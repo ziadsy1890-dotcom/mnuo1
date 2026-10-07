@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>لوحة تحكم - فستق حلب</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>لوحة تحكم - فستق حلب</title><style>
 *{
     box-sizing:border-box;
 }
@@ -21,34 +16,46 @@ body{
 .container{
     max-width:900px;
     margin:auto;
-    padding:20px;
+    padding:15px;
 }
 
 .card{
-    background:white;
+    background:#fff;
     border-radius:15px;
     padding:20px;
     margin-bottom:20px;
     box-shadow:0 2px 10px #0001;
 }
 
-h1,h2{
+h1,h2,h3{
     margin-top:0;
 }
 
-input,textarea,button{
+input,
+textarea,
+button{
     width:100%;
-    padding:12px;
+    padding:13px;
     margin:7px 0;
     border:1px solid #ddd;
     border-radius:8px;
     font-size:16px;
 }
 
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
 button{
     background:#222;
-    color:white;
+    color:#fff;
     border:none;
+    cursor:pointer;
+}
+
+button:active{
+    opacity:.8;
 }
 
 .logout{
@@ -63,19 +70,23 @@ button{
     border:1px solid #ddd;
     border-radius:12px;
     padding:15px;
-    margin:10px 0;
+    margin:12px 0;
+    background:#fafafa;
 }
 
 .product img{
-    width:100px;
-    height:100px;
+    width:120px;
+    height:120px;
     object-fit:cover;
     border-radius:10px;
+    display:block;
+    margin-bottom:10px;
 }
 
 .actions{
     display:flex;
     gap:8px;
+    margin-top:10px;
 }
 
 .actions button{
@@ -93,154 +104,169 @@ button{
 .message{
     text-align:center;
     font-weight:bold;
+    min-height:20px;
 }
-</style>
-</head>
 
-<body>
+.success{
+    color:green;
+}
 
-<div class="container">
+.error{
+    color:#c62828;
+}
 
-<!-- تسجيل الدخول -->
+.small{
+    color:#666;
+    font-size:14px;
+}
 
-<div id="loginPanel" class="card">
-
-<h1>🔐 لوحة تحكم فستق حلب</h1>
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
+</style></head><body><div class="container"><!-- تسجيل الدخول --><div id="loginPanel" class="card"><h1>🔐 لوحة تحكم فستق حلب</h1>
 
 <p>تسجيل دخول الإدارة</p>
 
 <input
-type="email"
-id="email"
-placeholder="البريد الإلكتروني">
+    type="email"
+    id="email"
+    placeholder="البريد الإلكتروني"
+    autocomplete="email">
 
 <input
-type="password"
-id="password"
-placeholder="كلمة المرور">
+    type="password"
+    id="password"
+    placeholder="كلمة المرور"
+    autocomplete="current-password">
 
 <button onclick="login()">
-تسجيل الدخول
+    تسجيل الدخول
 </button>
 
 <p id="loginMessage" class="message"></p>
 
-</div>
-
-
-<!-- لوحة الإدارة -->
-
-<div id="adminPanel">
-
+</div><!-- لوحة الإدارة --><div id="adminPanel"><!-- العنوان -->
 <div class="card">
 
-<h1>🍰 فستق حلب</h1>
+    <h1>🍰 فستق حلب</h1>
 
-<button class="logout" onclick="logout()">
-تسجيل الخروج
-</button>
+    <p class="small">
+        لوحة إدارة الأصناف والأسعار
+    </p>
+
+    <button class="logout" onclick="logout()">
+        تسجيل الخروج
+    </button>
 
 </div>
 
 
 <!-- إضافة صنف -->
-
 <div class="card">
 
-<h2>➕ إضافة صنف</h2>
+    <h2>➕ إضافة صنف جديد</h2>
 
-<input
-type="text"
-id="name"
-placeholder="اسم الصنف">
+    <input
+        type="text"
+        id="name"
+        placeholder="اسم الصنف">
 
-<input
-type="text"
-id="price"
-placeholder="السعر">
+    <input
+        type="number"
+        id="price"
+        placeholder="السعر"
+        min="0">
 
-<input
-type="text"
-id="category"
-placeholder="القسم">
+    <input
+        type="text"
+        id="category"
+        placeholder="القسم">
 
-<textarea
-id="description"
-placeholder="وصف الصنف"></textarea>
+    <textarea
+        id="description"
+        placeholder="وصف الصنف"></textarea>
 
-<input
-type="text"
-id="image"
-placeholder="رابط صورة الصنف">
+    <input
+        type="text"
+        id="image"
+        placeholder="رابط صورة الصنف">
 
-<button onclick="addProduct()">
-إضافة الصنف
-</button>
+    <button onclick="addProduct()">
+        ➕ إضافة الصنف
+    </button>
 
-<p id="message" class="message"></p>
+    <p id="message" class="message"></p>
 
 </div>
 
 
 <!-- الأصناف -->
-
 <div class="card">
 
-<h2>📋 الأصناف الموجودة</h2>
+    <h2>📋 الأصناف الموجودة</h2>
 
-<div id="products">
-جاري التحميل...
-</div>
-
-</div>
+    <div id="products">
+        جاري التحميل...
+    </div>
 
 </div>
 
-</div>
+</div></div><script type="module">
 
-
-<script type="module">
+/* =========================
+   Firebase
+========================= */
 
 import {
-initializeApp
+    initializeApp
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
 import {
-getAuth,
-signInWithEmailAndPassword,
-onAuthStateChanged,
-signOut
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-doc,
-updateDoc
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
+/* =========================
+   Firebase Config
+========================= */
+
 const firebaseConfig = {
 
-apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
 
-authDomain: "pistach-d-alep.firebaseapp.com",
+    authDomain: "pistach-d-alep.firebaseapp.com",
 
-projectId: "pistach-d-alep",
+    projectId: "pistach-d-alep",
 
-storageBucket: "pistach-d-alep.firebasestorage.app",
+    storageBucket: "pistach-d-alep.firebasestorage.app",
 
-messagingSenderId: "288943885593",
+    messagingSenderId: "288943885593",
 
-appId: "1:288943885593:web:4737041244be376c274988",
+    appId: "1:288943885593:web:4737041244be376c274988",
 
-measurementId: "G-569W2MXBTJ"
+    measurementId: "G-569W2MXBTJ"
 
 };
 
+
+/* =========================
+   تشغيل Firebase
+========================= */
 
 const app = initializeApp(firebaseConfig);
 
@@ -249,297 +275,472 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
+/* =========================
+   تسجيل الدخول
+========================= */
+
 window.login = async function(){
 
-const email =
-document.getElementById("email").value;
+    const email =
+        document.getElementById("email").value.trim();
 
-const password =
-document.getElementById("password").value;
+    const password =
+        document.getElementById("password").value;
 
-const message =
-document.getElementById("loginMessage");
+    const message =
+        document.getElementById("loginMessage");
 
-try{
 
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
+    if(!email || !password){
 
-message.innerText =
-"تم تسجيل الدخول ✅";
+        message.innerText =
+            "اكتب البريد الإلكتروني وكلمة المرور";
 
-}catch(error){
+        message.className =
+            "message error";
 
-message.innerText =
-"خطأ في تسجيل الدخول";
+        return;
+    }
 
-}
+
+    try{
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        message.innerText =
+            "تم تسجيل الدخول ✅";
+
+        message.className =
+            "message success";
+
+    }catch(error){
+
+        console.error(error);
+
+        message.innerText =
+            "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+
+        message.className =
+            "message error";
+    }
 
 };
 
+
+/* =========================
+   تسجيل الخروج
+========================= */
 
 window.logout = async function(){
 
-await signOut(auth);
+    await signOut(auth);
 
 };
 
+
+/* =========================
+   مراقبة حالة المستخدم
+========================= */
 
 onAuthStateChanged(auth,function(user){
 
-if(user){
+    if(user){
 
-document.getElementById("loginPanel")
-.style.display="none";
+        document.getElementById("loginPanel")
+            .style.display="none";
 
-document.getElementById("adminPanel")
-.style.display="block";
+        document.getElementById("adminPanel")
+            .style.display="block";
 
-loadProducts();
+        loadProducts();
 
-}else{
+    }else{
 
-document.getElementById("loginPanel")
-.style.display="block";
+        document.getElementById("loginPanel")
+            .style.display="block";
 
-document.getElementById("adminPanel")
-.style.display="none";
+        document.getElementById("adminPanel")
+            .style.display="none";
 
-}
+    }
 
 });
 
+
+/* =========================
+   إضافة صنف
+========================= */
 
 window.addProduct = async function(){
 
-const name =
-document.getElementById("name").value;
+    const name =
+        document.getElementById("name")
+        .value.trim();
 
-const price =
-document.getElementById("price").value;
+    const price =
+        document.getElementById("price")
+        .value.trim();
 
-const category =
-document.getElementById("category").value;
+    const category =
+        document.getElementById("category")
+        .value.trim();
 
-const description =
-document.getElementById("description").value;
+    const description =
+        document.getElementById("description")
+        .value.trim();
 
-const image =
-document.getElementById("image").value;
+    const image =
+        document.getElementById("image")
+        .value.trim();
 
-
-if(!name || !price){
-
-alert("اكتب اسم الصنف والسعر");
-
-return;
-
-}
-
-
-try{
-
-await addDoc(
-collection(db,"products"),
-{
-
-name:name,
-
-price:price,
-
-category:category,
-
-description:description,
-
-image:image
-
-}
-);
+    const message =
+        document.getElementById("message");
 
 
-document.getElementById("name").value="";
+    if(!name){
 
-document.getElementById("price").value="";
+        message.innerText =
+            "اكتب اسم الصنف";
 
-document.getElementById("category").value="";
+        message.className =
+            "message error";
 
-document.getElementById("description").value="";
-
-document.getElementById("image").value="";
-
-
-document.getElementById("message")
-.innerText="تمت إضافة الصنف ✅";
+        return;
+    }
 
 
-loadProducts();
+    if(!price){
+
+        message.innerText =
+            "اكتب السعر";
+
+        message.className =
+            "message error";
+
+        return;
+    }
 
 
-}catch(error){
+    try{
 
-alert("حدث خطأ: "+error.message);
+        await addDoc(
+            collection(db,"products"),
+            {
+                name:name,
+                price:price,
+                category:category,
+                description:description,
+                image:image,
+                createdAt:Date.now()
+            }
+        );
 
-}
+
+        document.getElementById("name").value="";
+        document.getElementById("price").value="";
+        document.getElementById("category").value="";
+        document.getElementById("description").value="";
+        document.getElementById("image").value="";
+
+
+        message.innerText =
+            "تمت إضافة الصنف بنجاح ✅";
+
+        message.className =
+            "message success";
+
+
+        loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        message.innerText =
+            "حدث خطأ: " + error.message;
+
+        message.className =
+            "message error";
+    }
 
 };
 
+
+/* =========================
+   تحميل الأصناف
+========================= */
 
 async function loadProducts(){
 
-const box =
-document.getElementById("products");
+    const box =
+        document.getElementById("products");
 
-box.innerHTML="جاري التحميل...";
-
-
-try{
-
-const snapshot =
-await getDocs(
-collection(db,"products")
-);
+    box.innerHTML =
+        "جاري تحميل الأصناف...";
 
 
-box.innerHTML="";
+    try{
+
+        const snapshot =
+            await getDocs(
+                collection(db,"products")
+            );
 
 
-snapshot.forEach(function(item){
-
-const data=item.data();
-
-const div=document.createElement("div");
-
-div.className="product";
+        box.innerHTML="";
 
 
-div.innerHTML=`
+        if(snapshot.empty){
 
-${data.image ?
-`<img src="${data.image}">`
-:
-""}
+            box.innerHTML =
+                '<div class="empty">لا توجد أصناف بعد.</div>';
 
-<h3>${data.name || ""}</h3>
-
-<p>
-السعر: ${data.price || ""}
-</p>
-
-<p>
-القسم: ${data.category || ""}
-</p>
-
-<p>
-${data.description || ""}
-</p>
-
-<div class="actions">
-
-<button
-class="edit"
-onclick="editProduct('${item.id}')">
-تعديل
-</button>
-
-<button
-class="delete"
-onclick="deleteProduct('${item.id}')">
-حذف
-</button>
-
-</div>
-
-`;
+            return;
+        }
 
 
-box.appendChild(div);
+        snapshot.forEach(function(item){
 
-});
+            const data =
+                item.data();
 
 
-if(snapshot.empty){
+            const div =
+                document.createElement("div");
 
-box.innerHTML="لا توجد أصناف بعد.";
+            div.className =
+                "product";
+
+
+            div.innerHTML = `
+
+                ${
+                    data.image
+                    ?
+                    `<img src="${escapeHtml(data.image)}"
+                          onerror="this.style.display='none'">`
+                    :
+                    ""
+                }
+
+                <h3>
+                    ${escapeHtml(data.name || "")}
+                </h3>
+
+                <p>
+                    <strong>السعر:</strong>
+                    ${escapeHtml(data.price || "")}
+                </p>
+
+                <p>
+                    <strong>القسم:</strong>
+                    ${escapeHtml(data.category || "")}
+                </p>
+
+                ${
+                    data.description
+                    ?
+                    `<p>${escapeHtml(data.description)}</p>`
+                    :
+                    ""
+                }
+
+                <div class="actions">
+
+                    <button
+                        class="edit"
+                        onclick="editProduct('${item.id}')">
+                        ✏️ تعديل
+                    </button>
+
+                    <button
+                        class="delete"
+                        onclick="deleteProduct('${item.id}')">
+                        🗑️ حذف
+                    </button>
+
+                </div>
+            `;
+
+
+            box.appendChild(div);
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        box.innerHTML =
+            "خطأ في تحميل الأصناف: "
+            +
+            error.message;
+
+    }
 
 }
 
 
-}catch(error){
-
-box.innerHTML=
-"خطأ في تحميل الأصناف: "
-+
-error.message;
-
-}
-
-}
-
-
-window.deleteProduct = async function(id){
-
-if(!confirm("هل تريد حذف هذا الصنف؟")){
-
-return;
-
-}
-
-
-await deleteDoc(
-doc(db,"products",id)
-);
-
-
-loadProducts();
-
-};
-
+/* =========================
+   تعديل صنف
+========================= */
 
 window.editProduct = async function(id){
 
-const newName =
-prompt("اسم الصنف الجديد:");
+    try{
 
-if(!newName){
+        const newName =
+            prompt("اسم الصنف الجديد:");
 
-return;
-
-}
-
-
-const newPrice =
-prompt("السعر الجديد:");
-
-if(!newPrice){
-
-return;
-
-}
+        if(newName === null){
+            return;
+        }
 
 
-await updateDoc(
-
-doc(db,"products",id),
-
-{
-
-name:newName,
-
-price:newPrice
-
-}
-
-);
+        if(!newName.trim()){
+            alert("اسم الصنف لا يمكن أن يكون فارغًا");
+            return;
+        }
 
 
-loadProducts();
+        const newPrice =
+            prompt("السعر الجديد:");
+
+        if(newPrice === null){
+            return;
+        }
+
+
+        if(!newPrice.trim()){
+            alert("السعر لا يمكن أن يكون فارغًا");
+            return;
+        }
+
+
+        const newCategory =
+            prompt("القسم الجديد:");
+
+        if(newCategory === null){
+            return;
+        }
+
+
+        const newDescription =
+            prompt("وصف الصنف الجديد:");
+
+
+        if(newDescription === null){
+            return;
+        }
+
+
+        const newImage =
+            prompt("رابط الصورة الجديد:");
+
+
+        if(newImage === null){
+            return;
+        }
+
+
+        await updateDoc(
+            doc(db,"products",id),
+            {
+                name:newName.trim(),
+                price:newPrice.trim(),
+                category:newCategory.trim(),
+                description:newDescription.trim(),
+                image:newImage.trim()
+            }
+        );
+
+
+        alert("تم تعديل الصنف بنجاح ✅");
+
+
+        loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء التعديل: "
+            +
+            error.message
+        );
+
+    }
 
 };
 
-</script>
 
-</body>
-    </html>
+/* =========================
+   حذف صنف
+========================= */
+
+window.deleteProduct = async function(id){
+
+    const confirmed =
+        confirm(
+            "هل تريد حذف هذا الصنف نهائيًا؟"
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
+
+    try{
+
+        await deleteDoc(
+            doc(db,"products",id)
+        );
+
+
+        alert("تم حذف الصنف ✅");
+
+
+        loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء الحذف: "
+            +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* =========================
+   حماية النصوص
+========================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script></body>
+</html>
