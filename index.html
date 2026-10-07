@@ -69,7 +69,7 @@ header p{
 }
 
 .item{
-    background:#fff;
+    background:white;
     border-radius:12px;
     overflow:hidden;
     box-shadow:0 2px 8px #00000015;
@@ -295,6 +295,10 @@ textarea{
 
 <script type="module">
 
+/* ==========================================
+   Firebase
+========================================== */
+
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -305,6 +309,10 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+
+/* ==========================================
+   Firebase Config
+========================================== */
 
 const firebaseConfig = {
 
@@ -331,6 +339,7 @@ const firebaseConfig = {
 
 };
 
+
 const app =
     initializeApp(firebaseConfig);
 
@@ -338,11 +347,17 @@ const db =
     getFirestore(app);
 
 
-/* رقم واتساب الجديد */
+/* ==========================================
+   رقم واتساب الجديد
+========================================== */
 
 const whatsappNumber =
     "201010644644";
 
+
+/* ==========================================
+   المتغيرات
+========================================== */
 
 let products = [];
 
@@ -350,6 +365,10 @@ let cart = [];
 
 let currentCategory = "الكل";
 
+
+/* ==========================================
+   تحميل المنتجات من Firebase
+========================================== */
 
 async function loadProducts(){
 
@@ -363,23 +382,38 @@ async function loadProducts(){
                 collection(db,"products")
             );
 
+
         products = [];
+
 
         snapshot.forEach(item => {
 
             const data =
                 item.data();
 
-            if(data.hidden === true){
-                return;
-            }
 
             /*
-             ترتيب الأوزان:
-             كيلو أولًا
-             ثم نصف كيلو
-             ثم ربع كيلو
-            */
+             * إذا كان الصنف مخفيًا
+             * لا يظهر للزبون
+             */
+
+            if(data.hidden === true){
+
+                return;
+
+            }
+
+
+            /*
+             * ترتيب الأوزان بشكل إجباري:
+             *
+             * 1 - كيلو
+             * 2 - نصف كيلو
+             * 3 - ربع كيلو
+             *
+             * حتى لو كانت Firebase
+             * مخزنة بترتيب مختلف.
+             */
 
             let weights =
                 Array.isArray(data.weights)
@@ -390,32 +424,65 @@ async function loadProducts(){
                 :
                 ["كيلو"];
 
-            const weightOrder = [
-                "كيلو",
-                "نصف كيلو",
-                "ربع كيلو"
-            ];
 
-            weights.sort((a,b) => {
+            const orderedWeights = [];
 
-                const indexA =
-                    weightOrder.indexOf(a);
 
-                const indexB =
-                    weightOrder.indexOf(b);
+            if(
+                weights.includes("كيلو")
+            ){
 
-                return
-                    (indexA === -1 ? 99 : indexA)
-                    -
-                    (indexB === -1 ? 99 : indexB);
+                orderedWeights.push("كيلو");
+
+            }
+
+
+            if(
+                weights.includes("نصف كيلو")
+            ){
+
+                orderedWeights.push("نصف كيلو");
+
+            }
+
+
+            if(
+                weights.includes("ربع كيلو")
+            ){
+
+                orderedWeights.push("ربع كيلو");
+
+            }
+
+
+            /*
+             * إضافة أي وزن آخر موجود
+             * بدون حذفه.
+             */
+
+            weights.forEach(weight => {
+
+                if(
+                    !orderedWeights.includes(weight)
+                ){
+
+                    orderedWeights.push(weight);
+
+                }
 
             });
+
+
+            weights =
+                orderedWeights;
+
 
             products.push({
 
                 id:item.id,
 
-                name:data.name || "",
+                name:
+                    data.name || "",
 
                 description:
                     data.description || "",
@@ -436,19 +503,23 @@ async function loadProducts(){
                     :
                     10,
 
-                weights:weights
+                weights:
+                    weights
 
             });
 
         });
 
+
         showCategories();
 
         showProducts();
 
+
     }catch(error){
 
         console.error(error);
+
 
         menu.innerHTML = `
 
@@ -469,10 +540,15 @@ async function loadProducts(){
 }
 
 
+/* ==========================================
+   التصنيفات
+========================================== */
+
 function showCategories(){
 
     const categories =
         document.getElementById("categories");
+
 
     const list = [
 
@@ -486,15 +562,19 @@ function showCategories(){
 
     ];
 
+
     categories.innerHTML = "";
+
 
     list.forEach(category => {
 
         const button =
             document.createElement("button");
 
+
         button.innerText =
             category;
+
 
         if(
             category ===
@@ -506,11 +586,13 @@ function showCategories(){
 
         }
 
+
         button.onclick = function(){
 
             selectCategory(category);
 
         };
+
 
         categories.appendChild(button);
 
@@ -519,10 +601,15 @@ function showCategories(){
 }
 
 
+/* ==========================================
+   اختيار التصنيف
+========================================== */
+
 function selectCategory(category){
 
     currentCategory =
         category;
+
 
     showCategories();
 
@@ -531,34 +618,50 @@ function selectCategory(category){
 }
 
 
+/* ==========================================
+   حساب سعر الوزن
+========================================== */
+
 function getWeightPrice(
     price,
     weight
 ){
 
-    if(weight === "ربع كيلو"){
+    if(
+        weight === "ربع كيلو"
+    ){
 
         return price * 0.25;
 
     }
 
-    if(weight === "نصف كيلو"){
+
+    if(
+        weight === "نصف كيلو"
+    ){
 
         return price * 0.5;
 
     }
+
 
     return price;
 
 }
 
 
+/* ==========================================
+   عرض المنتجات
+========================================== */
+
 function showProducts(){
 
     const menu =
         document.getElementById("menu");
 
+
     menu.innerHTML = "";
+
 
     const list =
         currentCategory === "الكل"
@@ -570,6 +673,7 @@ function showProducts(){
             p.category ===
             currentCategory
         );
+
 
     if(list.length === 0){
 
@@ -584,17 +688,27 @@ function showProducts(){
         `;
 
         return;
+
     }
+
 
     list.forEach(product => {
 
         const div =
             document.createElement("div");
 
+
         div.className =
             "item";
 
+
         let weightOptions = "";
+
+
+        /*
+         * هنا أيضًا نضمن أن
+         * الكيلو هو أول خيار.
+         */
 
         product.weights.forEach(
             weight => {
@@ -604,6 +718,7 @@ function showProducts(){
                         product.price,
                         weight
                     );
+
 
                 weightOptions += `
 
@@ -622,6 +737,7 @@ function showProducts(){
             }
         );
 
+
         div.innerHTML = `
 
             ${
@@ -637,11 +753,13 @@ function showProducts(){
                 ""
             }
 
+
             <div class="item-content">
 
                 <h3>
                     ${escapeHtml(product.name)}
                 </h3>
+
 
                 <div class="description">
 
@@ -651,6 +769,7 @@ function showProducts(){
 
                 </div>
 
+
                 <div class="price">
 
                     سعر الكيلو:
@@ -658,6 +777,7 @@ function showProducts(){
                     جنيه
 
                 </div>
+
 
                 <select
                     class="weight-select"
@@ -667,6 +787,7 @@ function showProducts(){
 
                 </select>
 
+
                 <div class="max-info">
 
                     الحد الأقصى:
@@ -674,6 +795,7 @@ function showProducts(){
                     كمية
 
                 </div>
+
 
                 <button
                     class="add"
@@ -687,12 +809,17 @@ function showProducts(){
 
         `;
 
+
         menu.appendChild(div);
 
     });
 
 }
 
+
+/* ==========================================
+   إضافة للسلة
+========================================== */
 
 window.addToCart =
 function(id){
@@ -702,14 +829,19 @@ function(id){
             p => p.id === id
         );
 
+
     if(!product){
+
         return;
+
     }
+
 
     const weightSelect =
         document.getElementById(
             "weight-" + product.id
         );
+
 
     const weight =
         weightSelect
@@ -718,6 +850,7 @@ function(id){
         :
         "كيلو";
 
+
     const existing =
         cart.find(
             p =>
@@ -725,6 +858,7 @@ function(id){
             &&
             p.weight === weight
         );
+
 
     if(existing){
 
@@ -740,21 +874,28 @@ function(id){
             );
 
             return;
+
         }
 
+
         existing.quantity++;
+
 
     }else{
 
         cart.push({
 
-            id:product.id,
+            id:
+                product.id,
 
-            name:product.name,
+            name:
+                product.name,
 
-            price:product.price,
+            price:
+                product.price,
 
-            weight:weight,
+            weight:
+                weight,
 
             weightPrice:
                 getWeightPrice(
@@ -762,7 +903,8 @@ function(id){
                     weight
                 ),
 
-            quantity:1,
+            quantity:
+                1,
 
             maxQuantity:
                 product.maxQuantity
@@ -771,10 +913,15 @@ function(id){
 
     }
 
+
     updateCart();
 
 };
 
+
+/* ==========================================
+   زيادة الكمية
+========================================== */
 
 window.increase =
 function(index){
@@ -782,9 +929,13 @@ function(index){
     const item =
         cart[index];
 
+
     if(!item){
+
         return;
+
     }
+
 
     if(
         item.quantity >=
@@ -796,14 +947,21 @@ function(index){
         );
 
         return;
+
     }
 
+
     item.quantity++;
+
 
     updateCart();
 
 };
 
+
+/* ==========================================
+   نقصان الكمية
+========================================== */
 
 window.decrease =
 function(index){
@@ -811,11 +969,16 @@ function(index){
     const item =
         cart[index];
 
+
     if(!item){
+
         return;
+
     }
 
+
     item.quantity--;
+
 
     if(
         item.quantity <= 0
@@ -828,10 +991,15 @@ function(index){
 
     }
 
+
     updateCart();
 
 };
 
+
+/* ==========================================
+   تحديث السلة
+========================================== */
 
 function updateCart(){
 
@@ -840,10 +1008,12 @@ function updateCart(){
             "cartItems"
         );
 
+
     const totalElement =
         document.getElementById(
             "total"
         );
+
 
     if(cart.length === 0){
 
@@ -857,16 +1027,21 @@ function updateCart(){
 
         `;
 
+
         totalElement.innerText =
             "0";
+
 
         return;
 
     }
 
+
     let total = 0;
 
+
     box.innerHTML = "";
+
 
     cart.forEach(
         (item,index) => {
@@ -875,7 +1050,9 @@ function updateCart(){
                 item.weightPrice *
                 item.quantity;
 
+
             total += itemTotal;
+
 
             box.innerHTML += `
 
@@ -896,6 +1073,7 @@ function updateCart(){
 
                     </div>
 
+
                     <div class="cart-details">
 
                         الوزن:
@@ -911,6 +1089,7 @@ function updateCart(){
 
                     </div>
 
+
                     <div class="qty">
 
                         <button
@@ -920,11 +1099,13 @@ function updateCart(){
 
                         </button>
 
+
                         <span>
 
                             ${item.quantity}
 
                         </span>
+
 
                         <button
                             onclick="decrease(${index})">
@@ -942,11 +1123,16 @@ function updateCart(){
         }
     );
 
+
     totalElement.innerText =
         total;
 
 }
 
+
+/* ==========================================
+   إرسال واتساب
+========================================== */
 
 window.sendWhatsApp =
 function(){
@@ -958,7 +1144,9 @@ function(){
         );
 
         return;
+
     }
+
 
     const name =
         document
@@ -966,17 +1154,20 @@ function(){
         .value
         .trim();
 
+
     const phone =
         document
         .getElementById("phone")
         .value
         .trim();
 
+
     const address =
         document
         .getElementById("address")
         .value
         .trim();
+
 
     if(!name){
 
@@ -989,7 +1180,9 @@ function(){
         .focus();
 
         return;
+
     }
+
 
     if(!phone){
 
@@ -1002,7 +1195,9 @@ function(){
         .focus();
 
         return;
+
     }
+
 
     if(!address){
 
@@ -1015,12 +1210,16 @@ function(){
         .focus();
 
         return;
+
     }
+
 
     let total = 0;
 
+
     let message =
         "🛒 طلب جديد\n\n";
+
 
     message +=
         "👤 الاسم: "
@@ -1029,12 +1228,14 @@ function(){
         +
         "\n";
 
+
     message +=
         "📞 الهاتف: "
         +
         phone
         +
         "\n";
+
 
     message +=
         "📍 العنوان: "
@@ -1043,8 +1244,10 @@ function(){
         +
         "\n\n";
 
+
     message +=
         "📦 تفاصيل الطلب:\n";
+
 
     cart.forEach(item => {
 
@@ -1052,7 +1255,9 @@ function(){
             item.weightPrice *
             item.quantity;
 
+
         total += itemTotal;
+
 
         message +=
 
@@ -1074,12 +1279,14 @@ function(){
 
     });
 
+
     message +=
         "💰 الإجمالي: "
         +
         total
         +
         " جنيه";
+
 
     const url =
 
@@ -1093,6 +1300,7 @@ function(){
             message
         );
 
+
     window.open(
         url,
         "_blank"
@@ -1100,6 +1308,10 @@ function(){
 
 };
 
+
+/* ==========================================
+   حماية النصوص
+========================================== */
 
 function escapeHtml(value){
 
@@ -1133,9 +1345,13 @@ function escapeHtml(value){
 }
 
 
+/* ==========================================
+   تشغيل المنيو
+========================================== */
+
 loadProducts();
 
 </script>
 
 </body>
-</html>
+    </html>
