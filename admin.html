@@ -1,7 +1,12 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>لوحة تحكم - فستق حلب</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لوحة تحكم - فستق حلب</title>
+
+<style>
 *{
     box-sizing:border-box;
 }
@@ -74,6 +79,11 @@ button:active{
     background:#fafafa;
 }
 
+.product.hidden{
+    opacity:.65;
+    background:#eee;
+}
+
 .product img{
     width:120px;
     height:120px;
@@ -87,14 +97,24 @@ button:active{
     display:flex;
     gap:8px;
     margin-top:10px;
+    flex-wrap:wrap;
 }
 
 .actions button{
     flex:1;
+    min-width:120px;
 }
 
 .edit{
     background:#0069d9;
+}
+
+.hide{
+    background:#777;
+}
+
+.show{
+    background:#198754;
 }
 
 .delete{
@@ -125,622 +145,108 @@ button:active{
     padding:20px;
     color:#777;
 }
-</style></head><body><div class="container"><!-- تسجيل الدخول --><div id="loginPanel" class="card"><h1>🔐 لوحة تحكم فستق حلب</h1>
 
-<p>تسجيل دخول الإدارة</p>
+.options{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:12px;
+    margin:10px 0;
+    background:#fafafa;
+}
 
-<input
-    type="email"
-    id="email"
-    placeholder="البريد الإلكتروني"
-    autocomplete="email">
+.options label{
+    display:block;
+    padding:8px 0;
+    font-size:16px;
+}
 
-<input
-    type="password"
-    id="password"
-    placeholder="كلمة المرور"
-    autocomplete="current-password">
+.options input[type="checkbox"]{
+    width:auto;
+    margin-left:8px;
+}
 
-<button onclick="login()">
-    تسجيل الدخول
-</button>
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:13px;
+    margin:5px 0;
+}
 
-<p id="loginMessage" class="message"></p>
+.status-visible{
+    background:#d1e7dd;
+    color:#0f5132;
+}
 
-</div><!-- لوحة الإدارة --><div id="adminPanel"><!-- العنوان -->
-<div class="card">
+.status-hidden{
+    background:#f8d7da;
+    color:#842029;
+}
 
-    <h1>🍰 فستق حلب</h1>
+.info{
+    background:#e7f1ff;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+</style>
+</head>
 
-    <p class="small">
-        لوحة إدارة الأصناف والأسعار
-    </p>
+<body>
 
-    <button class="logout" onclick="logout()">
-        تسجيل الخروج
+<div class="container">
+
+<!-- تسجيل الدخول -->
+<div id="loginPanel" class="card">
+
+    <h1>🔐 لوحة تحكم فستق حلب</h1>
+
+    <p>تسجيل دخول الإدارة</p>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="البريد الإلكتروني"
+        autocomplete="email">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="كلمة المرور"
+        autocomplete="current-password">
+
+    <button onclick="login()">
+        تسجيل الدخول
     </button>
+
+    <p id="loginMessage" class="message"></p>
 
 </div>
 
 
-<!-- إضافة صنف -->
-<div class="card">
+<!-- لوحة الإدارة -->
+<div id="adminPanel">
 
-    <h2>➕ إضافة صنف جديد</h2>
+    <div class="card">
 
-    <input
-        type="text"
-        id="name"
-        placeholder="اسم الصنف">
+        <h1>🍰 فستق حلب</h1>
 
-    <input
-        type="number"
-        id="price"
-        placeholder="السعر"
-        min="0">
+        <p class="small">
+            لوحة إدارة الأصناف والأسعار
+        </p>
 
-    <input
-        type="text"
-        id="category"
-        placeholder="القسم">
+        <button class="logout" onclick="logout()">
+            تسجيل الخروج
+        </button>
 
-    <textarea
-        id="description"
-        placeholder="وصف الصنف"></textarea>
-
-    <input
-        type="text"
-        id="image"
-        placeholder="رابط صورة الصنف">
-
-    <button onclick="addProduct()">
-        ➕ إضافة الصنف
-    </button>
-
-    <p id="message" class="message"></p>
-
-</div>
-
-
-<!-- الأصناف -->
-<div class="card">
-
-    <h2>📋 الأصناف الموجودة</h2>
-
-    <div id="products">
-        جاري التحميل...
     </div>
 
-</div>
 
-</div></div><script type="module">
+    <!-- إضافة صنف -->
+    <div class="card">
 
-/* =========================
-   Firebase
-========================= */
+        <h2>➕ إضافة صنف جديد</h2>
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc,
-    updateDoc
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
-
-/* =========================
-   Firebase Config
-========================= */
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
-
-    authDomain: "pistach-d-alep.firebaseapp.com",
-
-    projectId: "pistach-d-alep",
-
-    storageBucket: "pistach-d-alep.firebasestorage.app",
-
-    messagingSenderId: "288943885593",
-
-    appId: "1:288943885593:web:4737041244be376c274988",
-
-    measurementId: "G-569W2MXBTJ"
-
-};
-
-
-/* =========================
-   تشغيل Firebase
-========================= */
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-
-/* =========================
-   تسجيل الدخول
-========================= */
-
-window.login = async function(){
-
-    const email =
-        document.getElementById("email").value.trim();
-
-    const password =
-        document.getElementById("password").value;
-
-    const message =
-        document.getElementById("loginMessage");
-
-
-    if(!email || !password){
-
-        message.innerText =
-            "اكتب البريد الإلكتروني وكلمة المرور";
-
-        message.className =
-            "message error";
-
-        return;
-    }
-
-
-    try{
-
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-
-        message.innerText =
-            "تم تسجيل الدخول ✅";
-
-        message.className =
-            "message success";
-
-    }catch(error){
-
-        console.error(error);
-
-        message.innerText =
-            "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-
-        message.className =
-            "message error";
-    }
-
-};
-
-
-/* =========================
-   تسجيل الخروج
-========================= */
-
-window.logout = async function(){
-
-    await signOut(auth);
-
-};
-
-
-/* =========================
-   مراقبة حالة المستخدم
-========================= */
-
-onAuthStateChanged(auth,function(user){
-
-    if(user){
-
-        document.getElementById("loginPanel")
-            .style.display="none";
-
-        document.getElementById("adminPanel")
-            .style.display="block";
-
-        loadProducts();
-
-    }else{
-
-        document.getElementById("loginPanel")
-            .style.display="block";
-
-        document.getElementById("adminPanel")
-            .style.display="none";
-
-    }
-
-});
-
-
-/* =========================
-   إضافة صنف
-========================= */
-
-window.addProduct = async function(){
-
-    const name =
-        document.getElementById("name")
-        .value.trim();
-
-    const price =
-        document.getElementById("price")
-        .value.trim();
-
-    const category =
-        document.getElementById("category")
-        .value.trim();
-
-    const description =
-        document.getElementById("description")
-        .value.trim();
-
-    const image =
-        document.getElementById("image")
-        .value.trim();
-
-    const message =
-        document.getElementById("message");
-
-
-    if(!name){
-
-        message.innerText =
-            "اكتب اسم الصنف";
-
-        message.className =
-            "message error";
-
-        return;
-    }
-
-
-    if(!price){
-
-        message.innerText =
-            "اكتب السعر";
-
-        message.className =
-            "message error";
-
-        return;
-    }
-
-
-    try{
-
-        await addDoc(
-            collection(db,"products"),
-            {
-                name:name,
-                price:price,
-                category:category,
-                description:description,
-                image:image,
-                createdAt:Date.now()
-            }
-        );
-
-
-        document.getElementById("name").value="";
-        document.getElementById("price").value="";
-        document.getElementById("category").value="";
-        document.getElementById("description").value="";
-        document.getElementById("image").value="";
-
-
-        message.innerText =
-            "تمت إضافة الصنف بنجاح ✅";
-
-        message.className =
-            "message success";
-
-
-        loadProducts();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        message.innerText =
-            "حدث خطأ: " + error.message;
-
-        message.className =
-            "message error";
-    }
-
-};
-
-
-/* =========================
-   تحميل الأصناف
-========================= */
-
-async function loadProducts(){
-
-    const box =
-        document.getElementById("products");
-
-    box.innerHTML =
-        "جاري تحميل الأصناف...";
-
-
-    try{
-
-        const snapshot =
-            await getDocs(
-                collection(db,"products")
-            );
-
-
-        box.innerHTML="";
-
-
-        if(snapshot.empty){
-
-            box.innerHTML =
-                '<div class="empty">لا توجد أصناف بعد.</div>';
-
-            return;
-        }
-
-
-        snapshot.forEach(function(item){
-
-            const data =
-                item.data();
-
-
-            const div =
-                document.createElement("div");
-
-            div.className =
-                "product";
-
-
-            div.innerHTML = `
-
-                ${
-                    data.image
-                    ?
-                    `<img src="${escapeHtml(data.image)}"
-                          onerror="this.style.display='none'">`
-                    :
-                    ""
-                }
-
-                <h3>
-                    ${escapeHtml(data.name || "")}
-                </h3>
-
-                <p>
-                    <strong>السعر:</strong>
-                    ${escapeHtml(data.price || "")}
-                </p>
-
-                <p>
-                    <strong>القسم:</strong>
-                    ${escapeHtml(data.category || "")}
-                </p>
-
-                ${
-                    data.description
-                    ?
-                    `<p>${escapeHtml(data.description)}</p>`
-                    :
-                    ""
-                }
-
-                <div class="actions">
-
-                    <button
-                        class="edit"
-                        onclick="editProduct('${item.id}')">
-                        ✏️ تعديل
-                    </button>
-
-                    <button
-                        class="delete"
-                        onclick="deleteProduct('${item.id}')">
-                        🗑️ حذف
-                    </button>
-
-                </div>
-            `;
-
-
-            box.appendChild(div);
-
-        });
-
-
-    }catch(error){
-
-        console.error(error);
-
-        box.innerHTML =
-            "خطأ في تحميل الأصناف: "
-            +
-            error.message;
-
-    }
-
-}
-
-
-/* =========================
-   تعديل صنف
-========================= */
-
-window.editProduct = async function(id){
-
-    try{
-
-        const newName =
-            prompt("اسم الصنف الجديد:");
-
-        if(newName === null){
-            return;
-        }
-
-
-        if(!newName.trim()){
-            alert("اسم الصنف لا يمكن أن يكون فارغًا");
-            return;
-        }
-
-
-        const newPrice =
-            prompt("السعر الجديد:");
-
-        if(newPrice === null){
-            return;
-        }
-
-
-        if(!newPrice.trim()){
-            alert("السعر لا يمكن أن يكون فارغًا");
-            return;
-        }
-
-
-        const newCategory =
-            prompt("القسم الجديد:");
-
-        if(newCategory === null){
-            return;
-        }
-
-
-        const newDescription =
-            prompt("وصف الصنف الجديد:");
-
-
-        if(newDescription === null){
-            return;
-        }
-
-
-        const newImage =
-            prompt("رابط الصورة الجديد:");
-
-
-        if(newImage === null){
-            return;
-        }
-
-
-        await updateDoc(
-            doc(db,"products",id),
-            {
-                name:newName.trim(),
-                price:newPrice.trim(),
-                category:newCategory.trim(),
-                description:newDescription.trim(),
-                image:newImage.trim()
-            }
-        );
-
-
-        alert("تم تعديل الصنف بنجاح ✅");
-
-
-        loadProducts();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "حدث خطأ أثناء التعديل: "
-            +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =========================
-   حذف صنف
-========================= */
-
-window.deleteProduct = async function(id){
-
-    const confirmed =
-        confirm(
-            "هل تريد حذف هذا الصنف نهائيًا؟"
-        );
-
-
-    if(!confirmed){
-        return;
-    }
-
-
-    try{
-
-        await deleteDoc(
-            doc(db,"products",id)
-        );
-
-
-        alert("تم حذف الصنف ✅");
-
-
-        loadProducts();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "حدث خطأ أثناء الحذف: "
-            +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =========================
-   حماية النصوص
-========================= */
-
-function escapeHtml(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-</script></body>
-</html>
+        <div class="info">
+           
