@@ -1,9 +1,545 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لوحة تحكم - فستق حلب</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    color:#222;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px #0001;
+}
+
+h1,h2{
+    margin-top:0;
+}
+
+input,textarea,button{
+    width:100%;
+    padding:12px;
+    margin:7px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    background:#222;
+    color:white;
+    border:none;
+}
+
+.logout{
+    background:#b00020;
+}
+
+#adminPanel{
+    display:none;
+}
+
+.product{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:15px;
+    margin:10px 0;
+}
+
+.product img{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+}
+
+.actions button{
+    flex:1;
+}
+
+.edit{
+    background:#0069d9;
+}
+
+.delete{
+    background:#c62828;
+}
+
+.message{
+    text-align:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- تسجيل الدخول -->
+
+<div id="loginPanel" class="card">
+
+<h1>🔐 لوحة تحكم فستق حلب</h1>
+
+<p>تسجيل دخول الإدارة</p>
+
+<input
+type="email"
+id="email"
+placeholder="البريد الإلكتروني">
+
+<input
+type="password"
+id="password"
+placeholder="كلمة المرور">
+
+<button onclick="login()">
+تسجيل الدخول
+</button>
+
+<p id="loginMessage" class="message"></p>
+
+</div>
+
+
+<!-- لوحة الإدارة -->
+
+<div id="adminPanel">
+
+<div class="card">
+
+<h1>🍰 فستق حلب</h1>
+
+<button class="logout" onclick="logout()">
+تسجيل الخروج
+</button>
+
+</div>
+
+
+<!-- إضافة صنف -->
+
+<div class="card">
+
+<h2>➕ إضافة صنف</h2>
+
+<input
+type="text"
+id="name"
+placeholder="اسم الصنف">
+
+<input
+type="text"
+id="price"
+placeholder="السعر">
+
+<input
+type="text"
+id="category"
+placeholder="القسم">
+
+<textarea
+id="description"
+placeholder="وصف الصنف"></textarea>
+
+<input
+type="text"
+id="image"
+placeholder="رابط صورة الصنف">
+
+<button onclick="addProduct()">
+إضافة الصنف
+</button>
+
+<p id="message" class="message"></p>
+
+</div>
+
+
+<!-- الأصناف -->
+
+<div class="card">
+
+<h2>📋 الأصناف الموجودة</h2>
+
+<div id="products">
+جاري التحميل...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
-    authDomain: "pistach-d-alep.firebaseapp.com",
-    projectId: "pistach-d-alep",
-    storageBucket: "pistach-d-alep.firebasestorage.app",
-    messagingSenderId: "288943885593",
-    appId: "1:288943885593:web:4737041244be376c274988",
-    measurementId: "G-569W2MXBTJ"
+
+apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+
+authDomain: "pistach-d-alep.firebaseapp.com",
+
+projectId: "pistach-d-alep",
+
+storageBucket: "pistach-d-alep.firebasestorage.app",
+
+messagingSenderId: "288943885593",
+
+appId: "1:288943885593:web:4737041244be376c274988",
+
+measurementId: "G-569W2MXBTJ"
+
 };
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+window.login = async function(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+const message =
+document.getElementById("loginMessage");
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+message.innerText =
+"تم تسجيل الدخول ✅";
+
+}catch(error){
+
+message.innerText =
+"خطأ في تسجيل الدخول";
+
+}
+
+};
+
+
+window.logout = async function(){
+
+await signOut(auth);
+
+};
+
+
+onAuthStateChanged(auth,function(user){
+
+if(user){
+
+document.getElementById("loginPanel")
+.style.display="none";
+
+document.getElementById("adminPanel")
+.style.display="block";
+
+loadProducts();
+
+}else{
+
+document.getElementById("loginPanel")
+.style.display="block";
+
+document.getElementById("adminPanel")
+.style.display="none";
+
+}
+
+});
+
+
+window.addProduct = async function(){
+
+const name =
+document.getElementById("name").value;
+
+const price =
+document.getElementById("price").value;
+
+const category =
+document.getElementById("category").value;
+
+const description =
+document.getElementById("description").value;
+
+const image =
+document.getElementById("image").value;
+
+
+if(!name || !price){
+
+alert("اكتب اسم الصنف والسعر");
+
+return;
+
+}
+
+
+try{
+
+await addDoc(
+collection(db,"products"),
+{
+
+name:name,
+
+price:price,
+
+category:category,
+
+description:description,
+
+image:image
+
+}
+);
+
+
+document.getElementById("name").value="";
+
+document.getElementById("price").value="";
+
+document.getElementById("category").value="";
+
+document.getElementById("description").value="";
+
+document.getElementById("image").value="";
+
+
+document.getElementById("message")
+.innerText="تمت إضافة الصنف ✅";
+
+
+loadProducts();
+
+
+}catch(error){
+
+alert("حدث خطأ: "+error.message);
+
+}
+
+};
+
+
+async function loadProducts(){
+
+const box =
+document.getElementById("products");
+
+box.innerHTML="جاري التحميل...";
+
+
+try{
+
+const snapshot =
+await getDocs(
+collection(db,"products")
+);
+
+
+box.innerHTML="";
+
+
+snapshot.forEach(function(item){
+
+const data=item.data();
+
+const div=document.createElement("div");
+
+div.className="product";
+
+
+div.innerHTML=`
+
+${data.image ?
+`<img src="${data.image}">`
+:
+""}
+
+<h3>${data.name || ""}</h3>
+
+<p>
+السعر: ${data.price || ""}
+</p>
+
+<p>
+القسم: ${data.category || ""}
+</p>
+
+<p>
+${data.description || ""}
+</p>
+
+<div class="actions">
+
+<button
+class="edit"
+onclick="editProduct('${item.id}')">
+تعديل
+</button>
+
+<button
+class="delete"
+onclick="deleteProduct('${item.id}')">
+حذف
+</button>
+
+</div>
+
+`;
+
+
+box.appendChild(div);
+
+});
+
+
+if(snapshot.empty){
+
+box.innerHTML="لا توجد أصناف بعد.";
+
+}
+
+
+}catch(error){
+
+box.innerHTML=
+"خطأ في تحميل الأصناف: "
++
+error.message;
+
+}
+
+}
+
+
+window.deleteProduct = async function(id){
+
+if(!confirm("هل تريد حذف هذا الصنف؟")){
+
+return;
+
+}
+
+
+await deleteDoc(
+doc(db,"products",id)
+);
+
+
+loadProducts();
+
+};
+
+
+window.editProduct = async function(id){
+
+const newName =
+prompt("اسم الصنف الجديد:");
+
+if(!newName){
+
+return;
+
+}
+
+
+const newPrice =
+prompt("السعر الجديد:");
+
+if(!newPrice){
+
+return;
+
+}
+
+
+await updateDoc(
+
+doc(db,"products",id),
+
+{
+
+name:newName,
+
+price:newPrice
+
+}
+
+);
+
+
+loadProducts();
+
+};
+
+</script>
+
+</body>
+    </html>
