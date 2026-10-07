@@ -14,12 +14,12 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f5f5f5;
+    background:#d9e8b8;
     color:#222;
 }
 
 header{
-    background:#222;
+    background:#789262;
     color:white;
     text-align:center;
     padding:22px 10px;
@@ -32,7 +32,7 @@ header h1{
 
 header p{
     margin:8px 0 0;
-    color:#ddd;
+    color:#f1f5e8;
 }
 
 .container{
@@ -50,7 +50,7 @@ header p{
 
 .categories button{
     border:0;
-    background:white;
+    background:#f7f9ef;
     padding:10px 16px;
     border-radius:20px;
     white-space:nowrap;
@@ -58,7 +58,7 @@ header p{
 }
 
 .categories button.active{
-    background:#222;
+    background:#789262;
     color:white;
 }
 
@@ -69,7 +69,7 @@ header p{
 }
 
 .item{
-    background:white;
+    background:#fff;
     border-radius:12px;
     overflow:hidden;
     box-shadow:0 2px 8px #00000015;
@@ -106,7 +106,7 @@ header p{
     padding:10px;
     border:0;
     border-radius:8px;
-    background:#222;
+    background:#789262;
     color:white;
     cursor:pointer;
 }
@@ -115,7 +115,7 @@ header p{
     width:100%;
     padding:10px;
     margin:7px 0;
-    border:1px solid #ddd;
+    border:1px solid #cbd5b8;
     border-radius:8px;
     background:white;
 }
@@ -230,14 +230,12 @@ textarea{
 
 </header>
 
-
 <div class="container">
 
     <div
         class="categories"
         id="categories">
     </div>
-
 
     <div
         class="menu"
@@ -248,7 +246,6 @@ textarea{
         </div>
 
     </div>
-
 
     <div class="cart">
 
@@ -262,7 +259,6 @@ textarea{
 
         </div>
 
-
         <div class="total">
 
             الإجمالي:
@@ -271,23 +267,19 @@ textarea{
 
         </div>
 
-
         <input
             id="name"
             placeholder="اسم العميل *">
-
 
         <input
             id="phone"
             type="tel"
             placeholder="رقم الهاتف *">
 
-
         <textarea
             id="address"
             rows="3"
             placeholder="العنوان بالتفصيل *"></textarea>
-
 
         <button
             class="whatsapp"
@@ -301,17 +293,11 @@ textarea{
 
 </div>
 
-
 <script type="module">
-
-/* ==========================================
-   Firebase
-========================================== */
 
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
 
 import {
     getFirestore,
@@ -319,10 +305,6 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-
-/* ==========================================
-   Firebase Config
-========================================== */
 
 const firebaseConfig = {
 
@@ -349,26 +331,18 @@ const firebaseConfig = {
 
 };
 
-
 const app =
     initializeApp(firebaseConfig);
-
 
 const db =
     getFirestore(app);
 
 
-/* ==========================================
-   رقم واتساب
-========================================== */
+/* رقم واتساب الجديد */
 
 const whatsappNumber =
-    "201140653708";
+    "201010644644";
 
-
-/* ==========================================
-   المتغيرات
-========================================== */
 
 let products = [];
 
@@ -377,15 +351,10 @@ let cart = [];
 let currentCategory = "الكل";
 
 
-/* ==========================================
-   تحميل المنتجات من Firebase
-========================================== */
-
 async function loadProducts(){
 
     const menu =
         document.getElementById("menu");
-
 
     try{
 
@@ -394,25 +363,53 @@ async function loadProducts(){
                 collection(db,"products")
             );
 
-
         products = [];
-
 
         snapshot.forEach(item => {
 
             const data =
                 item.data();
 
-
-            /*
-             * إذا كان الصنف مخفيًا
-             * لا يظهر للزبون
-             */
-
             if(data.hidden === true){
                 return;
             }
 
+            /*
+             ترتيب الأوزان:
+             كيلو أولًا
+             ثم نصف كيلو
+             ثم ربع كيلو
+            */
+
+            let weights =
+                Array.isArray(data.weights)
+                &&
+                data.weights.length
+                ?
+                [...data.weights]
+                :
+                ["كيلو"];
+
+            const weightOrder = [
+                "كيلو",
+                "نصف كيلو",
+                "ربع كيلو"
+            ];
+
+            weights.sort((a,b) => {
+
+                const indexA =
+                    weightOrder.indexOf(a);
+
+                const indexB =
+                    weightOrder.indexOf(b);
+
+                return
+                    (indexA === -1 ? 99 : indexA)
+                    -
+                    (indexB === -1 ? 99 : indexB);
+
+            });
 
             products.push({
 
@@ -439,24 +436,15 @@ async function loadProducts(){
                     :
                     10,
 
-                weights:
-                    Array.isArray(data.weights)
-                    &&
-                    data.weights.length
-                    ?
-                    data.weights
-                    :
-                    ["كيلو"]
+                weights:weights
 
             });
 
         });
 
-
         showCategories();
 
         showProducts();
-
 
     }catch(error){
 
@@ -481,15 +469,10 @@ async function loadProducts(){
 }
 
 
-/* ==========================================
-   التصنيفات
-========================================== */
-
 function showCategories(){
 
     const categories =
         document.getElementById("categories");
-
 
     const list = [
 
@@ -503,19 +486,15 @@ function showCategories(){
 
     ];
 
-
     categories.innerHTML = "";
-
 
     list.forEach(category => {
 
         const button =
             document.createElement("button");
 
-
         button.innerText =
             category;
-
 
         if(
             category ===
@@ -527,13 +506,11 @@ function showCategories(){
 
         }
 
-
         button.onclick = function(){
 
             selectCategory(category);
 
         };
-
 
         categories.appendChild(button);
 
@@ -541,10 +518,6 @@ function showCategories(){
 
 }
 
-
-/* ==========================================
-   اختيار التصنيف
-========================================== */
 
 function selectCategory(category){
 
@@ -558,10 +531,6 @@ function selectCategory(category){
 }
 
 
-/* ==========================================
-   حساب سعر الوزن
-========================================== */
-
 function getWeightPrice(
     price,
     weight
@@ -573,31 +542,23 @@ function getWeightPrice(
 
     }
 
-
     if(weight === "نصف كيلو"){
 
         return price * 0.5;
 
     }
 
-
     return price;
 
 }
 
-
-/* ==========================================
-   عرض المنتجات
-========================================== */
 
 function showProducts(){
 
     const menu =
         document.getElementById("menu");
 
-
     menu.innerHTML = "";
-
 
     const list =
         currentCategory === "الكل"
@@ -609,7 +570,6 @@ function showProducts(){
             p.category ===
             currentCategory
         );
-
 
     if(list.length === 0){
 
@@ -626,19 +586,15 @@ function showProducts(){
         return;
     }
 
-
     list.forEach(product => {
 
         const div =
             document.createElement("div");
 
-
         div.className =
             "item";
 
-
         let weightOptions = "";
-
 
         product.weights.forEach(
             weight => {
@@ -648,7 +604,6 @@ function showProducts(){
                         product.price,
                         weight
                     );
-
 
                 weightOptions += `
 
@@ -667,7 +622,6 @@ function showProducts(){
             }
         );
 
-
         div.innerHTML = `
 
             ${
@@ -683,13 +637,11 @@ function showProducts(){
                 ""
             }
 
-
             <div class="item-content">
 
                 <h3>
                     ${escapeHtml(product.name)}
                 </h3>
-
 
                 <div class="description">
 
@@ -699,7 +651,6 @@ function showProducts(){
 
                 </div>
 
-
                 <div class="price">
 
                     سعر الكيلو:
@@ -707,7 +658,6 @@ function showProducts(){
                     جنيه
 
                 </div>
-
 
                 <select
                     class="weight-select"
@@ -717,7 +667,6 @@ function showProducts(){
 
                 </select>
 
-
                 <div class="max-info">
 
                     الحد الأقصى:
@@ -725,7 +674,6 @@ function showProducts(){
                     كمية
 
                 </div>
-
 
                 <button
                     class="add"
@@ -739,17 +687,12 @@ function showProducts(){
 
         `;
 
-
         menu.appendChild(div);
 
     });
 
 }
 
-
-/* ==========================================
-   إضافة للسلة
-========================================== */
 
 window.addToCart =
 function(id){
@@ -759,17 +702,14 @@ function(id){
             p => p.id === id
         );
 
-
     if(!product){
         return;
     }
-
 
     const weightSelect =
         document.getElementById(
             "weight-" + product.id
         );
-
 
     const weight =
         weightSelect
@@ -778,7 +718,6 @@ function(id){
         :
         "كيلو";
 
-
     const existing =
         cart.find(
             p =>
@@ -786,7 +725,6 @@ function(id){
             &&
             p.weight === weight
         );
-
 
     if(existing){
 
@@ -803,7 +741,6 @@ function(id){
 
             return;
         }
-
 
         existing.quantity++;
 
@@ -834,15 +771,10 @@ function(id){
 
     }
 
-
     updateCart();
 
 };
 
-
-/* ==========================================
-   زيادة الكمية
-========================================== */
 
 window.increase =
 function(index){
@@ -850,11 +782,9 @@ function(index){
     const item =
         cart[index];
 
-
     if(!item){
         return;
     }
-
 
     if(
         item.quantity >=
@@ -868,18 +798,12 @@ function(index){
         return;
     }
 
-
     item.quantity++;
-
 
     updateCart();
 
 };
 
-
-/* ==========================================
-   نقصان الكمية
-========================================== */
 
 window.decrease =
 function(index){
@@ -887,14 +811,11 @@ function(index){
     const item =
         cart[index];
 
-
     if(!item){
         return;
     }
 
-
     item.quantity--;
-
 
     if(
         item.quantity <= 0
@@ -907,15 +828,10 @@ function(index){
 
     }
 
-
     updateCart();
 
 };
 
-
-/* ==========================================
-   تحديث السلة
-========================================== */
 
 function updateCart(){
 
@@ -924,12 +840,10 @@ function updateCart(){
             "cartItems"
         );
 
-
     const totalElement =
         document.getElementById(
             "total"
         );
-
 
     if(cart.length === 0){
 
@@ -943,21 +857,16 @@ function updateCart(){
 
         `;
 
-
         totalElement.innerText =
             "0";
-
 
         return;
 
     }
 
-
     let total = 0;
 
-
     box.innerHTML = "";
-
 
     cart.forEach(
         (item,index) => {
@@ -966,9 +875,7 @@ function updateCart(){
                 item.weightPrice *
                 item.quantity;
 
-
             total += itemTotal;
-
 
             box.innerHTML += `
 
@@ -989,7 +896,6 @@ function updateCart(){
 
                     </div>
 
-
                     <div class="cart-details">
 
                         الوزن:
@@ -1005,7 +911,6 @@ function updateCart(){
 
                     </div>
 
-
                     <div class="qty">
 
                         <button
@@ -1015,13 +920,11 @@ function updateCart(){
 
                         </button>
 
-
                         <span>
 
                             ${item.quantity}
 
                         </span>
-
 
                         <button
                             onclick="decrease(${index})">
@@ -1039,21 +942,14 @@ function updateCart(){
         }
     );
 
-
     totalElement.innerText =
         total;
 
 }
 
 
-/* ==========================================
-   إرسال واتساب
-========================================== */
-
 window.sendWhatsApp =
 function(){
-
-    /* السلة */
 
     if(cart.length === 0){
 
@@ -1064,15 +960,11 @@ function(){
         return;
     }
 
-
-    /* البيانات */
-
     const name =
         document
         .getElementById("name")
         .value
         .trim();
-
 
     const phone =
         document
@@ -1080,15 +972,11 @@ function(){
         .value
         .trim();
 
-
     const address =
         document
         .getElementById("address")
         .value
         .trim();
-
-
-    /* الاسم */
 
     if(!name){
 
@@ -1103,9 +991,6 @@ function(){
         return;
     }
 
-
-    /* الهاتف */
-
     if(!phone){
 
         alert(
@@ -1118,9 +1003,6 @@ function(){
 
         return;
     }
-
-
-    /* العنوان */
 
     if(!address){
 
@@ -1135,13 +1017,10 @@ function(){
         return;
     }
 
-
     let total = 0;
-
 
     let message =
         "🛒 طلب جديد\n\n";
-
 
     message +=
         "👤 الاسم: "
@@ -1150,14 +1029,12 @@ function(){
         +
         "\n";
 
-
     message +=
         "📞 الهاتف: "
         +
         phone
         +
         "\n";
-
 
     message +=
         "📍 العنوان: "
@@ -1166,10 +1043,8 @@ function(){
         +
         "\n\n";
 
-
     message +=
         "📦 تفاصيل الطلب:\n";
-
 
     cart.forEach(item => {
 
@@ -1177,9 +1052,7 @@ function(){
             item.weightPrice *
             item.quantity;
 
-
         total += itemTotal;
-
 
         message +=
 
@@ -1201,14 +1074,12 @@ function(){
 
     });
 
-
     message +=
         "💰 الإجمالي: "
         +
         total
         +
         " جنيه";
-
 
     const url =
 
@@ -1222,7 +1093,6 @@ function(){
             message
         );
 
-
     window.open(
         url,
         "_blank"
@@ -1230,10 +1100,6 @@ function(){
 
 };
 
-
-/* ==========================================
-   حماية النصوص
-========================================== */
 
 function escapeHtml(value){
 
@@ -1267,13 +1133,9 @@ function escapeHtml(value){
 }
 
 
-/* ==========================================
-   تشغيل المنيو
-========================================== */
-
 loadProducts();
 
 </script>
 
 </body>
-    </html>
+</html>
