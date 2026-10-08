@@ -3,301 +3,419 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منيو</title>
+
+<title>فستق حلب</title>
 
 <style>
-:root{
-    --primary:#789262;
-    --bg:#d9e8b8;
-    --text:#222;
-    --card:#fff;
-    --soft:#f7f9ef
-}
-
 *{
-    box-sizing:border-box
+    box-sizing:border-box;
 }
 
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text)
+    background:#f5f5f5;
+    color:#222;
 }
 
 header{
-    background:var(--primary);
-    color:#fff;
+    background:#789262;
+    color:white;
+    padding:18px 15px;
     text-align:center;
-    padding:18px 10px;
-    position:relative
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-header img{
-    max-width:110px;
-    max-height:80px;
-    object-fit:contain;
-    display:none;
-    margin:0 auto 8px;
-    border-radius:10px
+.logo{
+    width:75px;
+    height:75px;
+    object-fit:cover;
+    border-radius:50%;
+    background:white;
+    margin-bottom:8px;
 }
 
 header h1{
-    margin:0;
-    font-size:28px
+    margin:5px 0;
+    font-size:24px;
 }
 
 header p{
-    margin:7px 0 0
+    margin:4px 0 0;
+    font-size:14px;
+    opacity:.9;
 }
 
 .container{
-    max-width:760px;
+    width:100%;
+    max-width:1100px;
     margin:auto;
-    padding:15px
+    padding:15px;
 }
 
 .categories{
     display:flex;
     gap:8px;
     overflow-x:auto;
-    margin-bottom:15px
+    padding:5px 0 15px;
+    scrollbar-width:none;
 }
 
-.categories button{
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.category-btn{
     border:0;
-    background:var(--soft);
-    padding:10px 16px;
-    border-radius:20px;
+    background:white;
+    color:#555;
+    padding:10px 18px;
+    border-radius:25px;
     white-space:nowrap;
-    cursor:pointer
+    cursor:pointer;
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+    font-size:14px;
 }
 
-.categories button.active{
-    background:var(--primary);
-    color:#fff
+.category-btn.active{
+    background:#789262;
+    color:white;
 }
 
-.menu{
+.products{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px
+    grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:15px;
 }
 
-.item{
-    background:var(--card);
-    border-radius:12px;
+.product-card{
+    background:white;
+    border-radius:15px;
     overflow:hidden;
-    box-shadow:0 2px 8px #0002
-}
-
-.item img{
-    width:100%;
-    height:155px;
-    object-fit:cover
-}
-
-.no-image{
-    width:100%;
-    height:155px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
     display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#f1f1f1;
-    font-size:50px
+    flex-direction:column;
 }
 
-.item-content{
-    padding:12px
+.product-image{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+    background:#eee;
 }
 
-.item h3{
-    margin:0 0 6px
+.product-content{
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
 }
 
-.description{
-    color:#777;
-    font-size:13px;
-    min-height:32px
-}
-
-.price{
-    font-size:16px;
+.product-name{
+    font-size:19px;
     font-weight:bold;
-    margin:8px 0
+    margin-bottom:6px;
+}
+
+.product-description{
+    font-size:13px;
+    color:#777;
+    line-height:1.6;
+    margin-bottom:10px;
 }
 
 .price-main{
-    color:var(--primary);
+    font-size:18px;
+    font-weight:bold;
+    color:#789262;
+    margin-bottom:10px;
 }
 
-.price-extra{
-    color:#777;
-    font-size:13px;
-    font-weight:normal;
-    margin-top:4px;
-    line-height:1.6;
+.price-select{
+    width:100%;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:white;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.add-btn{
+    width:100%;
+    border:0;
+    background:#789262;
+    color:white;
+    padding:12px;
+    border-radius:9px;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:auto;
+}
+
+.add-btn:hover{
+    opacity:.9;
 }
 
 .custom-price{
-    color:var(--primary);
+    color:#789262;
     font-weight:bold;
-    margin:10px 0
+    margin-bottom:10px;
+    font-size:16px;
 }
 
-.weight-select,
-input,
-textarea,
-select{
-    width:100%;
-    padding:11px;
-    margin:6px 0;
-    border:1px solid #ddd;
-    border-radius:8px;
-    font-family:inherit;
-    background:#fff
+.empty{
+    background:white;
+    border-radius:15px;
+    padding:30px 20px;
+    text-align:center;
+    color:#777;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.add,
-.whatsapp{
-    width:100%;
-    padding:11px;
-    border:0;
-    border-radius:8px;
-    background:var(--primary);
-    color:#fff;
-    cursor:pointer
+.error-box{
+    background:#fff1f1;
+    color:#a40000;
+    border:1px solid #e2aaaa;
+    border-radius:12px;
+    padding:18px;
+    margin:20px 0;
+    line-height:1.8;
+    direction:rtl;
+    text-align:right;
+    word-break:break-word;
 }
 
-.add{
-    margin-top:5px;
-    font-weight:bold
-}
-
-.cart{
+.error-box code{
+    display:block;
     background:#fff;
-    margin-top:20px;
+    padding:8px;
+    border-radius:6px;
+    direction:ltr;
+    text-align:left;
+    margin-top:8px;
+}
+
+.delivery-box{
+    background:white;
+    border-radius:15px;
     padding:15px;
-    border-radius:12px
+    margin-top:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.delivery-box h3{
+    margin-top:0;
+}
+
+.delivery-select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    background:white;
+    font-size:15px;
+}
+
+.cart-section{
+    margin-top:25px;
+    background:white;
+    border-radius:15px;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.cart-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
 .cart-item{
-    border-bottom:1px solid #eee;
-    padding:12px 0
-}
-
-.cart-top{
     display:flex;
     justify-content:space-between;
-    gap:10px
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
 }
 
-.cart-details{
-    color:#666;
+.cart-item-info{
+    flex:1;
+}
+
+.cart-item-name{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.cart-item-unit{
+    font-size:13px;
+    color:#777;
+}
+
+.cart-item-price{
     font-size:14px;
-    margin-top:5px
+    color:#789262;
+    margin-top:4px;
 }
 
-.qty{
+.cart-controls{
     display:flex;
     align-items:center;
     gap:7px;
-    margin-top:10px
 }
 
-.qty button{
-    width:32px;
-    height:32px;
+.qty-btn{
+    width:30px;
+    height:30px;
     border:0;
-    border-radius:6px;
-    cursor:pointer
+    border-radius:7px;
+    background:#789262;
+    color:white;
+    cursor:pointer;
+    font-size:17px;
 }
 
-.qty span{
+.qty-number{
     min-width:25px;
     text-align:center;
-    font-weight:bold
 }
 
-.total{
+.remove-btn{
+    border:0;
+    background:#eee;
+    color:#a00;
+    border-radius:7px;
+    padding:7px 9px;
+    cursor:pointer;
+}
+
+.cart-summary{
+    margin-top:15px;
+    border-top:1px solid #eee;
+    padding-top:15px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.summary-total{
     font-size:20px;
     font-weight:bold;
-    margin:15px 0
+    color:#789262;
 }
 
-.whatsapp{
+.whatsapp-btn{
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    border:0;
+    border-radius:10px;
     background:#25D366;
+    color:white;
     font-size:17px;
-    font-weight:bold
-}
-
-.empty,
-.loading{
-    text-align:center;
-    color:#777;
-    padding:20px
+    cursor:pointer;
 }
 
 .floating-cart{
     position:fixed;
+    left:18px;
     bottom:18px;
-    right:18px;
     width:58px;
     height:58px;
-    border:0;
     border-radius:50%;
-    background:var(--primary);
-    color:#fff;
+    border:0;
+    background:#789262;
+    color:white;
     font-size:25px;
-    box-shadow:0 4px 14px #0004;
-    z-index:20;
-    cursor:pointer
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    cursor:pointer;
+    z-index:2000;
 }
 
 .cart-count{
     position:absolute;
     top:-5px;
-    left:-5px;
-    background:#c62828;
-    color:#fff;
+    right:-5px;
+    background:#d9534f;
+    color:white;
+    width:23px;
+    height:23px;
     border-radius:50%;
-    min-width:24px;
-    height:24px;
-    font-size:13px;
+    font-size:12px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:bold
 }
 
-#cartSection{
-    scroll-margin-top:15px
+footer{
+    text-align:center;
+    padding:30px 15px 90px;
+    color:#777;
+    font-size:13px;
 }
 
-.delivery{
-    background:#f7f7f7;
-    padding:10px;
-    border-radius:9px;
-    margin:8px 0
+.social-links{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
 }
 
-.delivery label{
-    display:block;
-    font-size:14px;
-    margin-bottom:4px
+.social-links a{
+    text-decoration:none;
+    color:#789262;
 }
 
-.delivery-fee{
-    margin-top:7px;
-    font-size:14px
-}
+@media(max-width:600px){
 
-@media(max-width:500px){
-
-    .menu{
-        grid-template-columns:1fr
+    .products{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
     }
 
+    .product-image{
+        height:145px;
+    }
+
+    .product-content{
+        padding:10px;
+    }
+
+    .product-name{
+        font-size:16px;
+    }
+
+    .product-description{
+        font-size:12px;
+    }
+
+    .price-main{
+        font-size:16px;
+    }
+
+    .add-btn{
+        padding:10px;
+        font-size:14px;
+    }
+}
+
+@media(max-width:380px){
+
+    .products{
+        grid-template-columns:1fr;
+    }
+
+    .product-image{
+        height:180px;
+    }
 }
 </style>
 </head>
@@ -306,85 +424,121 @@ select{
 
 <header>
 
-<img id="logo" alt="الشعار">
+    <img
+        id="logo"
+        class="logo"
+        src=""
+        alt="فستق حلب"
+        style="display:none"
+    >
 
-<h1 id="storeName">🍰 Pistach D'Alep</h1>
+    <h1 id="storeName">فستق حلب</h1>
 
-<p id="storeSubtitle">بيستاش دي ألب</p>
+    <p id="storeDescription">
+        أهلاً وسهلاً بكم
+    </p>
 
 </header>
 
+
 <div class="container">
 
-<div class="categories" id="categories"></div>
+    <div id="errorContainer"></div>
 
-<div class="menu" id="menu">
-    <div class="loading">جاري تحميل المنيو...</div>
+    <div
+        id="categories"
+        class="categories"
+    ></div>
+
+    <div
+        id="menu"
+        class="products"
+    ></div>
+
+
+    <div class="delivery-box">
+
+        <h3>🚚 منطقة التوصيل</h3>
+
+        <select
+            id="deliveryRegion"
+            class="delivery-select"
+        >
+            <option value="">
+                اختر منطقة التوصيل
+            </option>
+        </select>
+
+    </div>
+
+
+    <div class="cart-section">
+
+        <div class="cart-title">
+            🛒 السلة
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-summary">
+
+            <div class="summary-row">
+                <span>المجموع</span>
+                <span id="subtotal">0 جنيه</span>
+            </div>
+
+            <div class="summary-row">
+                <span>التوصيل</span>
+                <span id="deliveryFee">0 جنيه</span>
+            </div>
+
+            <div class="summary-row summary-total">
+                <span>الإجمالي</span>
+                <span id="grandTotal">0 جنيه</span>
+            </div>
+
+            <button
+                id="whatsappBtn"
+                class="whatsapp-btn"
+            >
+                📱 إرسال الطلب عبر واتساب
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
-<section class="cart" id="cartSection">
 
-<h2>🛒 سلة الطلب</h2>
+<footer>
 
-<div id="cartItems">
-    <div class="empty">السلة فارغة</div>
-</div>
+    <div id="footerText">
+        فستق حلب
+    </div>
 
-<div class="total">
-    الإجمالي:
-    <span id="subtotal">0</span>
-    جنيه
-</div>
+    <div
+        id="socialLinks"
+        class="social-links"
+    ></div>
 
-<div class="delivery">
+</footer>
 
-<label>🚚 منطقة التوصيل</label>
-
-<select id="region">
-    <option value="">اختر المنطقة</option>
-</select>
-
-<div class="delivery-fee">
-    رسوم التوصيل:
-    <strong>
-        <span id="deliveryFee">0</span>
-        جنيه
-    </strong>
-</div>
-
-</div>
-
-<div class="total">
-    الإجمالي النهائي:
-    <span id="grandTotal">0</span>
-    جنيه
-</div>
-
-<input id="name" placeholder="اسم العميل *">
-
-<input id="phone" type="tel" placeholder="رقم الهاتف *">
-
-<textarea
-    id="address"
-    rows="3"
-    placeholder="العنوان بالتفصيل *"
-></textarea>
-
-<button class="whatsapp" id="whatsappBtn">
-    📲 إرسال الطلب عبر واتساب
-</button>
-
-</section>
-
-</div>
 
 <button
-    class="floating-cart"
     id="floatingCart"
-    aria-label="السلة"
+    class="floating-cart"
+    type="button"
 >
     🛒
-    <span class="cart-count" id="cartCount">0</span>
+
+    <span
+        id="cartCount"
+        class="cart-count"
+    >
+        0
+    </span>
+
 </button>
 
 
@@ -392,9 +546,7 @@ select{
 
 import {
     initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getFirestore,
@@ -402,55 +554,40 @@ import {
     getDocs,
     doc,
     getDoc
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 /* =========================
-   Firebase
+   FIREBASE
 ========================= */
 
 const firebaseConfig = {
 
-    apiKey:
-    "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+    apiKey:"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
 
-    authDomain:
-    "pistach-d-alep.firebaseapp.com",
+    authDomain:"pistach-d-alep.firebaseapp.com",
 
-    projectId:
-    "pistach-d-alep",
+    projectId:"pistach-d-alep",
 
-    storageBucket:
-    "pistach-d-alep.firebasestorage.app",
+    storageBucket:"pistach-d-alep.firebasestorage.app",
 
-    messagingSenderId:
-    "288943885593",
+    messagingSenderId:"288943885593",
 
-    appId:
-    "1:288943885593:web:4737041244be376c274988",
+    appId:"1:288943885593:web:4737041244be376c274988",
 
-    measurementId:
-    "G-569W2MXBTJ"
+    measurementId:"G-569W2MXBTJ"
 
 };
 
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const db =
-getFirestore(app);
+const db = getFirestore(app);
 
 
 /* =========================
-   إعدادات
+   VARIABLES
 ========================= */
-
-const whatsappNumber =
-"201010644644";
-
 
 let products = [];
 
@@ -466,494 +603,126 @@ let settings = {};
 
 
 /* =========================
-   اختصارات
+   HELPERS
 ========================= */
 
-const $ =
-id =>
-document.getElementById(id);
+function $(id){
+
+    return document.getElementById(id);
+
+}
 
 
-const esc =
-value =>
-String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+function esc(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
 
 
-const num =
-value =>
-Number(value) || 0;
+function num(value){
+
+    const n = Number(value);
+
+    return Number.isFinite(n) ? n : 0;
+
+}
 
 
-/* =========================
-   تحميل البيانات
-========================= */
+function money(value){
 
-async function loadAll(){
-
-    try{
-
-        const [
-            ps,
-            rs,
-            cs,
-            ss
-        ] =
-        await Promise.all([
-
-            getDocs(
-                collection(
-                    db,
-                    "products"
-                )
-            ),
-
-            getDocs(
-                collection(
-                    db,
-                    "deliveryRegions"
-                )
-            ),
-
-            getDocs(
-                collection(
-                    db,
-                    "categories"
-                )
-            ),
-
-            getDoc(
-                doc(
-                    db,
-                    "settings",
-                    "main"
-                )
-            )
-
-        ]);
-
-
-        products =
-        ps.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .filter(
-            p =>
-            p.hidden !== true
-        );
-
-
-        regions =
-        rs.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .sort(
-            (a,b) =>
-            num(a.order || 999) -
-            num(b.order || 999)
-        );
-
-
-        categories =
-        cs.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .sort(
-            (a,b) =>
-            num(a.order || 999) -
-            num(b.order || 999)
-        );
-
-
-        settings =
-        ss.exists()
-        ? ss.data()
-        : {};
-
-
-        applySettings();
-
-        showCategories();
-
-        showProducts();
-
-        showRegions();
-
-        updateCart();
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        $("menu").innerHTML =
-        `
-        <div class="empty">
-            حدث خطأ أثناء تحميل المنيو
-            <br>
-            ${esc(error.message)}
-        </div>
-        `;
-
-    }
+    return `${num(value).toLocaleString("ar-EG")} جنيه`;
 
 }
 
 
 /* =========================
-   إعدادات المتجر
-========================= */
-
-function applySettings(){
-
-    document.documentElement.style.setProperty(
-        "--primary",
-        settings.primaryColor ||
-        "#789262"
-    );
-
-
-    document.documentElement.style.setProperty(
-        "--bg",
-        settings.backgroundColor ||
-        "#d9e8b8"
-    );
-
-
-    document.documentElement.style.setProperty(
-        "--text",
-        settings.textColor ||
-        "#222"
-    );
-
-
-    $("storeName").textContent =
-    settings.storeName ||
-    "🍰 Pistach D'Alep";
-
-
-    $("storeSubtitle").textContent =
-    settings.subtitle ||
-    "بيستاش دي ألب";
-
-
-    document.title =
-    settings.storeName ||
-    "منيو";
-
-
-    const logo =
-    settings.logoUrl ||
-    settings.logo ||
-    "";
-
-
-    if(logo){
-
-        $("logo").src =
-        logo;
-
-        $("logo").style.display =
-        "block";
-
-    }
-
-    else{
-
-        $("logo").style.display =
-        "none";
-
-    }
-
-}
-
-
-/* =========================
-   مناطق التوصيل
-========================= */
-
-function showRegions(){
-
-    $("region").innerHTML =
-    `
-    <option value="">
-        اختر المنطقة
-    </option>
-    ` +
-
-    regions
-    .map(
-        r =>
-        `
-        <option value="${esc(r.id)}">
-            ${esc(r.name)}
-            -
-            ${num(r.fee)}
-            جنيه
-        </option>
-        `
-    )
-    .join("");
-
-}
-
-
-/* =========================
-   الأقسام
-========================= */
-
-function showCategories(){
-
-    let names = [];
-
-
-    if(categories.length){
-
-        names =
-        categories
-        .map(
-            c => c.name
-        )
-        .filter(Boolean);
-
-    }
-
-    else{
-
-        names =
-        [
-            ...new Set(
-                products.map(
-                    p =>
-                    p.category ||
-                    "أخرى"
-                )
-            )
-        ];
-
-    }
-
-
-    const list = [
-
-        "الكل",
-
-        ...names.filter(
-            x =>
-            x &&
-            x !== "الكل"
-        )
-
-    ];
-
-
-    $("categories").innerHTML =
-
-    list
-    .map(
-        category =>
-        `
-        <button
-            type="button"
-            class="${
-                category === currentCategory
-                ? "active"
-                : ""
-            }"
-            data-category="${esc(category)}"
-        >
-            ${esc(category)}
-        </button>
-        `
-    )
-    .join("");
-
-
-    document
-    .querySelectorAll(
-        "#categories button"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    currentCategory =
-                    button.dataset.category;
-
-                    showCategories();
-
-                    showProducts();
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================
-   تجهيز الأسعار
+   GET PRODUCT OPTIONS
 ========================= */
 
 function getOptions(product){
 
-    let options = [];
+    if(
+        Array.isArray(product.units)
+    ){
 
+        return product.units
+            .map(unit => ({
+                name:String(unit.name ?? "").trim(),
+                price:num(unit.price)
+            }))
+            .filter(unit =>
+                unit.name &&
+                unit.price > 0
+            );
 
-    /*
-       النظام الجديد:
-       units
-    */
+    }
+
 
     if(
-        Array.isArray(product.units) &&
-        product.units.length
+        Array.isArray(product.prices)
     ){
 
-        options =
-        product.units
-        .map(
-            unit => ({
+        return product.prices
+            .map(unit => ({
+                name:String(unit.name ?? "").trim(),
+                price:num(unit.price)
+            }))
+            .filter(unit =>
+                unit.name &&
+                unit.price > 0
+            );
 
-                name:
-                String(
-                    unit.name ?? ""
-                ).trim(),
+    }
 
-                price:
-                num(unit.price)
 
-            })
-        )
-        .filter(
-            unit =>
-            unit.name
+    if(
+        product.price !== undefined &&
+        product.price !== null
+    ){
+
+        return [{
+            name:"قطعة",
+            price:num(product.price)
+        }].filter(unit =>
+            unit.price > 0
         );
 
     }
 
 
-    /*
-       النظام القديم:
-       prices
-    */
-
-    else if(
-        product.prices &&
-        typeof product.prices ===
-        "object"
-    ){
-
-        options =
-        Object.entries(
-            product.prices
-        )
-        .map(
-            ([name,price]) => ({
-
-                name:
-                String(name).trim(),
-
-                price:
-                num(price)
-
-            })
-        )
-        .filter(
-            unit =>
-            unit.name
-        );
-
-    }
-
-
-    /*
-       النظام القديم جدًا
-    */
-
-    else if(
-        num(product.price) > 0
-    ){
-
-        const base =
-        num(product.price);
-
-
-        const weights =
+    if(
         Array.isArray(product.weights)
-        ?
-        product.weights
-        :
-        ["كيلو"];
+    ){
 
-
-        options =
-        weights.map(
-            weight => ({
-
-                name:
-                weight,
-
-                price:
-
-                weight ===
-                "ربع كيلو"
-
-                ?
-
-                base * 0.25
-
-                :
-
-                weight ===
-                "نصف كيلو"
-
-                ?
-
-                base * 0.5
-
-                :
-
-                base
-
-            })
-        );
+        return product.weights
+            .map(unit => ({
+                name:String(unit.name ?? "").trim(),
+                price:num(unit.price)
+            }))
+            .filter(unit =>
+                unit.name &&
+                unit.price > 0
+            );
 
     }
 
 
-    return options;
+    return [];
 
 }
 
 
 /* =========================
-   نوع التسعير
+   PRICING TYPE
 ========================= */
 
-function getPricingType(product, options){
+function getPricingType(product,options){
 
     if(product.pricingType){
 
@@ -962,140 +731,89 @@ function getPricingType(product, options){
     }
 
 
-    /*
-       دعم المنتجات القديمة
-    */
-
-    const hasKilo =
-    options.some(
-        option =>
-        option.name === "كيلو" ||
-        option.name === "نصف كيلو" ||
-        option.name === "ربع كيلو"
+    const names = options.map(
+        x => x.name.trim()
     );
 
 
-    if(hasKilo){
+    if(
+        names.includes("كيلو") ||
+        names.includes("نصف كيلو") ||
+        names.includes("ربع كيلو")
+    ){
 
         return "kilo";
 
     }
 
 
-    return "single";
+    return "piece";
 
 }
 
 
 /* =========================
-   ترتيب خيارات الأسعار
+   SORT OPTIONS
 ========================= */
 
-function sortOptions(product, options){
+function sortOptions(product,options){
 
     const type =
-    getPricingType(
-        product,
-        options
-    );
+        getPricingType(product,options);
 
-
-    /*
-       الكيلو له ترتيب ثابت
-    */
 
     if(type === "kilo"){
 
-        const order = {
-
-            "كيلو":1,
-
-            "نصف كيلو":2,
-
-            "ربع كيلو":3
-
-        };
+        const order = [
+            "كيلو",
+            "نصف كيلو",
+            "ربع كيلو"
+        ];
 
 
-        return [
-            ...options
-        ].sort(
-            (a,b) => {
+        return [...options].sort((a,b)=>{
 
-                const aOrder =
-                order[a.name] || 99;
+            const ai = order.indexOf(a.name);
 
-                const bOrder =
-                order[b.name] || 99;
+            const bi = order.indexOf(b.name);
 
+            if(ai !== -1 && bi !== -1){
 
-                if(
-                    aOrder !==
-                    bOrder
-                ){
-
-                    return (
-                        aOrder -
-                        bOrder
-                    );
-
-                }
-
-
-                return (
-                    b.price -
-                    a.price
-                );
+                return ai - bi;
 
             }
-        );
+
+            if(ai !== -1) return -1;
+
+            if(bi !== -1) return 1;
+
+            return b.price - a.price;
+
+        });
 
     }
 
 
-    /*
-       القطعة والعلبة:
-       نترك الخيار الأساسي
-       أولًا.
-    */
-
-    if(
-        type === "piece" ||
-        type === "box"
-    ){
-
-        return options;
-
-    }
-
-
-    /*
-       أي نظام متعدد قديم:
-       الأعلى سعرًا أولًا
-    */
-
-    return [
-        ...options
-    ].sort(
-        (a,b) =>
-        b.price -
-        a.price
-    );
+    return [...options];
 
 }
 
 
 /* =========================
-   السعر الظاهر على البطاقة
+   MAIN PRICE
 ========================= */
 
-function getMainPrice(product, options){
+function getMainPrice(product){
+
+    const options =
+        sortOptions(
+            product,
+            getOptions(product)
+        );
+
 
     const type =
-    getPricingType(
-        product,
-        options
-    );
+        getPricingType(product,options);
 
 
     if(type === "custom"){
@@ -1108,19 +826,11 @@ function getMainPrice(product, options){
     if(type === "kilo"){
 
         const kilo =
-        options.find(
-            option =>
-            option.name ===
-            "كيلو" &&
-            option.price > 0
-        );
+            options.find(
+                x => x.name === "كيلو"
+            );
 
-
-        if(kilo){
-
-            return kilo;
-
-        }
+        return kilo ? kilo.price : null;
 
     }
 
@@ -1130,111 +840,254 @@ function getMainPrice(product, options){
         type === "box"
     ){
 
-        return (
-            options.find(
-                option =>
-                option.price > 0
-            )
-            ||
-            null
-        );
+        return options.length
+            ? options[0].price
+            : null;
 
     }
 
 
-    return (
-        options.find(
-            option =>
-            option.price > 0
-        )
-        ||
-        null
-    );
+    return options.length
+        ? options[0].price
+        : null;
 
 }
 
 
 /* =========================
-   عرض الصنف
+   APPLY SETTINGS
+========================= */
+
+function applySettings(){
+
+    if(!settings){
+        return;
+    }
+
+
+    const logoUrl =
+        settings.logoUrl ||
+        settings.logo ||
+        "";
+
+
+    if(logoUrl){
+
+        $("logo").src = logoUrl;
+
+        $("logo").style.display =
+            "inline-block";
+
+    }
+
+
+    if(settings.storeName){
+
+        $("storeName").textContent =
+            settings.storeName;
+
+        document.title =
+            settings.storeName;
+
+    }
+
+
+    if(settings.description){
+
+        $("storeDescription")
+            .textContent =
+            settings.description;
+
+    }
+
+
+    if(settings.footerText){
+
+        $("footerText")
+            .textContent =
+            settings.footerText;
+
+    }
+
+
+    const social =
+        settings.socialMedia ||
+        settings.socialLinks ||
+        {};
+
+
+    const socialContainer =
+        $("socialLinks");
+
+
+    socialContainer.innerHTML = "";
+
+
+    if(typeof social === "object"){
+
+        Object.entries(social)
+            .forEach(([name,url])=>{
+
+                if(!url){
+                    return;
+                }
+
+
+                socialContainer.innerHTML += `
+
+                    <a
+                        href="${esc(url)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        ${esc(name)}
+                    </a>
+
+                `;
+
+            });
+
+    }
+
+}
+
+
+/* =========================
+   SHOW CATEGORIES
+========================= */
+
+function showCategories(){
+
+    const container =
+        $("categories");
+
+
+    container.innerHTML = "";
+
+
+    const allButton =
+        document.createElement("button");
+
+
+    allButton.className =
+        "category-btn" +
+        (
+            currentCategory === "الكل"
+                ? " active"
+                : ""
+        );
+
+
+    allButton.textContent =
+        "الكل";
+
+
+    allButton.onclick = ()=>{
+
+        currentCategory = "الكل";
+
+        showCategories();
+
+        showProducts();
+
+    };
+
+
+    container.appendChild(allButton);
+
+
+    categories.forEach(category=>{
+
+        const button =
+            document.createElement("button");
+
+
+        button.className =
+            "category-btn" +
+            (
+                currentCategory === category.id ||
+                currentCategory === category.name
+                    ? " active"
+                    : ""
+            );
+
+
+        button.textContent =
+            category.name;
+
+
+        button.onclick = ()=>{
+
+            currentCategory =
+                category.id ||
+                category.name;
+
+            showCategories();
+
+            showProducts();
+
+        };
+
+
+        container.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================
+   SHOW PRODUCTS
 ========================= */
 
 function showProducts(){
 
-    let list;
+    const container =
+        $("menu");
 
 
-    if(
-        currentCategory ===
-        "الكل"
-    ){
+    container.innerHTML = "";
 
-        list =
-        products;
 
-    }
+    let list =
+        [...products];
 
-    else{
 
-        /*
-           يدعم category كـ ID
-           أو كاسم
-        */
-
-        const selected =
-        categories.find(
-            c =>
-            c.name ===
-            currentCategory
-        );
-
+    if(currentCategory !== "الكل"){
 
         list =
-        products.filter(
-            product => {
-
-                if(
-                    selected &&
-                    product.category ===
-                    selected.id
-                ){
-
-                    return true;
-
-                }
-
+            list.filter(product =>{
 
                 return (
-                    product.category ||
-                    "أخرى"
-                ) ===
-                currentCategory;
+                    product.category ===
+                    currentCategory
+                );
 
-            }
-        );
+            });
 
     }
 
 
-    /*
-       ترتيب الأصناف
-    */
+    list.sort((a,b)=>{
 
-    list =
-    [...list]
-    .sort(
-        (a,b) =>
-        num(a.order || 999) -
-        num(b.order || 999)
-    );
+        return (
+            num(a.order || 999) -
+            num(b.order || 999)
+        );
+
+    });
 
 
     if(!list.length){
 
-        $("menu").innerHTML =
-        `
-        <div class="empty">
-            لا توجد أصناف متاحة حاليًا
-        </div>
+        container.innerHTML = `
+
+            <div class="empty">
+
+                لا توجد أصناف حالياً
+
+            </div>
+
         `;
 
         return;
@@ -1242,120 +1095,194 @@ function showProducts(){
     }
 
 
-    $("menu").innerHTML =
+    list.forEach(product=>{
 
-    list
-    .map(
-        product => {
+        const card =
+            document.createElement("div");
 
-            const options =
+
+        card.className =
+            "product-card";
+
+
+        const image =
+            product.image ||
+            product.imageUrl ||
+            "";
+
+
+        const options =
             sortOptions(
                 product,
                 getOptions(product)
             );
 
 
-            const type =
+        const pricingType =
             getPricingType(
                 product,
                 options
             );
 
 
-            const mainPrice =
-            getMainPrice(
-                product,
-                options
-            );
+        let pricingHTML = "";
 
 
-            let imageHtml;
+        /* CUSTOM */
 
+        if(pricingType === "custom"){
 
-            if(product.image){
+            pricingHTML = `
 
-                imageHtml =
-                `
-                <img
-                    src="${esc(product.image)}"
-                    alt="${esc(product.name)}"
-                    onerror="this.style.display='none'"
-                >
-                `;
-
-            }
-
-            else{
-
-                imageHtml =
-                `
-                <div class="no-image">
-                    🥜
-                </div>
-                `;
-
-            }
-
-
-            /*
-               نص السعر
-            */
-
-            let priceHtml = "";
-
-
-            if(type === "custom"){
-
-                priceHtml =
-                `
                 <div class="custom-price">
-                    📝 السعر حسب الطلب
-                </div>
-                `;
 
+                    📝 السعر حسب الطلب
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* MORE THAN ONE PRICE */
+
+        else if(options.length > 1){
+
+            pricingHTML = `
+
+                <select class="price-select">
+
+                    ${options.map((option,index)=>`
+
+                        <option
+                            value="${index}"
+                        >
+                            ${esc(option.name)}
+                            -
+                            ${money(option.price)}
+                        </option>
+
+                    `).join("")}
+
+                </select>
+
+            `;
+
+        }
+
+
+        /* ONE PRICE */
+
+        else if(options.length === 1){
+
+            pricingHTML = `
+
+                <div class="price-main">
+
+                    ${esc(options[0].name)}
+                    -
+                    ${money(options[0].price)}
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* NO PRICE */
+
+        else{
+
+            pricingHTML = `
+
+                <div class="custom-price">
+
+                    السعر حسب الطلب
+
+                </div>
+
+            `;
+
+        }
+
+
+        card.innerHTML = `
+
+            ${
+                image
+                ?
+                `
+                    <img
+                        class="product-image"
+                        src="${esc(image)}"
+                        alt="${esc(product.name)}"
+                        loading="lazy"
+                        onerror="
+                            this.style.display='none';
+                        "
+                    >
+                `
+                :
+                `
+                    <div
+                        class="product-image"
+                    ></div>
+                `
             }
 
-            else if(mainPrice){
 
-                priceHtml =
-                `
-                <div class="price">
-                    <div class="price-main">
-                        ${esc(mainPrice.name)}
-                        :
-                        ${num(mainPrice.price)}
-                        جنيه
-                    </div>
-                `;
+            <div class="product-content">
+
+                <div class="product-name">
+
+                    ${esc(product.name)}
+
+                </div>
 
 
-                /*
-                   إظهار نصف وربع كيلو
-                   على البطاقة
-                */
+                ${
+                    product.description
+                    ?
+                    `
+                        <div
+                            class="product-description"
+                        >
+                            ${esc(product.description)}
+                        </div>
+                    `
+                    :
+                    ""
+                }
 
-                if(type === "kilo"){
 
-                    const extra =
-                    options.filter(
-                        option =>
-                        option.name !==
-                        "كيلو"
-                    );
+                ${pricingHTML}
 
 
-                    if(extra.length){
+                <button
+                    class="add-btn"
+                    data-add-product="${esc(product.id)}"
+                    type="button"
+                >
 
-                        priceHtml +=
-                        `
-                        <div class="price-extra">
-                            ${
-                                extra
-                                .map(
-                                    option =>
-                                    `
-                                    ${esc(option.name)}
-                                    :
-                                    ${num(option.price)}
-                                    جنيه
+                    إضافة للسلة 🛒
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+
+    container
+        .querySelectorAll("[data-add-product]")
+        .forEach(button=>{
+
+            button.addEventListener(
             
