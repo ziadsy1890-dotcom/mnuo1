@@ -19,14 +19,14 @@ body{
 }
 
 .container{
-    max-width:1100px;
+    max-width:900px;
     margin:auto;
     padding:15px;
 }
 
 .card{
     background:#fff;
-    border-radius:16px;
+    border-radius:15px;
     padding:20px;
     margin-bottom:20px;
     box-shadow:0 2px 10px #0001;
@@ -38,13 +38,12 @@ h1,h2,h3{
 
 input,
 textarea,
-select,
 button{
     width:100%;
-    padding:12px;
-    margin:6px 0;
+    padding:13px;
+    margin:7px 0;
     border:1px solid #ddd;
-    border-radius:9px;
+    border-radius:8px;
     font-size:16px;
 }
 
@@ -64,142 +63,17 @@ button:active{
     opacity:.8;
 }
 
-#adminPanel{
-    display:none;
-}
-
 .logout{
     background:#b00020;
 }
 
-.message{
-    text-align:center;
-    font-weight:bold;
-    min-height:20px;
-}
-
-.success{
-    color:green;
-}
-
-.error{
-    color:#c62828;
-}
-
-.small{
-    color:#666;
-    font-size:14px;
-}
-
-.info{
-    background:#e7f1ff;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:15px;
-    font-size:14px;
-}
-
-.warning{
-    background:#fff3cd;
-    color:#664d03;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:15px;
-}
-
-.section-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.section-title button{
-    width:auto;
-    min-width:140px;
-}
-
-.tabs{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
-
-.tab-button{
-    width:auto;
-    padding:11px 18px;
-    background:#777;
-}
-
-.tab-button.active{
-    background:#198754;
-}
-
-.tab-content{
+#adminPanel{
     display:none;
-}
-
-.tab-content.active{
-    display:block;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-}
-
-@media(max-width:700px){
-    .grid{
-        grid-template-columns:1fr;
-    }
-}
-
-.field{
-    margin-bottom:5px;
-}
-
-.field label{
-    display:block;
-    font-weight:bold;
-    margin:7px 0;
-}
-
-.options{
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:14px;
-    margin:12px 0;
-    background:#fafafa;
-}
-
-.unit-row{
-    display:grid;
-    grid-template-columns:40px 1fr 150px;
-    gap:8px;
-    align-items:center;
-    padding:8px 0;
-    border-bottom:1px solid #eee;
-}
-
-.unit-row:last-child{
-    border-bottom:none;
-}
-
-.unit-row input[type="checkbox"]{
-    width:auto;
-    margin:0;
-}
-
-.auto-price{
-    background:#eee;
 }
 
 .product{
     border:1px solid #ddd;
-    border-radius:14px;
+    border-radius:12px;
     padding:15px;
     margin:12px 0;
     background:#fafafa;
@@ -247,61 +121,48 @@ button:active{
     background:#c62828;
 }
 
-.move{
-    background:#6f42c1;
+.message{
+    text-align:center;
+    font-weight:bold;
+    min-height:20px;
 }
 
-.save{
-    background:#198754;
+.success{
+    color:green;
 }
 
-.add{
-    background:#0069d9;
+.error{
+    color:#c62828;
 }
 
-.item-box{
+.small{
+    color:#666;
+    font-size:14px;
+}
+
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
+
+.options{
     border:1px solid #ddd;
-    border-radius:12px;
+    border-radius:10px;
     padding:12px;
     margin:10px 0;
     background:#fafafa;
 }
 
-.drag-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:12px;
-    margin:8px 0;
-    border:1px solid #ddd;
-    border-radius:10px;
-    background:#fff;
-    cursor:grab;
+.options label{
+    display:block;
+    padding:8px 0;
+    font-size:16px;
 }
 
-.drag-handle{
-    font-size:22px;
-}
-
-.drag-number{
-    min-width:30px;
-    font-weight:bold;
-}
-
-.drag-name{
-    flex:1;
-    font-weight:bold;
-}
-
-.drag-buttons{
-    display:flex;
-    gap:5px;
-}
-
-.drag-buttons button{
+.options input[type="checkbox"]{
     width:auto;
-    padding:8px 12px;
-    margin:0;
+    margin-left:8px;
 }
 
 .status{
@@ -322,113 +183,12 @@ button:active{
     color:#842029;
 }
 
-.empty{
-    text-align:center;
-    padding:25px;
-    color:#777;
-}
-
-.zone-row,
-.branch-row,
-.social-row{
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:12px;
-    margin:10px 0;
-    background:#fafafa;
-}
-
-.zone-header,
-.branch-header,
-.social-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-}
-
-.zone-header button,
-.branch-header button,
-.social-header button{
-    width:auto;
-    padding:8px 12px;
-}
-
-.danger{
-    background:#c62828;
-}
-
-.gray{
-    background:#777;
-}
-
-.green{
-    background:#198754;
-}
-
-.blue{
-    background:#0069d9;
-}
-
-.purple{
-    background:#6f42c1;
-}
-
-.orange{
-    background:#fd7e14;
-}
-
-.backup-box{
-    background:#f8f9fa;
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:15px;
-    margin:12px 0;
-}
-
-.file-input{
-    background:#fff;
-}
-
-.category-badge{
-    display:inline-block;
-    background:#e9ecef;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:13px;
-}
-
-.product-list-title{
-    background:#f1f3f5;
-    padding:10px;
+.info{
+    background:#e7f1ff;
     border-radius:10px;
-    margin-top:15px;
-    font-weight:bold;
-}
-
-hr{
-    border:0;
-    border-top:1px solid #eee;
-    margin:20px 0;
-}
-
-.preview-image{
-    max-width:200px;
-    max-height:200px;
-    border-radius:12px;
-    margin-top:10px;
-}
-
-.link-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-
-@media(max-width:700px){
-    .link-row{
-        grid-template-columns:1fr;
-    }
+    padding:12px;
+    margin-bottom:15px;
+    font-size:14px;
 }
 </style>
 </head>
@@ -437,8 +197,7 @@ hr{
 
 <div class="container">
 
-<!-- LOGIN -->
-
+<!-- تسجيل الدخول -->
 <div id="loginPanel" class="card">
 
     <h1>🔐 لوحة تحكم فستق حلب</h1>
@@ -466,524 +225,118 @@ hr{
 </div>
 
 
-<!-- ADMIN -->
-
+<!-- لوحة الإدارة -->
 <div id="adminPanel">
 
     <div class="card">
 
-        <div class="section-title">
+        <h1>🍰 فستق حلب</h1>
 
-            <div>
-                <h1>🍰 فستق حلب</h1>
+        <p class="small">
+            لوحة إدارة الأصناف والأسعار
+        </p>
 
-                <p class="small">
-                    لوحة التحكم الكاملة للمنيو
-                </p>
-            </div>
-
-            <button
-                class="logout"
-                onclick="logout()">
-                تسجيل الخروج
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- TABS -->
-
-    <div class="tabs">
-
-        <button
-            class="tab-button active"
-            onclick="showTab('productsTab',this)">
-            🍰 الأصناف
-        </button>
-
-        <button
-            class="tab-button"
-            onclick="showTab('categoriesTab',this)">
-            🗂️ الأقسام
-        </button>
-
-        <button
-            class="tab-button"
-            onclick="showTab('deliveryTab',this)">
-            🚚 التوصيل والفروع
-        </button>
-
-        <button
-            class="tab-button"
-            onclick="showTab('socialTab',this)">
-            📱 السوشيال ميديا
-        </button>
-
-        <button
-            class="tab-button"
-            onclick="showTab('backupTab',this)">
-            💾 النسخ الاحتياطي
+        <button class="logout" onclick="logout()">
+            تسجيل الخروج
         </button>
 
     </div>
 
 
-    <!-- PRODUCTS -->
+    <!-- إضافة صنف -->
+    <div class="card">
 
-    <div id="productsTab" class="tab-content active">
+        <h2>➕ إضافة صنف جديد</h2>
 
-        <div class="card">
-
-            <div class="section-title">
-
-                <h2>🍰 الأصناف</h2>
-
-                <button
-                    class="add"
-                    onclick="openProductForm()">
-                    + إضافة صنف
-                </button>
-
-            </div>
-
-            <div class="info">
-                يمكنك إضافة اسم الصنف، القسم، الصورة،
-                ووحدات البيع: كيلو، نصف كيلو، ربع كيلو،
-                قطعة أو علبة.
-            </div>
-
-            <select id="filterCategory" onchange="renderProducts()">
-                <option value="">كل الأقسام</option>
-            </select>
-
-            <div id="productsList"></div>
-
+        <div class="info">
+            السعر الذي تدخله هنا هو سعر الكيلو.
+            يمكنك اختيار ربع كيلو ونصف كيلو وكيلو.
         </div>
 
+        <input
+            type="text"
+            id="productName"
+            placeholder="اسم الصنف">
 
-        <!-- PRODUCT FORM -->
+        <input
+            type="number"
+            id="productPrice"
+            placeholder="سعر الكيلو"
+            min="0"
+            step="0.01">
 
-        <div
-            id="productFormCard"
-            class="card"
-            style="display:none">
+        <input
+            type="text"
+            id="productCategory"
+            placeholder="التصنيف">
 
-            <h2 id="productFormTitle">
-                ➕ إضافة صنف
-            </h2>
+        <input
+            type="number"
+            id="maxQuantity"
+            placeholder="الحد الأقصى للكمية"
+            min="1"
+            value="10">
 
-            <input
-                type="hidden"
-                id="productId">
+        <textarea
+            id="productDescription"
+            placeholder="وصف الصنف"></textarea>
 
-            <div class="grid">
+        <input
+            type="url"
+            id="productImage"
+            placeholder="رابط صورة الصنف">
 
-                <div class="field">
+        <div class="options">
 
-                    <label>اسم الصنف</label>
+            <strong>الأوزان المتاحة:</strong>
 
-                    <input
-                        id="productName"
-                        placeholder="مثال: فستق حلبي فاخر">
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>القسم</label>
-
-                    <select id="productCategory"></select>
-
-                </div>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>وصف الصنف</label>
-
-                <textarea
-                    id="productDescription"
-                    placeholder="وصف مختصر للصنف"></textarea>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>رابط الصورة</label>
-
+            <label>
                 <input
-                    id="productImage"
-                    placeholder="https://...">
+                    type="checkbox"
+                    id="weightQuarter"
+                    value="ربع كيلو"
+                    checked>
+                ربع كيلو
+            </label>
 
-                <img
-                    id="imagePreview"
-                    class="preview-image"
-                    style="display:none">
+            <label>
+                <input
+                    type="checkbox"
+                    id="weightHalf"
+                    value="نصف كيلو"
+                    checked>
+                نصف كيلو
+            </label>
 
-            </div>
-
-
-            <div class="options">
-
-                <h3>⚖️ وحدات البيع والأسعار</h3>
-
-                <div class="unit-row">
-
-                    <input
-                        type="checkbox"
-                        id="unitKg">
-
-                    <label for="unitKg">
-                        1 كيلو
-                    </label>
-
-                    <input
-                        type="number"
-                        id="priceKg"
-                        placeholder="السعر">
-
-                </div>
-
-
-                <div class="unit-row">
-
-                    <input
-                        type="checkbox"
-                        id="unitHalf">
-
-                    <label for="unitHalf">
-                        نصف كيلو
-                    </label>
-
-                    <input
-                        type="number"
-                        id="priceHalf"
-                        placeholder="السعر">
-
-                </div>
-
-
-                <div class="unit-row">
-
-                    <input
-                        type="checkbox"
-                        id="unitQuarter">
-
-                    <label for="unitQuarter">
-                        ربع كيلو
-                    </label>
-
-                    <input
-                        type="number"
-                        id="priceQuarter"
-                        placeholder="السعر">
-
-                </div>
-
-
-                <div class="unit-row">
-
-                    <input
-                        type="checkbox"
-                        id="unitPiece">
-
-                    <label for="unitPiece">
-                        قطعة
-                    </label>
-
-                    <input
-                        type="number"
-                        id="pricePiece"
-                        placeholder="السعر">
-
-                </div>
-
-
-                <div class="unit-row">
-
-                    <input
-                        type="checkbox"
-                        id="unitBox">
-
-                    <label for="unitBox">
-                        علبة
-                    </label>
-
-                    <input
-                        type="number"
-                        id="priceBox"
-                        placeholder="السعر">
-
-                </div>
-
-            </div>
-
-
-            <div class="grid">
-
-                <div>
-
-                    <label>
-                        ترتيب الصنف
-                    </label>
-
-                    <input
-                        type="number"
-                        id="productOrder"
-                        value="0">
-
-                </div>
-
-                <div>
-
-                    <label>
-                        الحالة
-                    </label>
-
-                    <select id="productVisible">
-
-                        <option value="true">
-                            ظاهر
-                        </option>
-
-                        <option value="false">
-                            مخفي
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="save"
-                    onclick="saveProduct()">
-                    💾 حفظ الصنف
-                </button>
-
-                <button
-                    class="gray"
-                    onclick="closeProductForm()">
-                    إلغاء
-                </button>
-
-            </div>
-
-            <p id="productMessage" class="message"></p>
+            <label>
+                <input
+                    type="checkbox"
+                    id="weightKilo"
+                    value="كيلو"
+                    checked>
+                كيلو
+            </label>
 
         </div>
+
+        <button onclick="addProduct()">
+            ➕ إضافة الصنف
+        </button>
+
+        <p id="addMessage" class="message"></p>
 
     </div>
 
 
-    <!-- CATEGORIES -->
+    <!-- قائمة الأصناف -->
+    <div class="card">
 
-    <div
-        id="categoriesTab"
-        class="tab-content">
+        <h2>📋 الأصناف</h2>
 
-        <div class="card">
-
-            <div class="section-title">
-
-                <h2>🗂️ الأقسام</h2>
-
-                <button
-                    class="add"
-                    onclick="addCategory()">
-                    + إضافة قسم
-                </button>
-
+        <div id="productsList">
+            <div class="empty">
+                جاري تحميل الأصناف...
             </div>
-
-            <div id="categoriesList"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- DELIVERY -->
-
-    <div
-        id="deliveryTab"
-        class="tab-content">
-
-        <div class="card">
-
-            <h2>🚚 التوصيل والفروع</h2>
-
-            <div class="info">
-                يمكنك إنشاء فروع ومناطق توصيل،
-                ولكل منطقة سعر توصيل مختلف.
-            </div>
-
-            <h3>🏪 الفروع</h3>
-
-            <button
-                class="blue"
-                onclick="addBranch()">
-                + إضافة فرع
-            </button>
-
-            <div id="branchesList"></div>
-
-            <hr>
-
-            <h3>📍 مناطق التوصيل</h3>
-
-            <button
-                class="orange"
-                onclick="addZone()">
-                + إضافة منطقة
-            </button>
-
-            <div id="zonesList"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- SOCIAL -->
-
-    <div
-        id="socialTab"
-        class="tab-content">
-
-        <div class="card">
-
-            <h2>📱 السوشيال ميديا</h2>
-
-            <div class="info">
-                أضف روابط صفحات المتجر التي تريد ظهورها
-                في المنيو.
-            </div>
-
-            <div class="social-row">
-
-                <label>Facebook</label>
-
-                <input
-                    id="facebook"
-                    placeholder="https://facebook.com/...">
-
-            </div>
-
-
-            <div class="social-row">
-
-                <label>Instagram</label>
-
-                <input
-                    id="instagram"
-                    placeholder="https://instagram.com/...">
-
-            </div>
-
-
-            <div class="social-row">
-
-                <label>TikTok</label>
-
-                <input
-                    id="tiktok"
-                    placeholder="https://tiktok.com/@...">
-
-            </div>
-
-
-            <div class="social-row">
-
-                <label>WhatsApp</label>
-
-                <input
-                    id="whatsapp"
-                    placeholder="https://wa.me/...">
-
-            </div>
-
-
-            <div class="social-row">
-
-                <label>Telegram</label>
-
-                <input
-                    id="telegram"
-                    placeholder="https://t.me/...">
-
-            </div>
-
-
-            <button
-                class="save"
-                onclick="saveSocial()">
-                💾 حفظ روابط السوشيال ميديا
-            </button>
-
-            <p id="socialMessage" class="message"></p>
-
-        </div>
-
-    </div>
-
-
-    <!-- BACKUP -->
-
-    <div
-        id="backupTab"
-        class="tab-content">
-
-        <div class="card">
-
-            <h2>💾 النسخ الاحتياطي</h2>
-
-            <div class="backup-box">
-
-                <h3>📥 تصدير البيانات</h3>
-
-                <p class="small">
-                    حفظ نسخة من الأصناف والأقسام والتوصيل
-                    والسوشيال ميديا.
-                </p>
-
-                <button
-                    class="green"
-                    onclick="exportData()">
-                    تنزيل نسخة احتياطية
-                </button>
-
-            </div>
-
-
-            <div class="backup-box">
-
-                <h3>📤 استرجاع البيانات</h3>
-
-                <input
-                    class="file-input"
-                    type="file"
-                    id="backupFile"
-                    accept=".json">
-
-                <button
-                    class="blue"
-                    onclick="importData()">
-                    استرجاع النسخة
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -992,60 +345,43 @@ hr{
 
 </div>
 
-
-<!-- FIREBASE -->
 
 <script type="module">
 
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
 import {
     getAuth,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 import {
     getFirestore,
     collection,
-    doc,
     addDoc,
-    setDoc,
     getDocs,
-    getDoc,
-    deleteDoc,
-    query,
-    orderBy
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    doc,
+    updateDoc,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
-// =====================================================
-// FIREBASE CONFIG
-// =====================================================
+/* Firebase */
 
 const firebaseConfig = {
-
-    apiKey: "ضع_API_KEY_هنا",
-
-    authDomain: "ضع_PROJECT_ID.firebaseapp.com",
-
-    projectId: "ضع_PROJECT_ID_هنا",
-
-    storageBucket: "ضع_PROJECT_ID.firebasestorage.app",
-
-    messagingSenderId: "ضع_MESSAGING_SENDER_ID_هنا",
-
-    appId: "ضع_APP_ID_هنا"
-
+    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+    authDomain: "pistach-d-alep.firebaseapp.com",
+    projectId: "pistach-d-alep",
+    storageBucket: "pistach-d-alep.firebasestorage.app",
+    messagingSenderId: "288943885593",
+    appId: "1:288943885593:web:4737041244be376c274988",
+    measurementId: "G-569W2MXBTJ"
 };
 
-
-// =====================================================
-// FIREBASE INITIALIZE
-// =====================================================
 
 const app = initializeApp(firebaseConfig);
 
@@ -1054,20 +390,25 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// =====================================================
-// GLOBAL DATA
-// =====================================================
+/* عناصر الصفحة */
 
-let products = [];
-let categories = [];
-let branches = [];
-let zones = [];
-let social = {};
+const loginPanel =
+    document.getElementById("loginPanel");
+
+const adminPanel =
+    document.getElementById("adminPanel");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const addMessage =
+    document.getElementById("addMessage");
+
+const productsList =
+    document.getElementById("productsList");
 
 
-// =====================================================
-// LOGIN
-// =====================================================
+/* تسجيل الدخول */
 
 window.login = async function(){
 
@@ -1077,17 +418,15 @@ window.login = async function(){
     const password =
         document.getElementById("password").value;
 
-    const message =
-        document.getElementById("loginMessage");
-
-    message.className = "message";
+    loginMessage.textContent = "";
 
     if(!email || !password){
 
-        message.textContent =
+        loginMessage.textContent =
             "أدخل البريد الإلكتروني وكلمة المرور";
 
-        message.classList.add("error");
+        loginMessage.className =
+            "message error";
 
         return;
     }
@@ -1100,47 +439,46 @@ window.login = async function(){
             password
         );
 
-        message.textContent =
+        loginMessage.textContent =
             "تم تسجيل الدخول";
 
-        message.classList.add("success");
+        loginMessage.className =
+            "message success";
 
     }catch(error){
 
         console.error(error);
 
-        message.textContent =
-            "فشل تسجيل الدخول. تأكد من البيانات.";
+        loginMessage.textContent =
+            "البريد الإلكتروني أو كلمة المرور غير صحيحة";
 
-        message.classList.add("error");
+        loginMessage.className =
+            "message error";
+    }
+
+};
+
+
+/* تسجيل الخروج */
+
+window.logout = async function(){
+
+    try{
+
+        await signOut(auth);
+
+    }catch(error){
+
+        console.error(error);
 
     }
 
 };
 
 
-// =====================================================
-// LOGOUT
-// =====================================================
+/* مراقبة حالة تسجيل الدخول */
 
-window.logout = async function(){
-
-    await signOut(auth);
-
-};
-
-
-// =====================================================
-// AUTH STATE
-// =====================================================
-
-onAuthStateChanged(auth, async user => {
-
-    const loginPanel =
-        document.getElementById("loginPanel");
-
-    const adminPanel =
-        document.getElementById("adminPanel");
+onAuthStateChanged(auth, async(user)=>{
 
     if(user){
 
@@ -1148,7 +486,7 @@ onAuthStateChanged(auth, async user => {
 
         adminPanel.style.display = "block";
 
-        await loadAllData();
+        await loadProducts();
 
     }else{
 
@@ -1161,4 +499,627 @@ onAuthStateChanged(auth, async user => {
 });
 
 
-// =========================
+/* الأوزان المختارة */
+
+function getSelectedWeights(){
+
+    const weights = [];
+
+    if(
+        document.getElementById("weightQuarter").checked
+    ){
+        weights.push("ربع كيلو");
+    }
+
+    if(
+        document.getElementById("weightHalf").checked
+    ){
+        weights.push("نصف كيلو");
+    }
+
+    if(
+        document.getElementById("weightKilo").checked
+    ){
+        weights.push("كيلو");
+    }
+
+    return weights;
+}
+
+
+/* إضافة صنف */
+
+window.addProduct = async function(){
+
+    const name =
+        document.getElementById("productName").value.trim();
+
+    const price =
+        Number(
+            document.getElementById("productPrice").value
+        );
+
+    const category =
+        document.getElementById("productCategory").value.trim();
+
+    const maxQuantity =
+        Number(
+            document.getElementById("maxQuantity").value
+        );
+
+    const description =
+        document.getElementById("productDescription").value.trim();
+
+    const image =
+        document.getElementById("productImage").value.trim();
+
+    const weights =
+        getSelectedWeights();
+
+
+    if(!name){
+
+        addMessage.textContent =
+            "اكتب اسم الصنف";
+
+        addMessage.className =
+            "message error";
+
+        return;
+    }
+
+
+    if(!price || price < 0){
+
+        addMessage.textContent =
+            "أدخل سعرًا صحيحًا";
+
+        addMessage.className =
+            "message error";
+
+        return;
+    }
+
+
+    if(!maxQuantity || maxQuantity < 1){
+
+        addMessage.textContent =
+            "أدخل الحد الأقصى للكمية";
+
+        addMessage.className =
+            "message error";
+
+        return;
+    }
+
+
+    if(weights.length === 0){
+
+        addMessage.textContent =
+            "اختر وزنًا واحدًا على الأقل";
+
+        addMessage.className =
+            "message error";
+
+        return;
+    }
+
+
+    try{
+
+        await addDoc(
+            collection(db,"products"),
+            {
+                name:name,
+                price:price,
+                category:category,
+                description:description,
+                image:image,
+                maxQuantity:maxQuantity,
+                weights:weights,
+                hidden:false,
+                createdAt:Date.now()
+            }
+        );
+
+
+        addMessage.textContent =
+            "✅ تم إضافة الصنف بنجاح";
+
+        addMessage.className =
+            "message success";
+
+
+        document.getElementById("productName").value = "";
+
+        document.getElementById("productPrice").value = "";
+
+        document.getElementById("productCategory").value = "";
+
+        document.getElementById("maxQuantity").value = "10";
+
+        document.getElementById("productDescription").value = "";
+
+        document.getElementById("productImage").value = "";
+
+
+        document.getElementById("weightQuarter").checked = true;
+
+        document.getElementById("weightHalf").checked = true;
+
+        document.getElementById("weightKilo").checked = true;
+
+
+        await loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        addMessage.textContent =
+            "❌ حدث خطأ أثناء إضافة الصنف";
+
+        addMessage.className =
+            "message error";
+
+    }
+
+};
+
+
+/* تحميل الأصناف */
+
+async function loadProducts(){
+
+    productsList.innerHTML =
+        '<div class="empty">جاري تحميل الأصناف...</div>';
+
+
+    try{
+
+        const snapshot =
+            await getDocs(
+                collection(db,"products")
+            );
+
+
+        if(snapshot.empty){
+
+            productsList.innerHTML =
+                '<div class="empty">لا توجد أصناف حتى الآن</div>';
+
+            return;
+        }
+
+
+        productsList.innerHTML = "";
+
+
+        snapshot.forEach((item)=>{
+
+            const data = item.data();
+
+            const hidden =
+                data.hidden === true;
+
+            const maxQuantity =
+                data.maxQuantity || 10;
+
+            const weights =
+                Array.isArray(data.weights)
+                ? data.weights
+                : ["كيلو"];
+
+
+            const product =
+                document.createElement("div");
+
+            product.className =
+                hidden
+                ? "product hidden"
+                : "product";
+
+
+            const image =
+                data.image
+                ? `
+                    <img
+                        src="${escapeHtml(data.image)}"
+                        alt="${escapeHtml(data.name || "")}"
+                        onerror="this.style.display='none'">
+                  `
+                : "";
+
+
+            const status =
+                hidden
+                ? `
+                    <span class="status status-hidden">
+                        🔴 مخفي عن العملاء
+                    </span>
+                  `
+                : `
+                    <span class="status status-visible">
+                        🟢 ظاهر للعملاء
+                    </span>
+                  `;
+
+
+            const hideButton =
+                hidden
+                ? `
+                    <button
+                        class="show"
+                        onclick="toggleHidden('${item.id}', true)">
+                        👁️ إظهار
+                    </button>
+                  `
+                : `
+                    <button
+                        class="hide"
+                        onclick="toggleHidden('${item.id}', false)">
+                        🚫 إخفاء
+                    </button>
+                  `;
+
+
+            product.innerHTML = `
+
+                ${image}
+
+                <h3>
+                    ${escapeHtml(data.name || "بدون اسم")}
+                </h3>
+
+                <p>
+                    💰 السعر: ${Number(data.price || 0)} جنيه / كيلو
+                </p>
+
+                <p>
+                    📦 الحد الأقصى:
+                    ${maxQuantity}
+                </p>
+
+                <p>
+                    ⚖️ الأوزان:
+                    ${weights.join(" - ")}
+                </p>
+
+                <p>
+                    🏷️ التصنيف:
+                    ${escapeHtml(data.category || "بدون تصنيف")}
+                </p>
+
+                ${
+                    data.description
+                    ? `
+                        <p>
+                            📝 ${escapeHtml(data.description)}
+                        </p>
+                      `
+                    : ""
+                }
+
+                ${status}
+
+                <div class="actions">
+
+                    <button
+                        class="edit"
+                        onclick="editProduct('${item.id}')">
+                        ✏️ تعديل
+                    </button>
+
+                    ${hideButton}
+
+                    <button
+                        class="delete"
+                        onclick="deleteProduct('${item.id}')">
+                        🗑️ حذف
+                    </button>
+
+                </div>
+            `;
+
+
+            productsList.appendChild(product);
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        productsList.innerHTML =
+            `
+            <div class="empty error">
+                ❌ لم نتمكن من تحميل الأصناف
+            </div>
+            `;
+
+    }
+
+}
+
+
+/* إخفاء / إظهار */
+
+window.toggleHidden = async function(
+    id,
+    currentHidden
+){
+
+    try{
+
+        await updateDoc(
+            doc(db,"products",id),
+            {
+                hidden:!currentHidden
+            }
+        );
+
+
+        await loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء تغيير حالة الصنف"
+        );
+
+    }
+
+};
+
+
+/* تعديل صنف */
+
+window.editProduct = async function(id){
+
+    try{
+
+        const snapshot =
+            await getDocs(
+                collection(db,"products")
+            );
+
+
+        let productData = null;
+
+
+        snapshot.forEach((item)=>{
+
+            if(item.id === id){
+
+                productData = item.data();
+
+            }
+
+        });
+
+
+        if(!productData){
+
+            alert("الصنف غير موجود");
+
+            return;
+        }
+
+
+        const newName =
+            prompt(
+                "اسم الصنف:",
+                productData.name || ""
+            );
+
+
+        if(newName === null) return;
+
+
+        const newPrice =
+            prompt(
+                "سعر الكيلو:",
+                productData.price || ""
+            );
+
+
+        if(newPrice === null) return;
+
+
+        const newMax =
+            prompt(
+                "الحد الأقصى للكمية:",
+                productData.maxQuantity || 10
+            );
+
+
+        if(newMax === null) return;
+
+
+        const newCategory =
+            prompt(
+                "التصنيف:",
+                productData.category || ""
+            );
+
+
+        if(newCategory === null) return;
+
+
+        const newDescription =
+            prompt(
+                "الوصف:",
+                productData.description || ""
+            );
+
+
+        if(newDescription === null) return;
+
+
+        const newImage =
+            prompt(
+                "رابط الصورة:",
+                productData.image || ""
+            );
+
+
+        if(newImage === null) return;
+
+
+        const oldWeights =
+            Array.isArray(productData.weights)
+            ? productData.weights
+            : ["كيلو"];
+
+
+        const newWeightsText =
+            prompt(
+                "الأوزان المتاحة، افصل بينها بفاصلة:\nربع كيلو, نصف كيلو, كيلو",
+                oldWeights.join(", ")
+            );
+
+
+        if(newWeightsText === null) return;
+
+
+        const newWeights =
+            newWeightsText
+            .split(",")
+            .map(item=>item.trim())
+            .filter(item=>item);
+
+
+        if(newWeights.length === 0){
+
+            alert(
+                "يجب اختيار وزن واحد على الأقل"
+            );
+
+            return;
+        }
+
+
+        const priceNumber =
+            Number(newPrice);
+
+        const maxNumber =
+            Number(newMax);
+
+
+        if(
+            isNaN(priceNumber) ||
+            priceNumber < 0
+        ){
+
+            alert("السعر غير صحيح");
+
+            return;
+        }
+
+
+        if(
+            isNaN(maxNumber) ||
+            maxNumber < 1
+        ){
+
+            alert(
+                "الحد الأقصى غير صحيح"
+            );
+
+            return;
+        }
+
+
+        await updateDoc(
+            doc(db,"products",id),
+            {
+                name:newName.trim(),
+                price:priceNumber,
+                maxQuantity:maxNumber,
+                category:newCategory.trim(),
+                description:newDescription.trim(),
+                image:newImage.trim(),
+                weights:newWeights
+            }
+        );
+
+
+        alert("✅ تم تعديل الصنف");
+
+        await loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء تعديل الصنف"
+        );
+
+    }
+
+};
+
+
+/* حذف صنف */
+
+window.deleteProduct = async function(id){
+
+    const confirmDelete =
+        confirm(
+            "هل أنت متأكد من حذف هذا الصنف؟"
+        );
+
+
+    if(!confirmDelete){
+
+        return;
+    }
+
+
+    try{
+
+        await deleteDoc(
+            doc(db,"products",id)
+        );
+
+
+        await loadProducts();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء حذف الصنف"
+        );
+
+    }
+
+};
+
+
+/* حماية النصوص */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+    </html>
