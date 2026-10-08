@@ -6,7 +6,9 @@
 <title>لوحة تحكم - فستق حلب</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -90,6 +92,10 @@ button:hover{
     background:#777;
 }
 
+.orange{
+    background:#e67e22;
+}
+
 .info{
     background:#e7f1ff;
     padding:12px;
@@ -163,15 +169,6 @@ button:hover{
     margin:8px 0;
 }
 
-.order-badge{
-    display:inline-block;
-    background:#eee;
-    padding:4px 8px;
-    border-radius:8px;
-    font-size:12px;
-    margin-right:5px;
-}
-
 .price-note{
     background:#fff8e1;
     border:1px solid #ffe082;
@@ -181,20 +178,87 @@ button:hover{
     line-height:1.8;
 }
 
+.pricing-mode{
+    border:2px solid #ddd;
+    border-radius:12px;
+    padding:14px;
+    margin:10px 0;
+    background:#fafafa;
+}
+
+.pricing-mode.active{
+    border-color:#789262;
+    background:#f5f9ef;
+}
+
+.mode-title{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.mode-description{
+    font-size:13px;
+    color:#666;
+    line-height:1.6;
+}
+
+.price-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.product-prices{
+    background:#f8f8f8;
+    padding:10px;
+    border-radius:10px;
+    margin-top:10px;
+    line-height:1.8;
+}
+
+.edit-box{
+    background:#fff;
+    border:2px solid #789262;
+    border-radius:12px;
+    padding:15px;
+    margin-top:12px;
+}
+
+.hidden{
+    display:none !important;
+}
+
 .loading{
     text-align:center;
     color:#777;
     padding:20px;
 }
 
+.empty{
+    text-align:center;
+    color:#777;
+    padding:20px;
+}
+
+.small{
+    font-size:13px;
+    color:#666;
+}
+
 @media(max-width:600px){
-    .row{
+
+    .row,
+    .price-row{
         grid-template-columns:1fr;
     }
 
     .actions{
         display:grid;
         grid-template-columns:1fr 1fr;
+    }
+
+    .actions button{
+        min-width:0;
     }
 }
 </style>
@@ -235,7 +299,7 @@ button:hover{
 
 <div id="adminPanel" style="display:none">
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 
 <div class="card">
 
@@ -354,10 +418,7 @@ button:hover{
         💾 حفظ إعدادات المنيو
     </button>
 
-    <p
-        id="settingsMessage"
-        class="message"
-    ></p>
+    <p id="settingsMessage" class="message"></p>
 
 </div>
 
@@ -371,7 +432,6 @@ button:hover{
     <div class="info">
         اكتب اسم القسم ورقم الترتيب.
         الرقم الأصغر يظهر أولًا.
-        بعد إضافة القسم يتم تفريغ خانات الإدخال تلقائيًا.
     </div>
 
     <div class="row">
@@ -394,10 +454,7 @@ button:hover{
         ➕ إضافة قسم
     </button>
 
-    <p
-        id="categoryMessage"
-        class="message"
-    ></p>
+    <p id="categoryMessage" class="message"></p>
 
     <div id="categoriesList"></div>
 
@@ -434,10 +491,7 @@ button:hover{
         ➕ إضافة منطقة
     </button>
 
-    <p
-        id="regionMessage"
-        class="message"
-    ></p>
+    <p id="regionMessage" class="message"></p>
 
     <div id="regionsList"></div>
 
@@ -452,15 +506,14 @@ button:hover{
 
     <div class="price-note">
 
-        <strong>طريقة الأسعار:</strong><br>
+        <strong>نظام التسعير:</strong><br>
 
-        سعر الكيلو هو السعر الأساسي فقط.<br>
+        ① بالوزن: كيلو + نصف كيلو + ربع كيلو.<br>
+        ② قطعة أو علبة: تختار وحدة واحدة فقط وتحدد سعرها.<br>
+        ③ حسب الطلب: بدون سعر ثابت.<br><br>
 
-        نصف كيلو = سعر الكيلو × 0.5<br>
-
-        ربع كيلو = سعر الكيلو × 0.25<br>
-
-        قطعة أو علبة = سعر مستقل.
+        <strong>ملاحظة:</strong>
+        أي سعر قيمته 0 لن يظهر للعميل في بطاقة الصنف.
 
     </div>
 
@@ -496,82 +549,124 @@ button:hover{
         placeholder="رابط صورة الصنف"
     >
 
-    <div class="row">
+    <input
+        id="maxQuantity"
+        type="number"
+        min="1"
+        value="10"
+        placeholder="الحد الأقصى للكمية"
+    >
 
-        <input
-            id="kiloPrice"
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="سعر الكيلو"
-        >
 
-        <input
-            id="maxQuantity"
-            type="number"
-            min="1"
-            value="10"
-            placeholder="الحد الأقصى للكمية"
-        >
+    <!-- ===== PRICING TYPE ===== -->
+
+    <h3>💰 طريقة التسعير</h3>
+
+    <select id="pricingType" onchange="changePricingType()">
+
+        <option value="weight">
+            ⚖️ بالوزن
+        </option>
+
+        <option value="unit">
+            📦 قطعة أو علبة
+        </option>
+
+        <option value="custom">
+            📝 حسب الطلب
+        </option>
+
+    </select>
+
+
+    <!-- ===== WEIGHT ===== -->
+
+    <div id="weightPricing">
+
+        <div class="unit-box">
+
+            <strong>كيلو</strong>
+
+            <input
+                id="kiloPrice"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="سعر الكيلو"
+                oninput="updatePricePreview()"
+            >
+
+        </div>
+
+        <div class="unit-box">
+
+            <strong>نصف كيلو</strong>
+
+            <input
+                id="halfPreview"
+                disabled
+                placeholder="السعر المحسوب"
+            >
+
+        </div>
+
+        <div class="unit-box">
+
+            <strong>ربع كيلو</strong>
+
+            <input
+                id="quarterPreview"
+                disabled
+                placeholder="السعر المحسوب"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- ===== UNIT ===== -->
+
+    <div id="unitPricing" class="hidden">
+
+        <div class="row">
+
+            <select id="unitName">
+
+                <option value="قطعة">
+                    قطعة
+                </option>
+
+                <option value="علبة">
+                    علبة
+                </option>
+
+            </select>
+
+            <input
+                id="unitPrice"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="السعر"
+            >
+
+        </div>
 
     </div>
 
-    <h3>⚖️ الأسعار المحسوبة</h3>
 
-    <div class="unit-box">
+    <!-- ===== CUSTOM ===== -->
 
-        <strong>كيلو</strong>
+    <div id="customPricing" class="hidden">
 
-        <input
-            id="kiloPreview"
-            disabled
-            placeholder="سيظهر السعر"
-        >
+        <div class="info">
+            هذا الصنف لا يملك سعرًا ثابتًا.
+            سيظهر للعميل باسم "حسب الطلب".
+        </div>
 
     </div>
 
-    <div class="unit-box">
-
-        <strong>نصف كيلو</strong>
-
-        <input
-            id="halfPreview"
-            disabled
-            placeholder="سيظهر السعر"
-        >
-
-    </div>
-
-    <div class="unit-box">
-
-        <strong>ربع كيلو</strong>
-
-        <input
-            id="quarterPreview"
-            disabled
-            placeholder="سيظهر السعر"
-        >
-
-    </div>
-
-    <h3>📦 وحدة إضافية</h3>
-
-    <div class="row">
-
-        <input
-            id="extraUnitName"
-            placeholder="مثال: قطعة أو علبة"
-        >
-
-        <input
-            id="extraUnitPrice"
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="السعر"
-        >
-
-    </div>
 
     <button
         class="green"
@@ -580,10 +675,7 @@ button:hover{
         ➕ إضافة الصنف
     </button>
 
-    <p
-        id="addMessage"
-        class="message"
-    ></p>
+    <p id="addMessage" class="message"></p>
 
 </div>
 
@@ -601,9 +693,11 @@ button:hover{
     >
 
     <div id="productsList">
+
         <div class="loading">
             جاري التحميل...
         </div>
+
     </div>
 
 </div>
@@ -646,15 +740,11 @@ button:hover{
         ⬆️ استعادة النسخة الاحتياطية
     </button>
 
-    <p
-        id="backupMessage"
-        class="message"
-    ></p>
+    <p id="backupMessage" class="message"></p>
 
 </div>
 
 </div>
-
 </div>
 
 
@@ -721,13 +811,17 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
-const db = getFirestore(app);
+const db =
+    getFirestore(app);
 
-const storage = getStorage(app);
+const storage =
+    getStorage(app);
 
 
 /* =====================================================
@@ -761,12 +855,18 @@ const num = value => {
 
     const n = Number(value);
 
-    return Number.isFinite(n) ? n : 0;
+    return Number.isFinite(n)
+        ? n
+        : 0;
 
 };
 
 
-function showMessage(id,text,success=true){
+function showMessage(
+    id,
+    text,
+    success=true
+){
 
     const el = $(id);
 
@@ -776,7 +876,11 @@ function showMessage(id,text,success=true){
 
     el.className =
         "message " +
-        (success ? "successText" : "errorText");
+        (
+            success
+                ? "successText"
+                : "errorText"
+        );
 
 }
 
@@ -793,6 +897,7 @@ window.login = async function(){
     const password =
         $("password").value;
 
+
     if(!email || !password){
 
         showMessage(
@@ -804,17 +909,13 @@ window.login = async function(){
         return;
     }
 
+
     try{
 
         await signInWithEmailAndPassword(
             auth,
             email,
             password
-        );
-
-        showMessage(
-            "loginMessage",
-            "✅ تم تسجيل الدخول"
         );
 
     }catch(error){
@@ -858,6 +959,7 @@ onAuthStateChanged(
 
             $("adminPanel").style.display =
                 "block";
+
 
             try{
 
@@ -1041,9 +1143,8 @@ function fillSettings(){
 
     }else{
 
-        $("logoPreview").removeAttribute(
-            "src"
-        );
+        $("logoPreview")
+            .removeAttribute("src");
 
     }
 
@@ -1057,10 +1158,14 @@ window.saveSettings = async function(){
         const data = {
 
             storeName:
-                $("storeName").value.trim(),
+                $("storeName")
+                    .value
+                    .trim(),
 
             subtitle:
-                $("subtitle").value.trim(),
+                $("subtitle")
+                    .value
+                    .trim(),
 
             primaryColor:
                 $("primaryColor").value,
@@ -1072,19 +1177,29 @@ window.saveSettings = async function(){
                 $("textColor").value,
 
             logo:
-                $("logoUrl").value.trim(),
+                $("logoUrl")
+                    .value
+                    .trim(),
 
             whatsapp:
-                $("whatsapp").value.trim(),
+                $("whatsapp")
+                    .value
+                    .trim(),
 
             facebook:
-                $("facebook").value.trim(),
+                $("facebook")
+                    .value
+                    .trim(),
 
             instagram:
-                $("instagram").value.trim(),
+                $("instagram")
+                    .value
+                    .trim(),
 
             tiktok:
-                $("tiktok").value.trim(),
+                $("tiktok")
+                    .value
+                    .trim(),
 
             updatedAt:
                 Date.now()
@@ -1131,1832 +1246,4 @@ window.saveSettings = async function(){
    LOGO UPLOAD
 ===================================================== */
 
-window.uploadLogo = async function(){
-
-    const file =
-        $("logoFile").files[0];
-
-    if(!file){
-
-        alert("اختر صورة أولًا");
-
-        return;
-    }
-
-
-    try{
-
-        showMessage(
-            "settingsMessage",
-            "جاري رفع الشعار..."
-        );
-
-
-        const safeName =
-            file.name.replace(
-                /[^a-zA-Z0-9._-]/g,
-                "_"
-            );
-
-
-        const storageRef =
-            ref(
-                storage,
-                "store/logo_" +
-                Date.now() +
-                "_" +
-                safeName
-            );
-
-
-        await uploadBytes(
-            storageRef,
-            file
-        );
-
-
-        const url =
-            await getDownloadURL(
-                storageRef
-            );
-
-
-        $("logoUrl").value =
-            url;
-
-        $("logoPreview").src =
-            url;
-
-
-        await saveSettings();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "تعذر رفع الشعار:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   CATEGORIES
-===================================================== */
-
-window.addCategory = async function(){
-
-    const name =
-        $("categoryName").value.trim();
-
-    const order =
-        num($("categoryOrder").value);
-
-
-    if(!name){
-
-        alert("اكتب اسم القسم");
-
-        return;
-    }
-
-
-    try{
-
-        await addDoc(
-            collection(db,"categories"),
-            {
-
-                name:name,
-
-                order:
-                    order > 0
-                        ? order
-                        : 999,
-
-                createdAt:
-                    Date.now()
-
-            }
-        );
-
-
-        /* تفريغ الإدخال */
-
-        $("categoryName").value = "";
-
-        $("categoryOrder").value = "";
-
-
-        showMessage(
-            "categoryMessage",
-            "✅ تمت إضافة القسم"
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "categoryMessage",
-            "❌ تعذر إضافة القسم: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-function renderCategorySelect(){
-
-    $("productCategory").innerHTML =
-        '<option value="">اختر القسم</option>' +
-
-        categories
-            .map(c =>
-
-                `<option value="${esc(c.name)}">
-                    ${esc(c.name)}
-                </option>`
-
-            )
-            .join("");
-
-}
-
-
-function renderCategories(){
-
-    if(!categories.length){
-
-        $("categoriesList").innerHTML =
-            "<p>لا توجد أقسام.</p>";
-
-        return;
-    }
-
-
-    $("categoriesList").innerHTML =
-
-        categories
-            .map(c => `
-
-                <div class="item">
-
-                    <strong>
-                        ${esc(c.name)}
-                    </strong>
-
-                    <span class="order-badge">
-                        ترتيب:
-                        ${num(c.order) || 999}
-                    </span>
-
-                    <div class="actions">
-
-                        <button
-                            class="blue"
-                            onclick="editCategory('${c.id}')"
-                        >
-                            ✏️ تعديل
-                        </button>
-
-                        <button
-                            class="red"
-                            onclick="deleteCategory('${c.id}')"
-                        >
-                            🗑️ حذف
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `)
-            .join("");
-
-}
-
-
-window.editCategory = async function(id){
-
-    const category =
-        categories.find(
-            c => c.id === id
-        );
-
-    if(!category) return;
-
-
-    const name =
-        prompt(
-            "اسم القسم",
-            category.name || ""
-        );
-
-
-    if(name === null) return;
-
-
-    const order =
-        prompt(
-            "رقم الترتيب",
-            category.order || 999
-        );
-
-
-    if(order === null) return;
-
-
-    if(!name.trim()){
-
-        alert("اسم القسم لا يمكن أن يكون فارغًا");
-
-        return;
-    }
-
-
-    try{
-
-        await updateDoc(
-            doc(db,"categories",id),
-            {
-
-                name:name.trim(),
-
-                order:
-                    num(order) > 0
-                        ? num(order)
-                        : 999
-
-            }
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر تعديل القسم:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-window.deleteCategory = async function(id){
-
-    if(!confirm(
-        "حذف القسم؟\n\nالأصناف داخل القسم لن تُحذف."
-    )){
-
-        return;
-    }
-
-
-    try{
-
-        await deleteDoc(
-            doc(db,"categories",id)
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر حذف القسم:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   DELIVERY REGIONS
-===================================================== */
-
-window.addRegion = async function(){
-
-    const name =
-        $("regionName").value.trim();
-
-    const fee =
-        num($("regionFee").value);
-
-
-    if(!name){
-
-        alert("اكتب اسم المنطقة");
-
-        return;
-    }
-
-
-    try{
-
-        await addDoc(
-            collection(db,"deliveryRegions"),
-            {
-
-                name:name,
-
-                fee:fee,
-
-                order:
-                    regions.length + 1,
-
-                createdAt:
-                    Date.now()
-
-            }
-        );
-
-
-        $("regionName").value = "";
-
-        $("regionFee").value = "";
-
-
-        showMessage(
-            "regionMessage",
-            "✅ تمت إضافة المنطقة"
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "regionMessage",
-            "❌ تعذر إضافة المنطقة: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-function renderRegions(){
-
-    if(!regions.length){
-
-        $("regionsList").innerHTML =
-            "<p>لا توجد مناطق.</p>";
-
-        return;
-    }
-
-
-    $("regionsList").innerHTML =
-
-        regions
-            .map(r => `
-
-                <div class="item">
-
-                    <strong>
-                        ${esc(r.name)}
-                    </strong>
-
-                    — ${num(r.fee)} جنيه
-
-                    <div class="actions">
-
-                        <button
-                            class="blue"
-                            onclick="editRegion('${r.id}')"
-                        >
-                            ✏️ تعديل
-                        </button>
-
-                        <button
-                            class="red"
-                            onclick="deleteRegion('${r.id}')"
-                        >
-                            🗑️ حذف
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `)
-            .join("");
-
-}
-
-
-window.editRegion = async function(id){
-
-    const region =
-        regions.find(
-            r => r.id === id
-        );
-
-    if(!region) return;
-
-
-    const name =
-        prompt(
-            "اسم المنطقة",
-            region.name || ""
-        );
-
-
-    if(name === null) return;
-
-
-    const fee =
-        prompt(
-            "رسوم التوصيل",
-            region.fee || 0
-        );
-
-
-    if(fee === null) return;
-
-
-    if(!name.trim()){
-
-        alert("اسم المنطقة لا يمكن أن يكون فارغًا");
-
-        return;
-    }
-
-
-    try{
-
-        await updateDoc(
-            doc(db,"deliveryRegions",id),
-            {
-
-                name:name.trim(),
-
-                fee:num(fee)
-
-            }
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر تعديل المنطقة:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-window.deleteRegion = async function(id){
-
-    if(!confirm(
-        "هل تريد حذف منطقة التوصيل؟"
-    )){
-
-        return;
-    }
-
-
-    try{
-
-        await deleteDoc(
-            doc(db,"deliveryRegions",id)
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر حذف المنطقة:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   PRICE CALCULATOR
-===================================================== */
-
-function updatePricePreview(){
-
-    const kilo =
-        num($("kiloPrice").value);
-
-
-    if(kilo > 0){
-
-        $("kiloPreview").value =
-            kilo + " جنيه";
-
-
-        $("halfPreview").value =
-            formatPrice(kilo * 0.5) +
-            " جنيه";
-
-
-        $("quarterPreview").value =
-            formatPrice(kilo * 0.25) +
-            " جنيه";
-
-    }else{
-
-        $("kiloPreview").value = "";
-
-        $("halfPreview").value = "";
-
-        $("quarterPreview").value = "";
-
-    }
-
-}
-
-
-function formatPrice(value){
-
-    const rounded =
-        Math.round(
-            Number(value) * 100
-        ) / 100;
-
-    return String(rounded);
-
-}
-
-
-$("kiloPrice").addEventListener(
-    "input",
-    updatePricePreview
-);
-
-
-/* =====================================================
-   PRODUCT UNITS
-===================================================== */
-
-function createWeightUnits(kiloPrice){
-
-    const base =
-        num(kiloPrice);
-
-
-    return [
-
-        {
-            name:"كيلو",
-            price:base,
-            type:"weight",
-            multiplier:1
-        },
-
-        {
-            name:"نصف كيلو",
-            price:
-                Math.round(
-                    base * 0.5 * 100
-                ) / 100,
-            type:"weight",
-            multiplier:0.5
-        },
-
-        {
-            name:"ربع كيلو",
-            price:
-                Math.round(
-                    base * 0.25 * 100
-                ) / 100,
-            type:"weight",
-            multiplier:0.25
-        }
-
-    ];
-
-}
-
-
-function getUnits(product){
-
-    if(
-        Array.isArray(product.units) &&
-        product.units.length
-    ){
-
-        const base =
-            num(
-                product.kiloPrice ||
-                product.price ||
-                product.units.find(
-                    u => u.name === "كيلو"
-                )?.price
-            );
-
-
-        const extra =
-            product.units.filter(
-                u =>
-                    u.name !== "كيلو" &&
-                    u.name !== "نصف كيلو" &&
-                    u.name !== "ربع كيلو"
-            );
-
-
-        const weightUnits =
-            base > 0
-                ? createWeightUnits(base)
-                : product.units.filter(
-                    u =>
-                        u.name === "كيلو" ||
-                        u.name === "نصف كيلو" ||
-                        u.name === "ربع كيلو"
-                );
-
-
-        return [
-            ...weightUnits,
-            ...extra.map(u => ({
-                name:u.name,
-                price:num(u.price),
-                type:"extra"
-            }))
-        ];
-
-    }
-
-
-    const base =
-        num(
-            product.kiloPrice ||
-            product.price
-        );
-
-
-    if(base > 0){
-
-        return createWeightUnits(base);
-
-    }
-
-
-    return [];
-
-}
-
-
-/* =====================================================
-   ADD PRODUCT
-===================================================== */
-
-window.addProduct = async function(){
-
-    const name =
-        $("productName").value.trim();
-
-    const description =
-        $("productDescription").value.trim();
-
-    const category =
-        $("productCategory").value.trim();
-
-    const image =
-        $("productImage").value.trim();
-
-    const kiloPrice =
-        num($("kiloPrice").value);
-
-    const maxQuantity =
-        num($("maxQuantity").value) || 10;
-
-    const order =
-        num($("productOrder").value);
-
-    const extraName =
-        $("extraUnitName").value.trim();
-
-    const extraPrice =
-        num($("extraUnitPrice").value);
-
-
-    if(!name){
-
-        alert("اكتب اسم الصنف");
-
-        return;
-    }
-
-
-    if(!category){
-
-        alert("اختر القسم");
-
-        return;
-    }
-
-
-    if(kiloPrice <= 0){
-
-        alert("اكتب سعر الكيلو");
-
-        return;
-    }
-
-
-    if(extraName && extraPrice < 0){
-
-        alert("سعر الوحدة الإضافية غير صحيح");
-
-        return;
-    }
-
-
-    const units =
-        createWeightUnits(
-            kiloPrice
-        );
-
-
-    if(extraName){
-
-        units.push({
-
-            name:extraName,
-
-            price:extraPrice,
-
-            type:"extra"
-
-        });
-
-    }
-
-
-    const data = {
-
-        name:name,
-
-        description:description,
-
-        category:category,
-
-        image:image,
-
-        kiloPrice:kiloPrice,
-
-        units:units,
-
-        maxQuantity:maxQuantity,
-
-        hidden:false,
-
-        order:
-            order > 0
-                ? order
-                : products.length + 1,
-
-        createdAt:
-            Date.now()
-
-    };
-
-
-    try{
-
-        await addDoc(
-            collection(db,"products"),
-            data
-        );
-
-
-        /* تفريغ الحقول */
-
-        $("productName").value = "";
-
-        $("productDescription").value = "";
-
-        $("productCategory").value = "";
-
-        $("productImage").value = "";
-
-        $("kiloPrice").value = "";
-
-        $("productOrder").value = "";
-
-        $("maxQuantity").value = "10";
-
-        $("extraUnitName").value = "";
-
-        $("extraUnitPrice").value = "";
-
-        $("kiloPreview").value = "";
-
-        $("halfPreview").value = "";
-
-        $("quarterPreview").value = "";
-
-
-        showMessage(
-            "addMessage",
-            "✅ تمت إضافة الصنف"
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "addMessage",
-            "❌ تعذر إضافة الصنف: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   RENDER PRODUCTS
-===================================================== */
-
-function renderProducts(){
-
-    const query =
-        ($("search").value || "")
-            .trim()
-            .toLowerCase();
-
-
-    const list =
-        products.filter(
-            product =>
-
-                (product.name || "")
-                    .toLowerCase()
-                    .includes(query)
-
-                ||
-
-                (product.category || "")
-                    .toLowerCase()
-                    .includes(query)
-        );
-
-
-    if(!list.length){
-
-        $("productsList").innerHTML =
-            '<div class="info">لا توجد نتائج.</div>';
-
-        return;
-    }
-
-
-    $("productsList").innerHTML =
-
-        list
-            .map(product => {
-
-                const hidden =
-                    product.hidden === true;
-
-                const units =
-                    getUnits(product);
-
-
-                return `
-
-                    <div class="item">
-
-                        ${
-                            product.image
-                            ?
-                            `
-                            <img
-                                class="thumb"
-                                src="${esc(product.image)}"
-                                alt="${esc(product.name)}"
-                                onerror="this.style.display='none'"
-                            >
-                            `
-                            :
-                            ""
-                        }
-
-
-                        <h3>
-                            ${esc(
-                                product.name ||
-                                "بدون اسم"
-                            )}
-                        </h3>
-
-
-                        <p>
-                            📂 القسم:
-                            ${esc(
-                                product.category ||
-                                "أخرى"
-                            )}
-
-                            <br>
-
-                            🔢 الترتيب:
-                            ${num(product.order) || 999}
-
-                            <br>
-
-                            📦 الحد الأقصى:
-                            ${num(product.maxQuantity) || 10}
-                        </p>
-
-
-                        <p>
-                            💰
-
-                            ${
-                                units
-                                    .map(
-                                        u =>
-                                            esc(u.name) +
-                                            ": " +
-                                            formatPrice(u.price) +
-                                            " جنيه"
-                                    )
-                                    .join(" — ")
-                            }
-
-                        </p>
-
-
-                        <span
-                            class="status ${hidden ? "off" : "on"}"
-                        >
-                            ${
-                                hidden
-                                ? "🔴 مخفي"
-                                : "🟢 ظاهر"
-                            }
-                        </span>
-
-
-                        <div class="actions">
-
-                            <button
-                                class="blue"
-                                onclick="editProduct('${product.id}')"
-                            >
-                                ✏️ تعديل
-                            </button>
-
-
-                            <button
-                                class="${hidden ? "green" : "gray"}"
-                                onclick="toggleProduct('${product.id}',${hidden})"
-                            >
-                                ${
-                                    hidden
-                                    ? "👁️ إظهار"
-                                    : "🚫 إخفاء"
-                                }
-                            </button>
-
-
-                            <button
-                                class="red"
-                                onclick="deleteProduct('${product.id}')"
-                            >
-                                🗑️ حذف
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            })
-            .join("");
-
-}
-
-
-/* =====================================================
-   SHOW / HIDE PRODUCT
-===================================================== */
-
-window.toggleProduct = async function(
-    id,
-    hidden
-){
-
-    try{
-
-        await updateDoc(
-            doc(db,"products",id),
-            {
-                hidden:!hidden
-            }
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر تغيير حالة الصنف:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   EDIT PRODUCT
-===================================================== */
-
-window.editProduct = async function(id){
-
-    const product =
-        products.find(
-            p => p.id === id
-        );
-
-    if(!product) return;
-
-
-    const name =
-        prompt(
-            "اسم الصنف",
-            product.name || ""
-        );
-
-    if(name === null) return;
-
-
-    const category =
-        prompt(
-            "اسم القسم",
-            product.category || ""
-        );
-
-    if(category === null) return;
-
-
-    const description =
-        prompt(
-            "الوصف",
-            product.description || ""
-        );
-
-    if(description === null) return;
-
-
-    const image =
-        prompt(
-            "رابط الصورة",
-            product.image || ""
-        );
-
-    if(image === null) return;
-
-
-    const order =
-        prompt(
-            "ترتيب الصنف",
-            product.order || 999
-        );
-
-    if(order === null) return;
-
-
-    const oldBase =
-        num(
-            product.kiloPrice ||
-            product.price ||
-            product.units?.find(
-                u => u.name === "كيلو"
-            )?.price
-        );
-
-
-    const kiloPrice =
-        prompt(
-            "سعر الكيلو",
-            oldBase
-        );
-
-    if(kiloPrice === null) return;
-
-
-    const maxQuantity =
-        prompt(
-            "الحد الأقصى للكمية",
-            product.maxQuantity || 10
-        );
-
-    if(maxQuantity === null) return;
-
-
-    const oldExtra =
-        Array.isArray(product.units)
-        ?
-        product.units.find(
-            u =>
-                u.name !== "كيلو" &&
-                u.name !== "نصف كيلو" &&
-                u.name !== "ربع كيلو"
-        )
-        :
-        null;
-
-
-    let extraName =
-        oldExtra
-        ? oldExtra.name
-        : "";
-
-    let extraPrice =
-        oldExtra
-        ? oldExtra.price
-        : "";
-
-
-    const editExtra =
-        confirm(
-            "هل تريد إضافة أو تعديل قطعة/علبة؟"
-        );
-
-
-    if(editExtra){
-
-        const newExtraName =
-            prompt(
-                "اسم الوحدة الإضافية",
-                extraName
-            );
-
-        if(newExtraName === null) return;
-
-
-        const newExtraPrice =
-            prompt(
-                "سعر الوحدة الإضافية",
-                extraPrice
-            );
-
-        if(newExtraPrice === null) return;
-
-
-        extraName =
-            newExtraName.trim();
-
-        extraPrice =
-            num(newExtraPrice);
-
-    }else{
-
-        extraName = "";
-        extraPrice = 0;
-
-    }
-
-
-    const base =
-        num(kiloPrice);
-
-
-    if(base <= 0){
-
-        alert(
-            "سعر الكيلو غير صحيح"
-        );
-
-        return;
-    }
-
-
-    const units =
-        createWeightUnits(base);
-
-
-    if(extraName){
-
-        units.push({
-
-            name:extraName,
-
-            price:extraPrice,
-
-            type:"extra"
-
-        });
-
-    }
-
-
-    try{
-
-        await updateDoc(
-            doc(db,"products",id),
-            {
-
-                name:name.trim(),
-
-                category:
-                    category.trim() ||
-                    "أخرى",
-
-                description:
-                    description.trim(),
-
-                image:
-                    image.trim(),
-
-                kiloPrice:base,
-
-                units:units,
-
-                maxQuantity:
-                    num(maxQuantity) || 10,
-
-                order:
-                    num(order) || 999,
-
-                updatedAt:
-                    Date.now()
-
-            }
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "تعذر تعديل الصنف:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   DELETE PRODUCT
-===================================================== */
-
-window.deleteProduct = async function(id){
-
-    if(!confirm(
-        "هل أنت متأكد من حذف الصنف نهائيًا؟"
-    )){
-
-        return;
-    }
-
-
-    try{
-
-        await deleteDoc(
-            doc(db,"products",id)
-        );
-
-
-        await loadAll();
-
-
-    }catch(error){
-
-        alert(
-            "تعذر حذف الصنف:\n" +
-            error.message
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   BACKUP
-===================================================== */
-
-window.backup = async function(){
-
-    try{
-
-        const data = {
-
-            version:4,
-
-            createdAt:
-                new Date().toISOString(),
-
-            settings:settings,
-
-            products:products,
-
-            regions:regions,
-
-            categories:categories
-
-        };
-
-
-        const blob =
-            new Blob(
-                [
-                    JSON.stringify(
-                        data,
-                        null,
-                        2
-                    )
-                ],
-                {
-                    type:
-                        "application/json"
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(blob);
-
-
-        const a =
-            document.createElement("a");
-
-
-        a.href = url;
-
-
-        a.download =
-            "pistach-d-alep-backup-" +
-            new Date()
-                .toISOString()
-                .slice(0,10) +
-            ".json";
-
-
-        document.body.appendChild(a);
-
-
-        a.click();
-
-
-        a.remove();
-
-
-        URL.revokeObjectURL(url);
-
-
-        showMessage(
-            "backupMessage",
-            "✅ تم تصدير النسخة الاحتياطية"
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "backupMessage",
-            "❌ تعذر إنشاء النسخة: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   DELETE COLLECTION DOCUMENTS
-===================================================== */
-
-async function deleteCollectionDocuments(
-    collectionName
-){
-
-    const snapshot =
-        await getDocs(
-            collection(
-                db,
-                collectionName
-            )
-        );
-
-
-    if(snapshot.empty){
-        return;
-    }
-
-
-    let batch =
-        writeBatch(db);
-
-    let count = 0;
-
-
-    for(
-        const item of snapshot.docs
-    ){
-
-        batch.delete(
-            doc(
-                db,
-                collectionName,
-                item.id
-            )
-        );
-
-        count++;
-
-
-        if(count === 450){
-
-            await batch.commit();
-
-            batch =
-                writeBatch(db);
-
-            count = 0;
-
-        }
-
-    }
-
-
-    if(count > 0){
-
-        await batch.commit();
-
-    }
-
-}
-
-
-/* =====================================================
-   RESTORE BACKUP
-===================================================== */
-
-window.restoreBackup = async function(){
-
-    const file =
-        $("restoreFile").files[0];
-
-
-    if(!file){
-
-        alert(
-            "اختر ملف النسخة الاحتياطية أولًا"
-        );
-
-        return;
-    }
-
-
-    if(!confirm(
-        "سيتم حذف البيانات الحالية من:\n\n" +
-        "الأصناف\n" +
-        "الأقسام\n" +
-        "مناطق التوصيل\n\n" +
-        "ثم استعادة النسخة الاحتياطية.\n\n" +
-        "هل أنت متأكد؟"
-    )){
-
-        return;
-    }
-
-
-    try{
-
-        showMessage(
-            "backupMessage",
-            "جاري قراءة النسخة..."
-        );
-
-
-        const data =
-            JSON.parse(
-                await file.text()
-            );
-
-
-        if(
-            !data ||
-            !Array.isArray(
-                data.products
-            ) ||
-            !Array.isArray(
-                data.categories
-            ) ||
-            !Array.isArray(
-                data.regions
-            )
-        ){
-
-            throw new Error(
-                "ملف النسخة الاحتياطية غير صالح."
-            );
-
-        }
-
-
-        /* حذف البيانات القديمة */
-
-        showMessage(
-            "backupMessage",
-            "جاري حذف البيانات القديمة..."
-        );
-
-
-        await deleteCollectionDocuments(
-            "products"
-        );
-
-
-        await deleteCollectionDocuments(
-            "categories"
-        );
-
-
-        await deleteCollectionDocuments(
-            "deliveryRegions"
-        );
-
-
-        /* استعادة الأصناف */
-
-        showMessage(
-            "backupMessage",
-            "جاري استعادة الأصناف..."
-        );
-
-
-        for(
-            const product
-            of data.products
-        ){
-
-            const {
-                id,
-                ...productData
-            } = product;
-
-
-            if(id){
-
-                await setDoc(
-                    doc(
-                        db,
-                        "products",
-                        id
-                    ),
-                    productData
-                );
-
-            }else{
-
-                await addDoc(
-                    collection(
-                        db,
-                        "products"
-                    ),
-                    productData
-                );
-
-            }
-
-        }
-
-
-        /* استعادة الأقسام */
-
-        showMessage(
-            "backupMessage",
-            "جاري استعادة الأقسام..."
-        );
-
-
-        for(
-            const category
-            of data.categories
-        ){
-
-            const {
-                id,
-                ...categoryData
-            } = category;
-
-
-            if(id){
-
-                await setDoc(
-                    doc(
-                        db,
-                        "categories",
-                        id
-                    ),
-                    categoryData
-                );
-
-            }else{
-
-                await addDoc(
-                    collection(
-                        db,
-                        "categories"
-                    ),
-                    categoryData
-                );
-
-            }
-
-        }
-
-
-        /* استعادة مناطق التوصيل */
-
-        showMessage(
-            "backupMessage",
-            "جاري استعادة مناطق التوصيل..."
-        );
-
-
-        for(
-            const region
-            of data.regions
-        ){
-
-            const {
-                id,
-                ...regionData
-            } = region;
-
-
-            if(id){
-
-                await setDoc(
-                    doc(
-                        db,
-                        "deliveryRegions",
-                        id
-                    ),
-                    regionData
-                );
-
-            }else{
-
-                await addDoc(
-                    collection(
-                        db,
-                        "deliveryRegions"
-                    ),
-                    regionData
-                );
-
-            }
-
-        }
-
-
-        /* استعادة الإعدادات */
-
-        if(data.settings){
-
-            await setDoc(
-                doc(
-                    db,
-                    "settings",
-                    "main"
-                ),
-                data.settings,
-                {
-                    merge:true
-                }
-            );
-
-        }
-
-
-        /* إعادة التحميل */
-
-        await loadAll();
-
-
-        $("restoreFile").value = "";
-
-
-        showMessage(
-            "backupMessage",
-            "✅ تمت استعادة النسخة الاحتياطية بنجاح"
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "backupMessage",
-            "❌ تعذر استعادة النسخة: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   CLEAR TEMP MESSAGES
-===================================================== */
-
-setInterval(() => {
-
-    [
-        "categoryMessage",
-        "regionMessage",
-        "addMessage",
-        "settingsMessage"
-    ].forEach(id => {
-
-        const el = $(id);
-
-        if(
-            el &&
-            el.textContent
-        ){
-
-            /* لا نمسح الرسالة فورًا */
-        }
-
-    });
-
-},5000);
-
-
-/* =====================================================
-   INITIAL PRICE PREVIEW
-===================================================== */
-
-updatePricePreview();
-
-</script>
-
-</body>
-</html>
+window
