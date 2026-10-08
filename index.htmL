@@ -77,6 +77,7 @@ const whatsappNumber="201010644644";
 let products=[],cart=[],regions=[],categories=[],currentCategory="الكل",settings={};
 
 const $=id=>document.getElementById(id);
+
 const esc=v=>String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
@@ -95,16 +96,13 @@ async function loadAll(){
    getDoc(doc(db,"settings","main"))
   ]);
 
-  products=ps.docs
-   .map(d=>({id:d.id,...d.data()}))
+  products=ps.docs.map(d=>({id:d.id,...d.data()}))
    .filter(p=>p.hidden!==true);
 
-  regions=rs.docs
-   .map(d=>({id:d.id,...d.data()}))
+  regions=rs.docs.map(d=>({id:d.id,...d.data()}))
    .sort((a,b)=>(a.order??999)-(b.order??999));
 
-  categories=cs.docs
-   .map(d=>({id:d.id,...d.data()}))
+  categories=cs.docs.map(d=>({id:d.id,...d.data()}))
    .sort((a,b)=>(a.order??999)-(b.order??999));
 
   settings=ss.exists()?ss.data():{};
@@ -121,20 +119,9 @@ async function loadAll(){
 }
 
 function applySettings(){
- document.documentElement.style.setProperty(
-  "--primary",
-  settings.primaryColor||"#789262"
- );
-
- document.documentElement.style.setProperty(
-  "--bg",
-  settings.backgroundColor||"#d9e8b8"
- );
-
- document.documentElement.style.setProperty(
-  "--text",
-  settings.textColor||"#222"
- );
+ document.documentElement.style.setProperty("--primary",settings.primaryColor||"#789262");
+ document.documentElement.style.setProperty("--bg",settings.backgroundColor||"#d9e8b8");
+ document.documentElement.style.setProperty("--text",settings.textColor||"#222");
 
  $("storeName").textContent=settings.storeName||"🍰 Pistach D'Alep";
  $("storeSubtitle").textContent=settings.subtitle||"بيستاش دي ألب";
@@ -152,9 +139,7 @@ function showRegions(){
  $("region").innerHTML=
  '<option value="">اختر المنطقة</option>'+
  regions.map(r=>
-  `<option value="${esc(r.id)}">
-   ${esc(r.name)} - ${num(r.fee)} جنيه
-  </option>`
+  `<option value="${esc(r.id)}">${esc(r.name)} - ${num(r.fee)} جنيه</option>`
  ).join("");
 }
 
@@ -163,15 +148,10 @@ function showCategories(){
   ?categories.map(c=>c.name)
   :[...new Set(products.map(p=>p.category||"أخرى"))];
 
- const list=[
-  "الكل",
-  ...names.filter(x=>x&&x!=="الكل")
- ];
+ const list=["الكل",...names.filter(x=>x&&x!=="الكل")];
 
  $("categories").innerHTML=list.map(c=>
-  `<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">
-   ${esc(c)}
-  </button>`
+  `<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">${esc(c)}</button>`
  ).join("");
 
  document.querySelectorAll("#categories button").forEach(b=>{
@@ -184,50 +164,82 @@ function showCategories(){
 }
 
 function getOptions(p){
+
  if(Array.isArray(p.units)&&p.units.length)
   return p.units.map(u=>({
-   name:u.name,
+   name:String(u.name??""),
    price:num(u.price)
   }));
 
  if(p.prices&&typeof p.prices==="object")
   return Object.entries(p.prices).map(([name,price])=>({
-   name,
+   name:String(name),
    price:num(price)
   }));
 
  const base=num(p.price);
 
  return (p.weights||["كيلو"]).map(w=>({
-  name:w,
+  name:String(w),
   price:
-   w==="ربع كيلو"
+   String(w).trim()==="ربع كيلو"
     ?base*.25
-    :w==="نصف كيلو"
+    :String(w).trim()==="نصف كيلو"
      ?base*.5
      :base
  }));
 }
 
-/* 
-   السعر الظاهر على بطاقة الصنف فقط:
-   - إذا كان هناك كيلو بسعر أكبر من 0 → يظهر سعر الكيلو.
-   - إذا لم يوجد سعر كيلو أو كان 0 → يظهر أول خيار
-     مثل قطعة أو علبة بسعر أكبر من 0.
-*/
-function getDisplayPrice(opts){
+/* السعر الرئيسي الظاهر على بطاقة الصنف فقط */
+function getMainPrice(opts){
 
- const kilo=opts.find(o=>
-  String(o.name).trim()==="كيلو" && num(o.price)>0
- );
+ /* 1 - سعر الكيلو */
+ const kilo=opts.find(o=>{
+  const n=String(o.name||"").trim();
+
+  return (
+   n==="كيلو" ||
+   n==="الكيلو" ||
+   n==="1 كيلو" ||
+   n==="1كيلو" ||
+   n.toLowerCase()==="kg"
+  ) && num(o.price)>0;
+ });
 
  if(kilo){
   return kilo;
  }
 
- const alternative=opts.find(o=>num(o.price)>0);
+ /* 2 - إذا لا يوجد كيلو، نبحث عن قطعة */
+ const piece=opts.find(o=>{
+  const n=String(o.name||"").trim();
 
- return alternative||null;
+  return (
+   n==="قطعة" ||
+   n==="القطعة"
+  ) && num(o.price)>0;
+ });
+
+ if(piece){
+  return piece;
+ }
+
+ /* 3 - إذا لا يوجد قطعة، نبحث عن علبة */
+ const box=opts.find(o=>{
+  const n=String(o.name||"").trim();
+
+  return (
+   n==="علبة" ||
+   n==="العلبة"
+  ) && num(o.price)>0;
+ });
+
+ if(box){
+  return box;
+ }
+
+ /* 4 - آخر حل: أول خيار بسعر أكبر من صفر */
+ return opts.find(o=>num(o.price)>0)||null;
 }
 
 function showProducts(){
@@ -235,22 +247,20 @@ function showProducts(){
  const list=currentCategory==="الكل"
   ?products
   :products.filter(
-    p=>(p.category||"أخرى")===currentCategory
+   p=>(p.category||"أخرى")===currentCategory
   );
 
  $("menu").innerHTML=list.length
  ?list.map(p=>{
 
    const opts=getOptions(p);
-   const displayPrice=getDisplayPrice(opts);
+   const mainPrice=getMainPrice(opts);
 
    return `
    <div class="item">
 
     ${p.image
-     ?`<img src="${esc(p.image)}"
-             alt="${esc(p.name)}"
-             onerror="this.style.display='none'">`
+     ?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
      :""
     }
 
@@ -264,27 +274,19 @@ function showProducts(){
 
      <div class="price">
       ${
-       displayPrice
-        ?`${esc(displayPrice.name)}: ${num(displayPrice.price)} جنيه`
+       mainPrice
+        ?`${esc(mainPrice.name)}: ${num(mainPrice.price)} جنيه`
         :""
       }
      </div>
 
-     <select
-      class="weight-select"
-      id="unit-${esc(p.id)}"
-     >
+     <select class="weight-select" id="unit-${esc(p.id)}">
       ${opts.map(o=>
-       `<option value="${esc(o.name)}">
-        ${esc(o.name)} - ${o.price} جنيه
-       </option>`
+       `<option value="${esc(o.name)}">${esc(o.name)} - ${num(o.price)} جنيه</option>`
       ).join("")}
      </select>
 
-     <button
-      class="add"
-      onclick="addToCart('${esc(p.id)}')"
-     >
+     <button class="add" onclick="addToCart('${esc(p.id)}')">
       ➕ إضافة للسلة
      </button>
 
@@ -304,9 +306,7 @@ window.addToCart=id=>{
  if(!u)return;
 
  const max=num(p.maxQuantity)||10;
- const old=cart.find(
-  x=>x.id===id&&x.unit===unit
- );
+ const old=cart.find(x=>x.id===id&&x.unit===unit);
 
  if(old){
   if(old.quantity>=max)
@@ -367,10 +367,7 @@ function updateCart(){
  $("cartCount").textContent=count;
  $("subtotal").textContent=sub;
 
- const r=regions.find(
-  x=>x.id===$("region").value
- );
-
+ const r=regions.find(x=>x.id===$("region").value);
  const fee=r?num(r.fee):0;
 
  $("deliveryFee").textContent=fee;
@@ -379,7 +376,6 @@ function updateCart(){
  $("cartItems").innerHTML=cart.length
  ?cart.map((x,i)=>
   `<div class="cart-item">
-
    <div class="cart-top">
     <strong>${esc(x.name)}</strong>
     <strong>${x.price*x.quantity} جنيه</strong>
@@ -395,7 +391,6 @@ function updateCart(){
     <button onclick="increase(${i})">+</button>
     <button onclick="removeItem(${i})">🗑️</button>
    </div>
-
   </div>`
  ).join("")
  :'<div class="empty">السلة فارغة</div>';
@@ -410,21 +405,12 @@ window.sendWhatsApp=()=>{
  const phone=$("phone").value.trim();
  const address=$("address").value.trim();
 
- const r=regions.find(
-  x=>x.id===$("region").value
- );
+ const r=regions.find(x=>x.id===$("region").value);
 
- if(!name)
-  return alert("اكتب اسم العميل.");
-
- if(!phone)
-  return alert("اكتب رقم الهاتف.");
-
- if(!r)
-  return alert("اختر منطقة التوصيل.");
-
- if(!address)
-  return alert("اكتب العنوان بالتفصيل.");
+ if(!name)return alert("اكتب اسم العميل.");
+ if(!phone)return alert("اكتب رقم الهاتف.");
+ if(!r)return alert("اختر منطقة التوصيل.");
+ if(!address)return alert("اكتب العنوان بالتفصيل.");
 
  let sub=0;
 
@@ -453,10 +439,8 @@ window.sendWhatsApp=()=>{
  `💰 الإجمالي النهائي: ${total} جنيه`;
 
  window.open(
-  "https://wa.me/"+
-  whatsappNumber+
-  "?text="+
-  encodeURIComponent(msg),
+  "https://wa.me/"+whatsappNumber+
+  "?text="+encodeURIComponent(msg),
   "_blank"
  );
 };
