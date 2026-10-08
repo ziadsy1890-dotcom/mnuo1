@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منيو</title><style>
+<title>منيو</title>
+
+<style>
 :root{
     --primary:#789262;
     --bg:#d9e8b8;
@@ -214,6 +217,7 @@ textarea{
     padding:20px;
 }
 
+/* سلة ثابتة مع العداد */
 .floating-cart{
     position:fixed;
     bottom:18px;
@@ -228,6 +232,9 @@ textarea{
     box-shadow:0 4px 14px #0004;
     z-index:20;
     cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .cart-count{
@@ -268,145 +275,199 @@ textarea{
         grid-template-columns:1fr;
     }
 }
-</style></head><body><header><img id="logo" alt="الشعار"><h1 id="storeName">
-🍰 Pistach D'Alep
-</h1><p id="storeSubtitle">
-بيستاش دي ألب
-</p></header><div class="container"><div class="categories" id="categories"></div><div class="menu" id="menu">
-<div class="loading">
-جاري تحميل المنيو...
+</style>
+</head>
+
+<body>
+
+<header>
+    <img id="logo" alt="الشعار">
+
+    <h1 id="storeName">
+        🍰 Pistach D'Alep
+    </h1>
+
+    <p id="storeSubtitle">
+        بيستاش دي ألب
+    </p>
+</header>
+
+<div class="container">
+
+    <div class="categories" id="categories"></div>
+
+    <div class="menu" id="menu">
+        <div class="loading">
+            جاري تحميل المنيو...
+        </div>
+    </div>
+
+    <section class="cart" id="cartSection">
+
+        <h2>🛒 سلة الطلب</h2>
+
+        <div id="cartItems">
+            <div class="empty">
+                السلة فارغة
+            </div>
+        </div>
+
+        <div class="total">
+            الإجمالي:
+            <span id="subtotal">0</span>
+            جنيه
+        </div>
+
+        <div class="delivery">
+
+            <label>
+                🚚 منطقة التوصيل
+            </label>
+
+            <select id="region" onchange="updateCart()">
+
+                <option value="">
+                    اختر المنطقة
+                </option>
+
+            </select>
+
+            <div>
+                رسوم التوصيل:
+                <strong>
+                    <span id="deliveryFee">0</span>
+                    جنيه
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="total">
+            الإجمالي النهائي:
+            <span id="grandTotal">0</span>
+            جنيه
+        </div>
+
+        <input
+            id="name"
+            placeholder="اسم العميل *"
+        >
+
+        <input
+            id="phone"
+            type="tel"
+            placeholder="رقم الهاتف *"
+        >
+
+        <textarea
+            id="address"
+            rows="3"
+            placeholder="العنوان بالتفصيل *"
+        ></textarea>
+
+        <button
+            class="whatsapp"
+            onclick="sendWhatsApp()"
+        >
+            📲 إرسال الطلب عبر واتساب
+        </button>
+
+    </section>
+
 </div>
-</div><section class="cart" id="cartSection"><h2>🛒 سلة الطلب</h2><div id="cartItems">
-<div class="empty">
-السلة فارغة
-</div>
-</div><div class="total">
-الإجمالي:
-<span id="subtotal">0</span>
-جنيه
-</div><div class="delivery"><label>
-🚚 منطقة التوصيل
-</label><select id="region" onchange="updateCart()"><option value="">
-اختر المنطقة
-</option></select><div>
-رسوم التوصيل:
-<strong>
-<span id="deliveryFee">0</span>
-جنيه
-</strong>
-</div></div><div class="total">
-الإجمالي النهائي:
-<span id="grandTotal">0</span>
-جنيه
-</div><input
-id="name"
-placeholder="اسم العميل *"
 
-«»
-
-<input
-id="phone"
-type="tel"
-placeholder="رقم الهاتف *"
-
-«»
-
-<textarea
-id="address"
-rows="3"
-placeholder="العنوان بالتفصيل *"
-></textarea><button
-class="whatsapp"
-onclick="sendWhatsApp()"
-
-«»
-
-📲 إرسال الطلب عبر واتساب
+<!-- السلة الثابتة + العداد -->
+<button
+    class="floating-cart"
+    onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})"
+    aria-label="السلة"
+>
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
 </button>
 
-</section></div><button
-class="floating-cart"
-onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})"
-aria-label="السلة"
-
-«»
-
-🛒
-<span class="cart-count" id="cartCount">0</span>
-</button>
 
 <script type="module">
 
-import{
-initializeApp
+import {
+    initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
-import{
-getFirestore,
-collection,
-getDocs,
-doc,
-getDoc
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc
 }
 from
 "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-const firebaseConfig={
 
-apiKey:
-"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+const firebaseConfig = {
 
-authDomain:
-"pistach-d-alep.firebaseapp.com",
+    apiKey:
+    "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
 
-projectId:
-"pistach-d-alep",
+    authDomain:
+    "pistach-d-alep.firebaseapp.com",
 
-storageBucket:
-"pistach-d-alep.firebasestorage.app",
+    projectId:
+    "pistach-d-alep",
 
-messagingSenderId:
-"288943885593",
+    storageBucket:
+    "pistach-d-alep.firebasestorage.app",
 
-appId:
-"1:288943885593:web:4737041244be376c274988",
+    messagingSenderId:
+    "288943885593",
 
-measurementId:
-"G-569W2MXBTJ"
+    appId:
+    "1:288943885593:web:4737041244be376c274988",
+
+    measurementId:
+    "G-569W2MXBTJ"
 
 };
 
-const db=
+
+const db =
 getFirestore(
-initializeApp(firebaseConfig)
+    initializeApp(firebaseConfig)
 );
 
-const whatsappNumber=
+
+const whatsappNumber =
 "201010644644";
 
-let products=[];
-let cart=[];
-let regions=[];
-let categories=[];
-let currentCategory="الكل";
-let settings={};
 
-const $=
-id=>document.getElementById(id);
+let products = [];
+let cart = [];
+let regions = [];
+let categories = [];
+let currentCategory = "الكل";
+let settings = {};
 
-const esc=
-v=>
-String(v??"")
+
+const $ =
+id =>
+document.getElementById(id);
+
+
+const esc =
+v =>
+String(v ?? "")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
 
-const num=
-v=>Number(v)||0;
+
+const num =
+v =>
+Number(v) || 0;
 
 
 /* =========================
@@ -415,97 +476,103 @@ v=>Number(v)||0;
 
 async function loadAll(){
 
-try{
+    try{
 
-const[
-ps,
-rs,
-cs,
-ss
-]=await Promise.all([
+        const [
+            ps,
+            rs,
+            cs,
+            ss
+        ] = await Promise.all([
 
-getDocs(
-collection(db,"products")
-),
+            getDocs(
+                collection(db,"products")
+            ),
 
-getDocs(
-collection(db,"deliveryRegions")
-),
+            getDocs(
+                collection(db,"deliveryRegions")
+            ),
 
-getDocs(
-collection(db,"categories")
-),
+            getDocs(
+                collection(db,"categories")
+            ),
 
-getDoc(
-doc(db,"settings","main")
-)
+            getDoc(
+                doc(db,"settings","main")
+            )
 
-]);
+        ]);
 
-products=
-ps.docs
-.map(
-d=>({
-id:d.id,
-...d.data()
-})
-)
-.filter(
-p=>p.hidden!==true
-);
 
-regions=
-rs.docs
-.map(
-d=>({
-id:d.id,
-...d.data()
-})
-)
-.sort(
-(a,b)=>
-(a.order??999)-
-(b.order??999)
-);
+        products =
+        ps.docs
+        .map(
+            d => ({
+                id:d.id,
+                ...d.data()
+            })
+        )
+        .filter(
+            p =>
+            p.hidden !== true
+        );
 
-categories=
-cs.docs
-.map(
-d=>({
-id:d.id,
-...d.data()
-})
-)
-.sort(
-(a,b)=>
-(a.order??999)-
-(b.order??999)
-);
 
-settings=
-ss.exists()
-?ss.data()
-:{};
+        regions =
+        rs.docs
+        .map(
+            d => ({
+                id:d.id,
+                ...d.data()
+            })
+        )
+        .sort(
+            (a,b) =>
+            (a.order ?? 999) -
+            (b.order ?? 999)
+        );
 
-applySettings();
 
-showCategories();
+        categories =
+        cs.docs
+        .map(
+            d => ({
+                id:d.id,
+                ...d.data()
+            })
+        )
+        .sort(
+            (a,b) =>
+            (a.order ?? 999) -
+            (b.order ?? 999)
+        );
 
-showProducts();
 
-showRegions();
+        settings =
+        ss.exists()
+        ? ss.data()
+        : {};
 
-}
-catch(e){
 
-console.error(e);
+        applySettings();
 
-$("menu").innerHTML=
-'<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+
-esc(e.message)+
-'</div>';
+        showCategories();
 
-}
+        showProducts();
+
+        showRegions();
+
+    }
+    catch(e){
+
+        console.error(e);
+
+        $("menu").innerHTML =
+        '<div class="empty">حدث خطأ أثناء تحميل المنيو<br>' +
+        esc(e.message) +
+        '</div>';
+
+    }
 
 }
 
@@ -516,51 +583,55 @@ esc(e.message)+
 
 function applySettings(){
 
-document.documentElement.style.setProperty(
-"--primary",
-settings.primaryColor||
-"#789262"
-);
+    document.documentElement.style.setProperty(
+        "--primary",
+        settings.primaryColor ||
+        "#789262"
+    );
 
-document.documentElement.style.setProperty(
-"--bg",
-settings.backgroundColor||
-"#d9e8b8"
-);
+    document.documentElement.style.setProperty(
+        "--bg",
+        settings.backgroundColor ||
+        "#d9e8b8"
+    );
 
-document.documentElement.style.setProperty(
-"--text",
-settings.textColor||
-"#222"
-);
+    document.documentElement.style.setProperty(
+        "--text",
+        settings.textColor ||
+        "#222"
+    );
 
-$("storeName").textContent=
-settings.storeName||
-"🍰 Pistach D'Alep";
 
-$("storeSubtitle").textContent=
-settings.subtitle||
-"بيستاش دي ألب";
+    $("storeName").textContent =
+    settings.storeName ||
+    "🍰 Pistach D'Alep";
 
-document.title=
-settings.storeName||
-"منيو";
 
-if(settings.logo){
+    $("storeSubtitle").textContent =
+    settings.subtitle ||
+    "بيستاش دي ألب";
 
-$("logo").src=
-settings.logo;
 
-$("logo").style.display=
-"block";
+    document.title =
+    settings.storeName ||
+    "منيو";
 
-}
-else{
 
-$("logo").style.display=
-"none";
+    if(settings.logo){
 
-}
+        $("logo").src =
+        settings.logo;
+
+        $("logo").style.display =
+        "block";
+
+    }
+    else{
+
+        $("logo").style.display =
+        "none";
+
+    }
 
 }
 
@@ -571,15 +642,16 @@ $("logo").style.display=
 
 function showRegions(){
 
-$("region").innerHTML=
-'<option value="">اختر المنطقة</option>'+
-regions.map(
-r=>
-`<option value="${esc(r.id)}">
-${esc(r.name)} - ${num(r.fee)} جنيه
-</option>`
-)
-.join("");
+    $("region").innerHTML =
+    '<option value="">اختر المنطقة</option>' +
+
+    regions.map(
+        r =>
+        `<option value="${esc(r.id)}">
+            ${esc(r.name)} - ${num(r.fee)} جنيه
+        </option>`
+    )
+    .join("");
 
 }
 
@@ -590,124 +662,123 @@ ${esc(r.name)} - ${num(r.fee)} جنيه
 
 function showCategories(){
 
-const names=
-categories.length
-?
-categories.map(c=>c.name)
-:
-[
-...new Set(
-products.map(
-p=>p.category||"أخرى"
-)
-)
-];
+    const names =
+    categories.length
+    ?
+    categories.map(
+        c => c.name
+    )
+    :
+    [
+        ...new Set(
+            products.map(
+                p =>
+                p.category ||
+                "أخرى"
+            )
+        )
+    ];
 
-const list=[
-"الكل",
-...names.filter(
-x=>x&&x!=="الكل"
-)
-];
 
-$("categories").innerHTML=
-list.map(
-c=>
-`<button
-class="${c===currentCategory?"active":""}"
-data-cat="${esc(c)}"
->
-${esc(c)}
-</button>`
-)
-.join("");
+    const list = [
+        "الكل",
+        ...names.filter(
+            x =>
+            x &&
+            x !== "الكل"
+        )
+    ];
 
-document
-.querySelectorAll(
-"#categories button"
-)
-.forEach(
-b=>{
 
-b.onclick=()=>{
+    $("categories").innerHTML =
+    list.map(
+        c =>
+        `<button
+            class="${c === currentCategory ? "active" : ""}"
+            data-cat="${esc(c)}"
+        >
+            ${esc(c)}
+        </button>`
+    )
+    .join("");
 
-currentCategory=
-b.dataset.cat;
 
-showCategories();
+    document
+    .querySelectorAll(
+        "#categories button"
+    )
+    .forEach(
+        b => {
 
-showProducts();
+            b.onclick = () => {
 
-};
+                currentCategory =
+                b.dataset.cat;
 
-}
-);
+                showCategories();
+
+                showProducts();
+
+            };
+
+        }
+    );
 
 }
 
 
 /* =========================
-استخراج سعر الكيلو فقط
+استخراج سعر الكيلو
 ========================= */
 
 function getKiloPrice(p){
 
-/*
-سعر الكيلو الجديد فقط
-*/
+    if(
+        p.kiloPrice !== undefined &&
+        num(p.kiloPrice) > 0
+    ){
 
-if(
-p.kiloPrice!==undefined &&
-num(p.kiloPrice)>0
-){
+        return num(p.kiloPrice);
 
-return num(p.kiloPrice);
-
-}
+    }
 
 
-/*
-البحث عن وحدة كيلو
-*/
+    if(
+        Array.isArray(p.units)
+    ){
 
-if(
-Array.isArray(p.units)
-){
-
-const kilo=
-p.units.find(
-u=>
-String(u.name||"")
-.trim()==="كيلو" &&
-num(u.price)>0
-);
-
-if(kilo){
-
-return num(kilo.price);
-
-}
-
-}
+        const kilo =
+        p.units.find(
+            u =>
+            String(u.name || "")
+            .trim() === "كيلو" &&
+            num(u.price) > 0
+        );
 
 
-/*
-البحث في الأسعار القديمة عن كيلو
-*/
+        if(kilo){
 
-if(
-p.prices &&
-typeof p.prices==="object" &&
-num(p.prices["كيلو"])>0
-){
+            return num(kilo.price);
 
-return num(
-p.prices["كيلو"]
-);
+        }
 
-}
+    }
 
-return 0;
+
+    if(
+        p.prices &&
+        typeof p.prices === "object" &&
+        num(p.prices["كيلو"]) > 0
+    ){
+
+        return num(
+            p.prices["كيلو"]
+        );
+
+    }
+
+
+    return 0;
 
 }
 
@@ -718,110 +789,135 @@ return 0;
 
 function getExtraOption(p){
 
-let extraUnit=
-String(
-p.extraUnit||
-""
-)
-.trim();
-
-let extraPrice=
-num(
-p.extraPrice
-);
+    let extraUnit =
+    String(
+        p.extraUnit || ""
+    )
+    .trim();
 
 
-/*
-البيانات الجديدة
-*/
-
-if(
-extraUnit &&
-extraPrice>0
-){
-
-return{
-name:extraUnit,
-price:extraPrice
-};
-
-}
+    let extraPrice =
+    num(
+        p.extraPrice
+    );
 
 
-/*
-البحث في units القديمة
-*/
+    /* البيانات الجديدة */
 
-if(
-Array.isArray(p.units)
-){
+    if(
+        extraUnit &&
+        extraPrice > 0
+    ){
 
-const extra=
-p.units.find(
-u=>{
+        return {
+            name:extraUnit,
+            price:extraPrice
+        };
 
-const name=
-String(
-u.name||""
-)
-.trim();
-
-return(
-name &&
-name!=="كيلو" &&
-name!=="نصف كيلو" &&
-name!=="ربع كيلو" &&
-num(u.price)>0
-);
-
-}
-);
-
-if(extra){
-
-return{
-name:String(extra.name).trim(),
-price:num(extra.price)
-};
-
-}
-
-}
+    }
 
 
-/*
-البحث في prices القديمة
-*/
+    /* البحث في units */
 
-if(
-p.prices &&
-typeof p.prices==="object"
-){
+    if(
+        Array.isArray(p.units)
+    ){
 
-for(
-const[name,price]
-of Object.entries(p.prices)
-){
+        const extra =
+        p.units.find(
+            u => {
 
-if(
-name!=="كيلو" &&
-name!=="نصف كيلو" &&
-name!=="ربع كيلو" &&
-num(price)>0
-){
+                const name =
+                String(
+                    u.name || ""
+                )
+                .trim();
 
-return{
-name:name,
-price:num(price)
-};
 
-}
+                return (
+                    name &&
+                    name !== "كيلو" &&
+                    name !== "نصف كيلو" &&
+                    name !== "ربع كيلو" &&
+                    num(u.price) > 0
+                );
 
-}
+            }
+        );
 
-}
 
-return null;
+        if(extra){
+
+            return {
+                name:
+                String(
+                    extra.name
+                ).trim(),
+
+                price:
+                num(extra.price)
+            };
+
+        }
+
+    }
+
+
+    /* البحث في prices */
+
+    if(
+        p.prices &&
+        typeof p.prices === "object"
+    ){
+
+        for(
+            const [name,price]
+            of Object.entries(p.prices)
+        ){
+
+            if(
+                name !== "كيلو" &&
+                name !== "نصف كيلو" &&
+                name !== "ربع كيلو" &&
+                num(price) > 0
+            ){
+
+                return {
+                    name:name,
+                    price:num(price)
+                };
+
+            }
+
+        }
+
+    }
+
+
+    /*
+    إذا لم يوجد كيلو
+    وكان هناك سعر قطعة مباشر
+    */
+
+    if(
+        num(p.price) > 0
+    ){
+
+        return {
+            name:
+            String(
+                p.extraUnit ||
+                "قطعة"
+            ).trim(),
+
+            price:
+            num(p.price)
+        };
+
+    }
+
+
+    return null;
 
 }
 
@@ -832,58 +928,56 @@ return null;
 
 function getOptions(p){
 
-const kilo=
-getKiloPrice(p);
-
-const extra=
-getExtraOption(p);
-
-const options=[];
+    const kilo =
+    getKiloPrice(p);
 
 
-/*
-فقط إذا كان سعر الكيلو موجودًا
-نضيف كيلو + نصف + ربع
-*/
-
-if(kilo>0){
-
-options.push({
-name:"كيلو",
-price:kilo
-});
-
-options.push({
-name:"نصف كيلو",
-price:kilo/2
-});
-
-options.push({
-name:"ربع كيلو",
-price:kilo/4
-});
-
-}
+    const extra =
+    getExtraOption(p);
 
 
-/*
-القطعة / العلبة
-*/
-
-if(extra){
-
-options.push(extra);
-
-}
+    const options = [];
 
 
-/*
-مهم:
-لا يوجد أي fallback إلى p.price
-حتى لا يظهر كيلو إذا لم يتم إدخال سعر كيلو.
-*/
+    /*
+    إذا يوجد سعر كيلو
+    يظهر كيلو + نصف + ربع
+    */
 
-return options;
+    if(kilo > 0){
+
+        options.push({
+            name:"كيلو",
+            price:kilo
+        });
+
+
+        options.push({
+            name:"نصف كيلو",
+            price:kilo / 2
+        });
+
+
+        options.push({
+            name:"ربع كيلو",
+            price:kilo / 4
+        });
+
+    }
+
+
+    /*
+    إذا يوجد قطعة / علبة
+    */
+
+    if(extra){
+
+        options.push(extra);
+
+    }
+
+
+    return options;
 
 }
 
@@ -894,38 +988,39 @@ return options;
 
 function getDefaultOption(p){
 
-const options=
-getOptions(p);
+    const options =
+    getOptions(p);
 
 
-/*
-إذا يوجد كيلو
-يظهر أولًا
-*/
+    /*
+    إذا يوجد كيلو
+    يظهر الكيلو أولًا
+    */
 
-const kilo=
-options.find(
-o=>o.name==="كيلو"
-);
-
-if(kilo){
-
-return kilo;
-
-}
+    const kilo =
+    options.find(
+        o =>
+        o.name === "كيلو"
+    );
 
 
-/*
-إذا لا يوجد كيلو
-تظهر أول وحدة موجودة
-مثل علبة أو قطعة
-*/
+    if(kilo){
 
-return options[0]||
-{
-name:"السعر",
-price:0
-};
+        return kilo;
+
+    }
+
+
+    /*
+    إذا لا يوجد كيلو
+    تظهر القطعة / العلبة
+    */
+
+    return options[0] ||
+    {
+        name:"قطعة",
+        price:0
+    };
 
 }
 
@@ -936,165 +1031,153 @@ price:0
 
 function showProducts(){
 
-const list=
-currentCategory==="الكل"
-?
-products
-:
-products.filter(
-p=>
-(p.category||"أخرى")
-===
-currentCategory
-);
-
-$("menu").innerHTML=
-list.length
-?
-list.map(
-p=>{
-
-const options=
-getOptions(p);
-
-const defaultOption=
-getDefaultOption(p);
-
-const optionHtml=
-options.map(
-o=>
-`<option
-value="${esc(o.name)}"
-${o.name===defaultOption.name?"selected":""}
->
-${esc(o.name)} -
-${o.price} جنيه
-</option>`
-)
-.join("");
+    const list =
+    currentCategory === "الكل"
+    ?
+    products
+    :
+    products.filter(
+        p =>
+        (p.category || "أخرى")
+        === currentCategory
+    );
 
 
-/*
-إذا كان هناك أكثر من خيار
-نحتاج قائمة الاختيارات.
-أما إذا يوجد خيار واحد فقط
-فلا حاجة لإظهار قائمة مخفية.
-*/
+    $("menu").innerHTML =
+    list.length
+    ?
+    list.map(
+        p => {
 
-const hasMultipleOptions=
-options.length>1;
-
-
-return`
-
-<div class="item">
-
-${
-p.image
-?
-`<img
-src="${esc(p.image)}"
-alt="${esc(p.name)}"
-onerror="this.style.display='none'"
->`
-:
-""
-}
-
-<div class="item-content">
-
-<h3>
-${esc(p.name)}
-</h3>
-
-<div class="description">
-${esc(p.description)}
-</div>
+            const options =
+            getOptions(p);
 
 
-<!-- السعر الظاهر أولًا -->
-
-<div
-class="price"
-id="price-${esc(p.id)}"
-${
-hasMultipleOptions
-?
-`onclick="toggleWeight('${esc(p.id)}')"`
-:
-""
-}
->
-
-${esc(defaultOption.name)}
-:
-${defaultOption.price}
-جنيه
-
-${
-hasMultipleOptions
-?
-`<span style="font-size:12px">▾</span>`
-:
-""
-}
-
-</div>
+            const defaultOption =
+            getDefaultOption(p);
 
 
-<!-- الخيارات -->
-
-<div
-class="weight-box"
-id="weight-box-${esc(p.id)}"
->
-
-${
-hasMultipleOptions
-?
-`
-<select
-class="weight-select"
-id="unit-${esc(p.id)}"
-onchange="changeDisplayedPrice('${esc(p.id)}')"
->
-${optionHtml}
-</select>
-`
-:
-`
-<input
-type="hidden"
-id="unit-${esc(p.id)}"
-value="${esc(defaultOption.name)}"
->
-`
-}
+            const optionHtml =
+            options.map(
+                o =>
+                `<option
+                    value="${esc(o.name)}"
+                    ${o.name === defaultOption.name ? "selected" : ""}
+                >
+                    ${esc(o.name)} -
+                    ${o.price} جنيه
+                </option>`
+            )
+            .join("");
 
 
-</div>
+            const hasMultipleOptions =
+            options.length > 1;
 
 
-<!-- زر الإضافة ظاهر دائمًا -->
+            return `
 
-<button
-class="add"
-onclick="addToCart('${esc(p.id)}')"
->
-➕ إضافة للسلة
-</button>
+            <div class="item">
 
-</div>
+                ${
+                    p.image
+                    ?
+                    `<img
+                        src="${esc(p.image)}"
+                        alt="${esc(p.name)}"
+                        onerror="this.style.display='none'"
+                    >`
+                    :
+                    ""
+                }
 
-</div>
+                <div class="item-content">
 
-`;
+                    <h3>
+                        ${esc(p.name)}
+                    </h3>
 
-}
-)
-.join("")
-:
-'<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
+                    <div class="description">
+                        ${esc(p.description)}
+                    </div>
+
+
+                    <div
+                        class="price"
+                        id="price-${esc(p.id)}"
+                        ${
+                            hasMultipleOptions
+                            ?
+                            `onclick="toggleWeight('${esc(p.id)}')"`
+                            :
+                            ""
+                        }
+                    >
+
+                        ${esc(defaultOption.name)}
+                        :
+                        ${defaultOption.price}
+                        جنيه
+
+                        ${
+                            hasMultipleOptions
+                            ?
+                            `<span style="font-size:12px">▾</span>`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="weight-box"
+                        id="weight-box-${esc(p.id)}"
+                    >
+
+                        ${
+                            hasMultipleOptions
+                            ?
+                            `
+                            <select
+                                class="weight-select"
+                                id="unit-${esc(p.id)}"
+                                onchange="changeDisplayedPrice('${esc(p.id)}')"
+                            >
+                                ${optionHtml}
+                            </select>
+                            `
+                            :
+                            `
+                            <input
+                                type="hidden"
+                                id="unit-${esc(p.id)}"
+                                value="${esc(defaultOption.name)}"
+                            >
+                            `
+                        }
+
+                    </div>
+
+
+                    <button
+                        class="add"
+                        onclick="addToCart('${esc(p.id)}')"
+                    >
+                        ➕ إضافة للسلة
+                    </button>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }
+    )
+    .join("")
+    :
+    '<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
 
 }
 
@@ -1103,15 +1186,20 @@ onclick="addToCart('${esc(p.id)}')"
 فتح الخيارات
 ========================= */
 
-window.toggleWeight=
+window.toggleWeight =
 function(id){
 
-const box=
-$("weight-box-"+id);
+    const box =
+    $("weight-box-" + id);
 
-if(!box)return;
 
-box.classList.toggle("open");
+    if(!box)
+    return;
+
+
+    box.classList.toggle(
+        "open"
+    );
 
 };
 
@@ -1120,45 +1208,58 @@ box.classList.toggle("open");
 تغيير السعر الظاهر
 ========================= */
 
-window.changeDisplayedPrice=
+window.changeDisplayedPrice =
 function(id){
 
-const select=
-$("unit-"+id);
+    const select =
+    $("unit-" + id);
 
-const priceBox=
-$("price-"+id);
 
-if(
-!select||
-!priceBox
-)return;
+    const priceBox =
+    $("price-" + id);
 
-const p=
-products.find(
-x=>x.id===id
-);
 
-if(!p)return;
+    if(
+        !select ||
+        !priceBox
+    )
+    return;
 
-const options=
-getOptions(p);
 
-const selected=
-options.find(
-x=>x.name===select.value
-);
+    const p =
+    products.find(
+        x =>
+        x.id === id
+    );
 
-if(!selected)return;
 
-priceBox.innerHTML=
-`${esc(selected.name)}
-:
-${selected.price}
-جنيه
-<span style="font-size:12px">
-▾
-</span>`;
+    if(!p)
+    return;
+
+
+    const options =
+    getOptions(p);
+
+
+    const selected =
+    options.find(
+        x =>
+        x.name === select.value
+    );
+
+
+    if(!selected)
+    return;
+
+
+    priceBox.innerHTML =
+    `${esc(selected.name)}
+    :
+    ${selected.price}
+    جنيه
+    <span style="font-size:12px">
+        ▾
+    </span>`;
 
 };
 
@@ -1167,391 +1268,18 @@ ${selected.price}
 إضافة للسلة
 ========================= */
 
-window.addToCart=
+window.addToCart =
 function(id){
 
-const p=
-products.find(
-x=>x.id===id
-);
+    const p =
+    products.find(
+        x =>
+        x.id === id
+    );
 
-if(!p)return;
 
-const select=
-$("unit-"+id);
+    if(!p)
+    return;
 
-if(!select)return;
 
-const unit=
-select.value;
-
-const options=
-getOptions(p);
-
-const selected=
-options.find(
-x=>x.name===unit
-);
-
-if(!selected){
-
-return alert(
-"لا يوجد سعر متاح لهذا الصنف."
-);
-
-}
-
-const max=
-num(p.maxQuantity)||
-10;
-
-const old=
-cart.find(
-x=>
-x.id===id &&
-x.unit===unit
-);
-
-if(old){
-
-if(
-old.quantity>=max
-){
-
-return alert(
-"وصلت للحد الأقصى لهذا الصنف."
-);
-
-}
-
-old.quantity++;
-
-}
-else{
-
-cart.push({
-
-id,
-
-name:p.name,
-
-unit,
-
-price:selected.price,
-
-quantity:1,
-
-maxQuantity:max
-
-});
-
-}
-
-updateCart();
-
-};
-
-
-/* =========================
-زيادة
-========================= */
-
-window.increase=
-function(i){
-
-const item=
-cart[i];
-
-if(!item)return;
-
-if(
-item.quantity>=
-item.maxQuantity
-){
-
-return alert(
-"وصلت للحد الأقصى لهذا الصنف."
-);
-
-}
-
-item.quantity++;
-
-updateCart();
-
-};
-
-
-/* =========================
-إنقاص
-========================= */
-
-window.decrease=
-function(i){
-
-const item=
-cart[i];
-
-if(!item)return;
-
-item.quantity--;
-
-if(
-item.quantity<=0
-){
-
-cart.splice(i,1);
-
-}
-
-updateCart();
-
-};
-
-
-/* =========================
-حذف
-========================= */
-
-window.removeItem=
-function(i){
-
-cart.splice(i,1);
-
-updateCart();
-
-};
-
-
-/* =========================
-تحديث السلة
-========================= */
-
-function updateCart(){
-
-let sub=0;
-
-let count=0;
-
-cart.forEach(
-item=>{
-
-sub+=
-item.price*
-item.quantity;
-
-count+=
-item.quantity;
-
-}
-);
-
-$("cartCount").textContent=
-count;
-
-$("subtotal").textContent=
-sub;
-
-const region=
-regions.find(
-r=>
-r.id===
-$("region").value
-);
-
-const fee=
-region?
-num(region.fee):
-0;
-
-$("deliveryFee").textContent=
-fee;
-
-$("grandTotal").textContent=
-sub+fee;
-
-$("cartItems").innerHTML=
-cart.length
-?
-cart.map(
-(item,i)=>
-`
-
-<div class="cart-item">
-
-<div class="cart-top">
-
-<strong>
-${esc(item.name)}
-</strong>
-
-<strong>
-${item.price*item.quantity}
-جنيه
-</strong>
-
-</div>
-
-<div class="cart-details">
-
-${esc(item.unit)}
-—
-${item.price}
-جنيه للوحدة
-
-</div>
-
-<div class="qty">
-
-<button
-onclick="decrease(${i})"
->
-−
-</button>
-
-<span>
-${item.quantity}
-</span>
-
-<button
-onclick="increase(${i})"
->
-+
-</button>
-
-<button
-onclick="removeItem(${i})"
->
-🗑️
-</button>
-
-</div>
-
-</div>
-
-`
-)
-.join("")
-:
-'<div class="empty">السلة فارغة</div>';
-
-}
-
-
-/* =========================
-واتساب
-========================= */
-
-window.sendWhatsApp=
-function(){
-
-if(!cart.length){
-
-return alert(
-"أضف صنفًا إلى السلة أولاً."
-);
-
-}
-
-const name=
-$("name").value.trim();
-
-const phone=
-$("phone").value.trim();
-
-const address=
-$("address").value.trim();
-
-const region=
-regions.find(
-r=>
-r.id===
-$("region").value
-);
-
-if(!name){
-
-return alert(
-"اكتب اسم العميل."
-);
-
-}
-
-if(!phone){
-
-return alert(
-"اكتب رقم الهاتف."
-);
-
-}
-
-if(!region){
-
-return alert(
-"اختر منطقة التوصيل."
-);
-
-}
-
-if(!address){
-
-return alert(
-"اكتب العنوان بالتفصيل."
-);
-
-}
-
-let sub=0;
-
-let msg=
-`🛒 طلب جديد\n\n`+
-`👤 الاسم: ${name}\n`+
-`📞 الهاتف: ${phone}\n`+
-`🚚 المنطقة: ${region.name}\n`+
-`📍 العنوان: ${address}\n\n`+
-`📦 تفاصيل الطلب:\n`;
-
-cart.forEach(
-item=>{
-
-const total=
-item.price*
-item.quantity;
-
-sub+=total;
-
-msg+=
-`• ${item.name}\n`+
-`  ${item.unit} × ${item.quantity} = ${total} جنيه\n`;
-
-}
-);
-
-const grand=
-sub+
-num(region.fee);
-
-msg+=
-`\n💵 قيمة الطلب: ${sub} جنيه\n`+
-`🚚 التوصيل: ${num(region.fee)} جنيه\n`+
-`💰 الإجمالي النهائي: ${grand} جنيه`;
-
-window.open(
-"https://wa.me/"+
-whatsappNumber+
-"?text="+
-encodeURIComponent(msg),
-"_blank"
-);
-
-};
-
-
-/* =========================
-تشغيل
-========================= */
-
-loadAll();
-
-</script></body>
-    </html>
+    const select =
