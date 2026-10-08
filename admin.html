@@ -48,6 +48,11 @@ button{
     font-family:inherit;
 }
 
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
 button{
     background:#222;
     color:#fff;
@@ -178,36 +183,6 @@ button:hover{
     line-height:1.8;
 }
 
-.pricing-mode{
-    border:2px solid #ddd;
-    border-radius:12px;
-    padding:14px;
-    margin:10px 0;
-    background:#fafafa;
-}
-
-.pricing-mode.active{
-    border-color:#789262;
-    background:#f5f9ef;
-}
-
-.mode-title{
-    font-weight:bold;
-    margin-bottom:8px;
-}
-
-.mode-description{
-    font-size:13px;
-    color:#666;
-    line-height:1.6;
-}
-
-.price-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-
 .product-prices{
     background:#f8f8f8;
     padding:10px;
@@ -245,10 +220,25 @@ button:hover{
     color:#666;
 }
 
+hr{
+    border:0;
+    border-top:1px solid #ddd;
+    margin:15px 0;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:6px;
+}
+
+.color-label{
+    font-weight:bold;
+}
+
 @media(max-width:600px){
 
-    .row,
-    .price-row{
+    .row{
         grid-template-columns:1fr;
     }
 
@@ -268,7 +258,9 @@ button:hover{
 
 <div class="container">
 
-<!-- ================= LOGIN ================= -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div id="loginPanel" class="card">
 
@@ -278,12 +270,14 @@ button:hover{
         id="email"
         type="email"
         placeholder="البريد الإلكتروني"
+        autocomplete="username"
     >
 
     <input
         id="password"
         type="password"
         placeholder="كلمة المرور"
+        autocomplete="current-password"
     >
 
     <button onclick="login()">
@@ -295,11 +289,15 @@ button:hover{
 </div>
 
 
-<!-- ================= ADMIN ================= -->
+<!-- =====================================================
+     ADMIN
+===================================================== -->
 
 <div id="adminPanel" style="display:none">
 
-<!-- ================= HEADER ================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <div class="card">
 
@@ -314,7 +312,9 @@ button:hover{
 </div>
 
 
-<!-- ================= SETTINGS ================= -->
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
 
 <div class="card">
 
@@ -336,8 +336,9 @@ button:hover{
 
     <div class="row">
 
-        <label>
+        <label class="color-label">
             لون المنيو
+
             <input
                 id="primaryColor"
                 type="color"
@@ -345,8 +346,9 @@ button:hover{
             >
         </label>
 
-        <label>
+        <label class="color-label">
             لون الخلفية
+
             <input
                 id="backgroundColor"
                 type="color"
@@ -356,8 +358,9 @@ button:hover{
 
     </div>
 
-    <label>
+    <label class="color-label">
         لون النص
+
         <input
             id="textColor"
             type="color"
@@ -423,7 +426,9 @@ button:hover{
 </div>
 
 
-<!-- ================= CATEGORIES ================= -->
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
 
 <div class="card">
 
@@ -461,7 +466,9 @@ button:hover{
 </div>
 
 
-<!-- ================= DELIVERY ================= -->
+<!-- =====================================================
+     DELIVERY
+===================================================== -->
 
 <div class="card">
 
@@ -482,6 +489,7 @@ button:hover{
             id="regionFee"
             type="number"
             min="0"
+            step="0.01"
             placeholder="رسوم التوصيل"
         >
 
@@ -498,19 +506,27 @@ button:hover{
 </div>
 
 
-<!-- ================= ADD PRODUCT ================= -->
+<!-- =====================================================
+     ADD / EDIT PRODUCT
+===================================================== -->
 
 <div class="card">
 
-    <h2>➕ إضافة صنف</h2>
+    <h2 id="productFormTitle">
+        ➕ إضافة صنف
+    </h2>
 
     <div class="price-note">
 
         <strong>نظام التسعير:</strong><br>
 
         ① بالوزن: كيلو + نصف كيلو + ربع كيلو.<br>
-        ② قطعة أو علبة: تختار وحدة واحدة فقط وتحدد سعرها.<br>
-        ③ حسب الطلب: بدون سعر ثابت.<br><br>
+
+        ② قطعة أو علبة:
+        تختار وحدة واحدة فقط وتحدد سعرها.<br>
+
+        ③ حسب الطلب:
+        بدون سعر ثابت.<br><br>
 
         <strong>ملاحظة:</strong>
         أي سعر قيمته 0 لن يظهر للعميل في بطاقة الصنف.
@@ -530,9 +546,11 @@ button:hover{
     <div class="row">
 
         <select id="productCategory">
+
             <option value="">
                 اختر القسم
             </option>
+
         </select>
 
         <input
@@ -558,11 +576,16 @@ button:hover{
     >
 
 
-    <!-- ===== PRICING TYPE ===== -->
+    <!-- =================================================
+         PRICING TYPE
+    ================================================= -->
 
     <h3>💰 طريقة التسعير</h3>
 
-    <select id="pricingType" onchange="changePricingType()">
+    <select
+        id="pricingType"
+        onchange="changePricingType()"
+    >
 
         <option value="weight">
             ⚖️ بالوزن
@@ -579,7 +602,9 @@ button:hover{
     </select>
 
 
-    <!-- ===== WEIGHT ===== -->
+    <!-- =================================================
+         WEIGHT
+    ================================================= -->
 
     <div id="weightPricing">
 
@@ -625,7 +650,9 @@ button:hover{
     </div>
 
 
-    <!-- ===== UNIT ===== -->
+    <!-- =================================================
+         UNIT
+    ================================================= -->
 
     <div id="unitPricing" class="hidden">
 
@@ -656,23 +683,37 @@ button:hover{
     </div>
 
 
-    <!-- ===== CUSTOM ===== -->
+    <!-- =================================================
+         CUSTOM
+    ================================================= -->
 
     <div id="customPricing" class="hidden">
 
         <div class="info">
+
             هذا الصنف لا يملك سعرًا ثابتًا.
-            سيظهر للعميل باسم "حسب الطلب".
+            سيظهر للعميل باسم
+            "حسب الطلب".
+
         </div>
 
     </div>
 
 
     <button
+        id="productSaveButton"
         class="green"
         onclick="addProduct()"
     >
         ➕ إضافة الصنف
+    </button>
+
+    <button
+        id="cancelEditButton"
+        class="gray hidden"
+        onclick="cancelEdit()"
+    >
+        إلغاء التعديل
     </button>
 
     <p id="addMessage" class="message"></p>
@@ -680,7 +721,9 @@ button:hover{
 </div>
 
 
-<!-- ================= PRODUCTS ================= -->
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
 
 <div class="card">
 
@@ -703,7 +746,9 @@ button:hover{
 </div>
 
 
-<!-- ================= BACKUP ================= -->
+<!-- =====================================================
+     BACKUP
+===================================================== -->
 
 <div class="card">
 
@@ -748,11 +793,11 @@ button:hover{
 </div>
 
 
-<script type="module">
+<!-- =====================================================
+     FIREBASE + JAVASCRIPT
+===================================================== -->
 
-/* =====================================================
-   FIREBASE
-===================================================== */
+<script type="module">
 
 import {
     initializeApp
@@ -786,6 +831,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
 
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
+
 const firebaseConfig = {
 
     apiKey:
@@ -811,17 +860,13 @@ const firebaseConfig = {
 };
 
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
-const db =
-    getFirestore(app);
+const db = getFirestore(app);
 
-const storage =
-    getStorage(app);
+const storage = getStorage(app);
 
 
 /* =====================================================
@@ -829,9 +874,14 @@ const storage =
 ===================================================== */
 
 let products = [];
+
 let regions = [];
+
 let categories = [];
+
 let settings = {};
+
+let editingProductId = null;
 
 
 /* =====================================================
@@ -862,15 +912,28 @@ const num = value => {
 };
 
 
-function showMessage(
-    id,
-    text,
-    success=true
-){
+function formatPrice(value){
+
+    const n = num(value);
+
+    if(n <= 0){
+        return "";
+    }
+
+    return Number.isInteger(n)
+        ? String(n)
+        : n.toFixed(2).replace(/\.00$/,"");
+
+}
+
+
+function showMessage(id,text,success=true){
 
     const el = $(id);
 
-    if(!el) return;
+    if(!el){
+        return;
+    }
 
     el.textContent = text;
 
@@ -881,7 +944,6 @@ function showMessage(
                 ? "successText"
                 : "errorText"
         );
-
 }
 
 
@@ -910,21 +972,104 @@ window.login = async function(){
     }
 
 
+    showMessage(
+        "loginMessage",
+        "⏳ جاري تسجيل الدخول...",
+        true
+    );
+
+
     try{
 
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
+        const result =
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+
+        console.log(
+            "LOGIN SUCCESS:",
+            result.user
         );
 
-    }catch(error){
-
-        console.error(error);
 
         showMessage(
             "loginMessage",
-            "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة",
+            "✅ تم تسجيل الدخول بنجاح",
+            true
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+
+        let message =
+            "❌ حدث خطأ أثناء تسجيل الدخول";
+
+
+        if(error.code === "auth/invalid-credential"){
+
+            message =
+                "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة";
+
+        }
+        else if(error.code === "auth/user-not-found"){
+
+            message =
+                "❌ هذا البريد غير موجود في Firebase Authentication";
+
+        }
+        else if(error.code === "auth/wrong-password"){
+
+            message =
+                "❌ كلمة المرور غير صحيحة";
+
+        }
+        else if(error.code === "auth/invalid-email"){
+
+            message =
+                "❌ البريد الإلكتروني غير صحيح";
+
+        }
+        else if(error.code === "auth/too-many-requests"){
+
+            message =
+                "❌ تم إيقاف المحاولات مؤقتًا، حاول لاحقًا";
+
+        }
+        else if(error.code === "auth/network-request-failed"){
+
+            message =
+                "❌ مشكلة في الاتصال بالإنترنت";
+
+        }
+        else if(error.code === "auth/operation-not-allowed"){
+
+            message =
+                "❌ تسجيل الدخول بالبريد الإلكتروني غير مفعّل في Firebase";
+
+        }
+        else{
+
+            message =
+                "❌ " +
+                error.code +
+                " — " +
+                error.message;
+
+        }
+
+
+        showMessage(
+            "loginMessage",
+            message,
             false
         );
 
@@ -932,6 +1077,10 @@ window.login = async function(){
 
 };
 
+
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 window.logout = async function(){
 
@@ -947,6 +1096,10 @@ window.logout = async function(){
 
 };
 
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
 
 onAuthStateChanged(
     auth,
@@ -970,7 +1123,7 @@ onAuthStateChanged(
                 console.error(error);
 
                 alert(
-                    "حدث خطأ أثناء تحميل البيانات:\n" +
+                    "تم تسجيل الدخول، لكن حدث خطأ أثناء تحميل البيانات:\n" +
                     error.message
                 );
 
@@ -1036,214 +1189,4 @@ async function loadAll(){
 
 
     regions =
-        regionSnapshot.docs
-            .map(d => ({
-                id:d.id,
-                ...d.data()
-            }))
-            .sort(
-                (a,b) =>
-                    num(a.order || 999) -
-                    num(b.order || 999)
-            );
-
-
-    categories =
-        categorySnapshot.docs
-            .map(d => ({
-                id:d.id,
-                ...d.data()
-            }))
-            .sort(
-                (a,b) =>
-                    num(a.order || 999) -
-                    num(b.order || 999)
-            );
-
-
-    settings =
-        settingsSnapshot.exists()
-            ? settingsSnapshot.data()
-            : {};
-
-
-    fillSettings();
-
-    renderCategories();
-
-    renderCategorySelect();
-
-    renderRegions();
-
-    renderProducts();
-
-}
-
-
-/* =====================================================
-   SETTINGS
-===================================================== */
-
-function fillSettings(){
-
-    $("storeName").value =
-        settings.storeName ||
-        "Pistach D'Alep";
-
-
-    $("subtitle").value =
-        settings.subtitle ||
-        "بيستاش دي ألب";
-
-
-    $("primaryColor").value =
-        settings.primaryColor ||
-        "#789262";
-
-
-    $("backgroundColor").value =
-        settings.backgroundColor ||
-        "#d9e8b8";
-
-
-    $("textColor").value =
-        settings.textColor ||
-        "#222222";
-
-
-    $("logoUrl").value =
-        settings.logo ||
-        "";
-
-
-    $("whatsapp").value =
-        settings.whatsapp ||
-        "201010644644";
-
-
-    $("facebook").value =
-        settings.facebook ||
-        "";
-
-
-    $("instagram").value =
-        settings.instagram ||
-        "";
-
-
-    $("tiktok").value =
-        settings.tiktok ||
-        "";
-
-
-    if(settings.logo){
-
-        $("logoPreview").src =
-            settings.logo;
-
-    }else{
-
-        $("logoPreview")
-            .removeAttribute("src");
-
-    }
-
-}
-
-
-window.saveSettings = async function(){
-
-    try{
-
-        const data = {
-
-            storeName:
-                $("storeName")
-                    .value
-                    .trim(),
-
-            subtitle:
-                $("subtitle")
-                    .value
-                    .trim(),
-
-            primaryColor:
-                $("primaryColor").value,
-
-            backgroundColor:
-                $("backgroundColor").value,
-
-            textColor:
-                $("textColor").value,
-
-            logo:
-                $("logoUrl")
-                    .value
-                    .trim(),
-
-            whatsapp:
-                $("whatsapp")
-                    .value
-                    .trim(),
-
-            facebook:
-                $("facebook")
-                    .value
-                    .trim(),
-
-            instagram:
-                $("instagram")
-                    .value
-                    .trim(),
-
-            tiktok:
-                $("tiktok")
-                    .value
-                    .trim(),
-
-            updatedAt:
-                Date.now()
-
-        };
-
-
-        await setDoc(
-            doc(db,"settings","main"),
-            data,
-            {merge:true}
-        );
-
-
-        settings = {
-            ...settings,
-            ...data
-        };
-
-
-        showMessage(
-            "settingsMessage",
-            "✅ تم حفظ الإعدادات"
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "settingsMessage",
-            "❌ تعذر حفظ الإعدادات: " +
-            error.message,
-            false
-        );
-
-    }
-
-};
-
-
-/* =====================================================
-   LOGO UPLOAD
-===================================================== */
-
-window
+        regionSnapsh
