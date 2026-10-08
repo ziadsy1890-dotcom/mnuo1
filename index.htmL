@@ -1,578 +1,467 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>فستق حلب</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منيو</title>
 <style>
-
-:root{
-    --primary:#789262;
-    --bg:#d9e8b8;
-    --text:#222;
-    --card:#fff;
-    --soft:#f7f9ef;
-    --border:#e5e5e5;
-}
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-}
-
-button,
-input,
-textarea,
-select{
-    font-family:inherit;
-}
-
-header{
-    background:var(--primary);
-    color:#fff;
-    text-align:center;
-    padding:20px 12px;
-    box-shadow:0 2px 8px #0002;
-}
-
-header img{
-    max-width:130px;
-    max-height:90px;
-    object-fit:contain;
-    display:none;
-    margin:0 auto 10px;
-    border-radius:12px;
-}
-
-header h1{
-    margin:0;
-    font-size:29px;
-}
-
-header p{
-    margin:8px 0 0;
-    font-size:15px;
-}
-
-.container{
-    max-width:850px;
-    margin:auto;
-    padding:15px;
-}
-
-/* الأقسام */
-
-.categories-wrapper{
-    position:sticky;
-    top:0;
-    z-index:10;
-    background:var(--bg);
-    padding:8px 0;
-}
-
-.categories{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding:2px;
-    scrollbar-width:none;
-}
-
-.categories::-webkit-scrollbar{
-    display:none;
-}
-
-.categories button{
-    border:0;
-    background:var(--soft);
-    color:var(--text);
-    padding:10px 17px;
-    border-radius:22px;
-    white-space:nowrap;
-    cursor:pointer;
-    font-size:14px;
-    transition:.2s;
-}
-
-.categories button.active{
-    background:var(--primary);
-    color:#fff;
-}
-
-/* المنيو */
-
-.menu{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
-.item{
-    background:var(--card);
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 2px 10px #0002;
-}
-
-.item-image{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    display:block;
-}
-
-.item-content{
-    padding:13px;
-}
-
-.item h3{
-    margin:0 0 7px;
-    font-size:19px;
-}
-
-.description{
-    color:#777;
-    font-size:13px;
-    line-height:1.6;
-    min-height:35px;
-}
-
-.price-box{
-    background:#f6f8f1;
-    border-radius:9px;
-    padding:8px 10px;
-    margin:10px 0;
-}
-
-.price-line{
-    display:flex;
-    justify-content:space-between;
-    gap:8px;
-    padding:4px 0;
-    border-bottom:1px solid #ddd;
-    font-size:14px;
-}
-
-.price-line:last-child{
-    border-bottom:0;
-}
-
-.price-line strong{
-    color:var(--primary);
-}
-
-.unit-select{
-    width:100%;
-    padding:11px;
-    border:1px solid var(--border);
-    border-radius:9px;
-    background:#fff;
-    margin:5px 0;
-    font-size:14px;
-}
-
-.add-button{
-    width:100%;
-    padding:11px;
-    border:0;
-    border-radius:9px;
-    background:var(--primary);
-    color:#fff;
-    cursor:pointer;
-    font-size:15px;
-    font-weight:bold;
-}
-
-.add-button:active{
-    transform:scale(.98);
-}
-
-/* السلة */
-
-.cart{
-    background:#fff;
-    margin-top:22px;
-    padding:17px;
-    border-radius:14px;
-    box-shadow:0 2px 10px #0001;
-}
-
-.cart h2{
-    margin:0 0 15px;
-}
-
-.cart-item{
-    border-bottom:1px solid #eee;
-    padding:13px 0;
-}
-
-.cart-item:last-child{
-    border-bottom:0;
-}
-
-.cart-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:10px;
-}
-
-.cart-name{
-    font-weight:bold;
-}
-
-.cart-total-item{
-    font-weight:bold;
-    white-space:nowrap;
-}
-
-.cart-details{
-    color:#666;
-    font-size:13px;
-    margin-top:5px;
-}
-
-.qty{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    margin-top:10px;
-}
-
-.qty button{
-    width:34px;
-    height:34px;
-    padding:0;
-    border:0;
-    border-radius:7px;
-    cursor:pointer;
-    background:#eee;
-    color:#222;
-    font-size:18px;
-}
-
-.qty button.delete{
-    background:#f8d7da;
-    color:#842029;
-}
-
-.qty span{
-    min-width:28px;
-    text-align:center;
-    font-weight:bold;
-}
-
-.empty{
-    text-align:center;
-    color:#777;
-    padding:25px 10px;
-}
-
-.loading{
-    text-align:center;
-    color:#777;
-    padding:35px 10px;
-}
-
-/* الإجمالي */
-
-.total-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:18px;
-    font-weight:bold;
-    margin:15px 0;
-}
-
-.final-total{
-    font-size:22px;
-    color:var(--primary);
-}
-
-/* التوصيل */
-
-.delivery{
-    background:#f7f7f7;
-    padding:12px;
-    border-radius:10px;
-    margin:12px 0;
-}
-
-.delivery label{
-    display:block;
-    font-size:14px;
-    margin-bottom:6px;
-    font-weight:bold;
-}
-
-.delivery select{
-    width:100%;
-    padding:11px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    background:#fff;
-}
-
-/* بيانات العميل */
-
-.customer input,
-.customer textarea{
-    width:100%;
-    padding:12px;
-    margin:6px 0;
-    border:1px solid #ddd;
-    border-radius:8px;
-    font-size:15px;
-    background:#fff;
-}
-
-.customer textarea{
-    min-height:90px;
-    resize:vertical;
-}
-
-/* واتساب */
-
-.whatsapp{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:9px;
-    background:#25D366;
-    color:#fff;
-    cursor:pointer;
-    font-size:17px;
-    font-weight:bold;
-    margin-top:8px;
-}
-
-/* السوشيال */
-
-.social{
-    text-align:center;
-    padding:25px 10px 90px;
-}
-
-.social h3{
-    margin-bottom:15px;
-}
-
-.social-links{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.social-links a{
-    text-decoration:none;
-    color:#fff;
-    background:var(--primary);
-    padding:9px 14px;
-    border-radius:20px;
-    font-size:13px;
-}
-
-/* زر السلة */
-
-.floating-cart{
-    position:fixed;
-    bottom:18px;
-    right:18px;
-    width:60px;
-    height:60px;
-    border:0;
-    border-radius:50%;
-    background:var(--primary);
-    color:#fff;
-    font-size:25px;
-    box-shadow:0 4px 14px #0004;
-    z-index:30;
-    cursor:pointer;
-}
-
-.cart-count{
-    position:absolute;
-    top:-5px;
-    left:-5px;
-    background:#c62828;
-    color:#fff;
-    border-radius:50%;
-    min-width:24px;
-    height:24px;
-    padding:0 5px;
-    font-size:13px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-/* رسالة */
-
-.notice{
-    background:#fff3cd;
-    color:#664d03;
-    padding:12px;
-    border-radius:9px;
-    margin:10px 0;
-    text-align:center;
-    display:none;
-}
-
-/* موبايل */
-
-@media(max-width:600px){
-
-    .container{
-        padding:10px;
-    }
-
-    .menu{
-        grid-template-columns:1fr;
-        gap:13px;
-    }
-
-    .item-image{
-        height:200px;
-    }
-
-    header h1{
-        font-size:25px;
-    }
-
-}
-
+:root{--primary:#789262;--bg:#d9e8b8;--text:#222;--card:#fff;--soft:#f7f9ef}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--primary);color:#fff;text-align:center;padding:18px 10px;position:relative}
+header img{max-width:110px;max-height:80px;object-fit:contain;display:none;margin:0 auto 8px;border-radius:10px}
+header h1{margin:0;font-size:28px}header p{margin:7px 0 0}
+.container{max-width:760px;margin:auto;padding:15px}.categories{display:flex;gap:8px;overflow-x:auto;margin-bottom:15px}
+.categories button{border:0;background:var(--soft);padding:10px 16px;border-radius:20px;white-space:nowrap;cursor:pointer}.categories button.active{background:var(--primary);color:#fff}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:14px}.item{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002}.item img{width:100%;height:155px;object-fit:cover}.item-content{padding:12px}
+.item h3{margin:0 0 6px}.description{color:#777;font-size:13px;min-height:32px}.price{font-size:16px;font-weight:bold;margin:8px 0}
+.weight-select,input,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:8px;font-family:inherit;background:#fff}.add,.whatsapp{width:100%;padding:11px;border:0;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer}
+.cart{background:#fff;margin-top:20px;padding:15px;border-radius:12px}.cart-item{border-bottom:1px solid #eee;padding:12px 0}.cart-top{display:flex;justify-content:space-between;gap:10px}.cart-details{color:#666;font-size:14px;margin-top:5px}
+.qty{display:flex;align-items:center;gap:7px;margin-top:10px}.qty button{width:32px;height:32px;border:0;border-radius:6px;cursor:pointer}.qty span{min-width:25px;text-align:center;font-weight:bold}.total{font-size:20px;font-weight:bold;margin:15px 0}
+.whatsapp{background:#25D366;font-size:17px;font-weight:bold}.empty,.loading{text-align:center;color:#777;padding:20px}
+.floating-cart{position:fixed;bottom:18px;right:18px;width:58px;height:58px;border:0;border-radius:50%;background:var(--primary);color:#fff;font-size:25px;box-shadow:0 4px 14px #0004;z-index:20;cursor:pointer}.cart-count{position:absolute;top:-5px;left:-5px;background:#c62828;color:#fff;border-radius:50%;min-width:24px;height:24px;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold}
+#cartSection{scroll-margin-top:15px}.delivery{background:#f7f7f7;padding:10px;border-radius:9px;margin:8px 0}.delivery label{display:block;font-size:14px;margin-bottom:4px}
+@media(max-width:500px){.menu{grid-template-columns:1fr}}
 </style>
-
 </head>
-
-
 <body>
-
-
-<!-- رأس المنيو -->
-
 <header>
-
-    <img
-        id="logo"
-        alt="شعار فستق حلب"
-    >
-
-    <h1 id="storeName">
-        🍰 فستق حلب
-    </h1>
-
-    <p id="storeSubtitle">
-        بيستاش دي ألب
-    </p>
-
+<img id="logo" alt="الشعار">
+<h1 id="storeName">🍰 Pistach D'Alep</h1>
+<p id="storeSubtitle">بيستاش دي ألب</p>
 </header>
 
-
 <div class="container">
+<div class="categories" id="categories"></div>
+<div class="menu" id="menu"><div class="loading">جاري تحميل المنيو...</div></div>
 
+<section class="cart" id="cartSection">
+<h2>🛒 سلة الطلب</h2>
+<div id="cartItems"><div class="empty">السلة فارغة</div></div>
+<div class="total">الإجمالي: <span id="subtotal">0</span> جنيه</div>
 
-    <!-- الأقسام -->
+<div class="delivery">
+<label>🚚 منطقة التوصيل</label>
+<select id="region" onchange="updateCart()"><option value="">اختر المنطقة</option></select>
+<div>رسوم التوصيل: <strong><span id="deliveryFee">0</span> جنيه</strong></div>
+</div>
 
-    <div class="categories-wrapper">
+<div class="total">الإجمالي النهائي: <span id="grandTotal">0</span> جنيه</div>
+<input id="name" placeholder="اسم العميل *">
+<input id="phone" type="tel" placeholder="رقم الهاتف *">
+<textarea id="address" rows="3" placeholder="العنوان بالتفصيل *"></textarea>
+<button class="whatsapp" onclick="sendWhatsApp()">📲 إرسال الطلب عبر واتساب</button>
+</section>
+</div>
 
-        <div
-            class="categories"
-            id="categories"
-        ></div>
+<button class="floating-cart" onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})" aria-label="السلة">
+🛒<span class="cart-count" id="cartCount">0</span>
+</button>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import{getFirestore,collection,getDocs,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+ authDomain:"pistach-d-alep.firebaseapp.com",
+ projectId:"pistach-d-alep",
+ storageBucket:"pistach-d-alep.firebasestorage.app",
+ messagingSenderId:"288943885593",
+ appId:"1:288943885593:web:4737041244be376c274988",
+ measurementId:"G-569W2MXBTJ"
+};
+
+const db=getFirestore(initializeApp(firebaseConfig));
+const whatsappNumber="201010644644";
+
+let products=[],cart=[],regions=[],categories=[],currentCategory="الكل",settings={};
+
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+const num=v=>Number(v)||0;
+
+async function loadAll(){
+ try{
+  const [ps,rs,cs,ss]=await Promise.all([
+   getDocs(collection(db,"products")),
+   getDocs(collection(db,"deliveryRegions")),
+   getDocs(collection(db,"categories")),
+   getDoc(doc(db,"settings","main"))
+  ]);
+
+  products=ps.docs
+   .map(d=>({id:d.id,...d.data()}))
+   .filter(p=>p.hidden!==true);
+
+  regions=rs.docs
+   .map(d=>({id:d.id,...d.data()}))
+   .sort((a,b)=>(a.order??999)-(b.order??999));
+
+  categories=cs.docs
+   .map(d=>({id:d.id,...d.data()}))
+   .sort((a,b)=>(a.order??999)-(b.order??999));
+
+  settings=ss.exists()?ss.data():{};
+
+  applySettings();
+  showCategories();
+  showProducts();
+  showRegions();
+
+ }catch(e){
+  console.error(e);
+  $("menu").innerHTML='<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+esc(e.message)+'</div>';
+ }
+}
+
+function applySettings(){
+ document.documentElement.style.setProperty(
+  "--primary",
+  settings.primaryColor||"#789262"
+ );
+
+ document.documentElement.style.setProperty(
+  "--bg",
+  settings.backgroundColor||"#d9e8b8"
+ );
+
+ document.documentElement.style.setProperty(
+  "--text",
+  settings.textColor||"#222"
+ );
+
+ $("storeName").textContent=settings.storeName||"🍰 Pistach D'Alep";
+ $("storeSubtitle").textContent=settings.subtitle||"بيستاش دي ألب";
+ document.title=settings.storeName||"منيو";
+
+ if(settings.logo){
+  $("logo").src=settings.logo;
+  $("logo").style.display="block";
+ }else{
+  $("logo").style.display="none";
+ }
+}
+
+function showRegions(){
+ $("region").innerHTML=
+ '<option value="">اختر المنطقة</option>'+
+ regions.map(r=>
+  `<option value="${esc(r.id)}">
+   ${esc(r.name)} - ${num(r.fee)} جنيه
+  </option>`
+ ).join("");
+}
+
+function showCategories(){
+ const names=categories.length
+  ?categories.map(c=>c.name)
+  :[...new Set(products.map(p=>p.category||"أخرى"))];
+
+ const list=[
+  "الكل",
+  ...names.filter(x=>x&&x!=="الكل")
+ ];
+
+ $("categories").innerHTML=list.map(c=>
+  `<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">
+   ${esc(c)}
+  </button>`
+ ).join("");
+
+ document.querySelectorAll("#categories button").forEach(b=>{
+  b.onclick=()=>{
+   currentCategory=b.dataset.cat;
+   showCategories();
+   showProducts();
+  };
+ });
+}
+
+function getOptions(p){
+ if(Array.isArray(p.units)&&p.units.length)
+  return p.units.map(u=>({
+   name:u.name,
+   price:num(u.price)
+  }));
+
+ if(p.prices&&typeof p.prices==="object")
+  return Object.entries(p.prices).map(([name,price])=>({
+   name,
+   price:num(price)
+  }));
+
+ const base=num(p.price);
+
+ return (p.weights||["كيلو"]).map(w=>({
+  name:w,
+  price:
+   w==="ربع كيلو"
+    ?base*.25
+    :w==="نصف كيلو"
+     ?base*.5
+     :base
+ }));
+}
+
+/* 
+   السعر الظاهر على بطاقة الصنف فقط:
+   - إذا كان هناك كيلو بسعر أكبر من 0 → يظهر سعر الكيلو.
+   - إذا لم يوجد سعر كيلو أو كان 0 → يظهر أول خيار
+     مثل قطعة أو علبة بسعر أكبر من 0.
+*/
+function getDisplayPrice(opts){
+
+ const kilo=opts.find(o=>
+  String(o.name).trim()==="كيلو" && num(o.price)>0
+ );
+
+ if(kilo){
+  return kilo;
+ }
+
+ const alternative=opts.find(o=>num(o.price)>0);
+
+ return alternative||null;
+}
+
+function showProducts(){
+
+ const list=currentCategory==="الكل"
+  ?products
+  :products.filter(
+    p=>(p.category||"أخرى")===currentCategory
+  );
+
+ $("menu").innerHTML=list.length
+ ?list.map(p=>{
+
+   const opts=getOptions(p);
+   const displayPrice=getDisplayPrice(opts);
+
+   return `
+   <div class="item">
+
+    ${p.image
+     ?`<img src="${esc(p.image)}"
+             alt="${esc(p.name)}"
+             onerror="this.style.display='none'">`
+     :""
+    }
+
+    <div class="item-content">
+
+     <h3>${esc(p.name)}</h3>
+
+     <div class="description">
+      ${esc(p.description)}
+     </div>
+
+     <div class="price">
+      ${
+       displayPrice
+        ?`${esc(displayPrice.name)}: ${num(displayPrice.price)} جنيه`
+        :""
+      }
+     </div>
+
+     <select
+      class="weight-select"
+      id="unit-${esc(p.id)}"
+     >
+      ${opts.map(o=>
+       `<option value="${esc(o.name)}">
+        ${esc(o.name)} - ${o.price} جنيه
+       </option>`
+      ).join("")}
+     </select>
+
+     <button
+      class="add"
+      onclick="addToCart('${esc(p.id)}')"
+     >
+      ➕ إضافة للسلة
+     </button>
 
     </div>
+   </div>`;
+  }).join("")
+ :'<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
+}
 
+window.addToCart=id=>{
+ const p=products.find(x=>x.id===id);
+ if(!p)return;
 
-    <!-- رسالة -->
+ const unit=$("unit-"+id).value;
+ const u=getOptions(p).find(x=>x.name===unit);
 
-    <div
-        id="notice"
-        class="notice"
-    ></div>
+ if(!u)return;
 
+ const max=num(p.maxQuantity)||10;
+ const old=cart.find(
+  x=>x.id===id&&x.unit===unit
+ );
 
-    <!-- الأصناف -->
+ if(old){
+  if(old.quantity>=max)
+   return alert("وصلت للحد الأقصى لهذا الصنف.");
 
-    <div
-        class="menu"
-        id="menu"
-    >
+  old.quantity++;
+ }else{
+  cart.push({
+   id,
+   name:p.name,
+   unit,
+   price:u.price,
+   quantity:1,
+   maxQuantity:max
+  });
+ }
 
-        <div class="loading">
-            جاري تحميل المنيو...
-        </div>
+ updateCart();
+};
 
-    </div>
+window.increase=i=>{
+ let x=cart[i];
+ if(!x)return;
 
+ if(x.quantity>=x.maxQuantity)
+  return alert("وصلت للحد الأقصى لهذا الصنف.");
 
-    <!-- السلة -->
+ x.quantity++;
+ updateCart();
+};
 
-    <section
-        class="cart"
-        id="cartSection"
-    >
+window.decrease=i=>{
+ let x=cart[i];
+ if(!x)return;
 
-        <h2>
-            🛒 سلة الطلب
-        </h2>
+ x.quantity--;
 
+ if(x.quantity<=0)
+  cart.splice(i,1);
 
-        <div id="cartItems">
+ updateCart();
+};
 
-            <div class="empty">
-                السلة فارغة
-            </div>
+window.removeItem=i=>{
+ cart.splice(i,1);
+ updateCart();
+};
 
-        </div>
+function updateCart(){
 
+ let sub=0,count=0;
 
-        <div class="total-row">
+ cart.forEach(x=>{
+  sub+=x.price*x.quantity;
+  count+=x.quantity;
+ });
 
-            <span>
-                قيمة الطلب
-            </span>
+ $("cartCount").textContent=count;
+ $("subtotal").textContent=sub;
 
-            <span>
-                <span id="subtotal">0</span>
-                جنيه
-            </span>
+ const r=regions.find(
+  x=>x.id===$("region").value
+ );
 
-        </div>
+ const fee=r?num(r.fee):0;
 
+ $("deliveryFee").textContent=fee;
+ $("grandTotal").textContent=sub+fee;
 
-        <!-- التوصيل -->
+ $("cartItems").innerHTML=cart.length
+ ?cart.map((x,i)=>
+  `<div class="cart-item">
 
-        <div class="delivery">
+   <div class="cart-top">
+    <strong>${esc(x.name)}</strong>
+    <strong>${x.price*x.quantity} جنيه</strong>
+   </div>
 
-            <label>
-                🚚 منطقة التوصيل
-            </label>
+   <div class="cart-details">
+    ${esc(x.unit)} — ${x.price} جنيه للوحدة
+   </div>
 
-            <select
-                id="region"
-                onchange="updateCart()"
-            >
+   <div class="qty">
+    <button onclick="decrease(${i})">−</button>
+    <span>${x.quantity}</span>
+    <button onclick="increase(${i})">+</button>
+    <button onclick="removeItem(${i})">🗑️</button>
+   </div>
 
-                <
+  </div>`
+ ).join("")
+ :'<div class="empty">السلة فارغة</div>';
+}
+
+window.sendWhatsApp=()=>{
+
+ if(!cart.length)
+  return alert("أضف صنفًا إلى السلة أولاً.");
+
+ const name=$("name").value.trim();
+ const phone=$("phone").value.trim();
+ const address=$("address").value.trim();
+
+ const r=regions.find(
+  x=>x.id===$("region").value
+ );
+
+ if(!name)
+  return alert("اكتب اسم العميل.");
+
+ if(!phone)
+  return alert("اكتب رقم الهاتف.");
+
+ if(!r)
+  return alert("اختر منطقة التوصيل.");
+
+ if(!address)
+  return alert("اكتب العنوان بالتفصيل.");
+
+ let sub=0;
+
+ let msg=
+ `🛒 طلب جديد\n\n`+
+ `👤 الاسم: ${name}\n`+
+ `📞 الهاتف: ${phone}\n`+
+ `🚚 المنطقة: ${r.name}\n`+
+ `📍 العنوان: ${address}\n\n`+
+ `📦 تفاصيل الطلب:\n`;
+
+ cart.forEach(x=>{
+  let t=x.price*x.quantity;
+  sub+=t;
+
+  msg+=
+  `• ${x.name}\n`+
+  `  ${x.unit} × ${x.quantity} = ${t} جنيه\n`;
+ });
+
+ const total=sub+num(r.fee);
+
+ msg+=
+ `\n💵 قيمة الطلب: ${sub} جنيه\n`+
+ `🚚 التوصيل: ${num(r.fee)} جنيه\n`+
+ `💰 الإجمالي النهائي: ${total} جنيه`;
+
+ window.open(
+  "https://wa.me/"+
+  whatsappNumber+
+  "?text="+
+  encodeURIComponent(msg),
+  "_blank"
+ );
+};
+
+loadAll();
+</script>
+</body>
+</html>
