@@ -153,6 +153,12 @@ textarea{
     cursor:pointer;
 }
 
+.add{
+    margin-top:8px;
+    font-size:16px;
+    font-weight:bold;
+}
+
 .cart{
     background:#fff;
     margin-top:20px;
@@ -217,7 +223,6 @@ textarea{
     padding:20px;
 }
 
-/* سلة ثابتة مع العداد */
 .floating-cart{
     position:fixed;
     bottom:18px;
@@ -232,9 +237,6 @@ textarea{
     box-shadow:0 4px 14px #0004;
     z-index:20;
     cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
 }
 
 .cart-count{
@@ -281,183 +283,183 @@ textarea{
 <body>
 
 <header>
-    <img id="logo" alt="الشعار">
 
-    <h1 id="storeName">
-        🍰 Pistach D'Alep
-    </h1>
+<img id="logo" alt="الشعار">
 
-    <p id="storeSubtitle">
-        بيستاش دي ألب
-    </p>
+<h1 id="storeName">
+🍰 Pistach D'Alep
+</h1>
+
+<p id="storeSubtitle">
+بيستاش دي ألب
+</p>
+
 </header>
 
 <div class="container">
 
-    <div class="categories" id="categories"></div>
+<div class="categories" id="categories"></div>
 
-    <div class="menu" id="menu">
-        <div class="loading">
-            جاري تحميل المنيو...
-        </div>
-    </div>
+<div class="menu" id="menu">
+<div class="loading">
+جاري تحميل المنيو...
+</div>
+</div>
 
-    <section class="cart" id="cartSection">
+<section class="cart" id="cartSection">
 
-        <h2>🛒 سلة الطلب</h2>
+<h2>🛒 سلة الطلب</h2>
 
-        <div id="cartItems">
-            <div class="empty">
-                السلة فارغة
-            </div>
-        </div>
+<div id="cartItems">
+<div class="empty">
+السلة فارغة
+</div>
+</div>
 
-        <div class="total">
-            الإجمالي:
-            <span id="subtotal">0</span>
-            جنيه
-        </div>
+<div class="total">
+الإجمالي:
+<span id="subtotal">0</span>
+جنيه
+</div>
 
-        <div class="delivery">
+<div class="delivery">
 
-            <label>
-                🚚 منطقة التوصيل
-            </label>
+<label>
+🚚 منطقة التوصيل
+</label>
 
-            <select id="region" onchange="updateCart()">
+<select id="region" onchange="updateCart()">
 
-                <option value="">
-                    اختر المنطقة
-                </option>
+<option value="">
+اختر المنطقة
+</option>
 
-            </select>
+</select>
 
-            <div>
-                رسوم التوصيل:
-                <strong>
-                    <span id="deliveryFee">0</span>
-                    جنيه
-                </strong>
-            </div>
-
-        </div>
-
-        <div class="total">
-            الإجمالي النهائي:
-            <span id="grandTotal">0</span>
-            جنيه
-        </div>
-
-        <input
-            id="name"
-            placeholder="اسم العميل *"
-        >
-
-        <input
-            id="phone"
-            type="tel"
-            placeholder="رقم الهاتف *"
-        >
-
-        <textarea
-            id="address"
-            rows="3"
-            placeholder="العنوان بالتفصيل *"
-        ></textarea>
-
-        <button
-            class="whatsapp"
-            onclick="sendWhatsApp()"
-        >
-            📲 إرسال الطلب عبر واتساب
-        </button>
-
-    </section>
+<div>
+رسوم التوصيل:
+<strong>
+<span id="deliveryFee">0</span>
+جنيه
+</strong>
+</div>
 
 </div>
 
-<!-- السلة الثابتة + العداد -->
-<button
-    class="floating-cart"
-    onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})"
-    aria-label="السلة"
+<div class="total">
+الإجمالي النهائي:
+<span id="grandTotal">0</span>
+جنيه
+</div>
+
+<input
+id="name"
+placeholder="اسم العميل *"
 >
-    🛒
-    <span class="cart-count" id="cartCount">0</span>
+
+<input
+id="phone"
+type="tel"
+placeholder="رقم الهاتف *"
+>
+
+<textarea
+id="address"
+rows="3"
+placeholder="العنوان بالتفصيل *"
+></textarea>
+
+<button
+class="whatsapp"
+onclick="sendWhatsApp()"
+>
+📲 إرسال الطلب عبر واتساب
+</button>
+
+</section>
+
+</div>
+
+<button
+class="floating-cart"
+onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})"
+aria-label="السلة"
+>
+🛒
+<span class="cart-count" id="cartCount">0</span>
 </button>
 
 
 <script type="module">
 
-import {
-    initializeApp
+import{
+initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    getDoc
+import{
+getFirestore,
+collection,
+getDocs,
+doc,
+getDoc
 }
 from
 "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
-const firebaseConfig = {
+const firebaseConfig={
 
-    apiKey:
-    "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+apiKey:
+"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
 
-    authDomain:
-    "pistach-d-alep.firebaseapp.com",
+authDomain:
+"pistach-d-alep.firebaseapp.com",
 
-    projectId:
-    "pistach-d-alep",
+projectId:
+"pistach-d-alep",
 
-    storageBucket:
-    "pistach-d-alep.firebasestorage.app",
+storageBucket:
+"pistach-d-alep.firebasestorage.app",
 
-    messagingSenderId:
-    "288943885593",
+messagingSenderId:
+"288943885593",
 
-    appId:
-    "1:288943885593:web:4737041244be376c274988",
+appId:
+"1:288943885593:web:4737041244be376c274988",
 
-    measurementId:
-    "G-569W2MXBTJ"
+measurementId:
+"G-569W2MXBTJ"
 
 };
 
 
-const db =
+const db=
 getFirestore(
-    initializeApp(firebaseConfig)
+initializeApp(firebaseConfig)
 );
 
 
-const whatsappNumber =
+const whatsappNumber=
 "201010644644";
 
 
-let products = [];
-let cart = [];
-let regions = [];
-let categories = [];
-let currentCategory = "الكل";
-let settings = {};
+let products=[];
+let cart=[];
+let regions=[];
+let categories=[];
+let currentCategory="الكل";
+let settings={};
 
 
-const $ =
-id =>
-document.getElementById(id);
+const $=
+id=>document.getElementById(id);
 
 
-const esc =
-v =>
-String(v ?? "")
+const esc=
+v=>
+String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
@@ -465,9 +467,8 @@ String(v ?? "")
 .replace(/'/g,"&#039;");
 
 
-const num =
-v =>
-Number(v) || 0;
+const num=
+v=>Number(v)||0;
 
 
 /* =========================
@@ -476,103 +477,102 @@ Number(v) || 0;
 
 async function loadAll(){
 
-    try{
+try{
 
-        const [
-            ps,
-            rs,
-            cs,
-            ss
-        ] = await Promise.all([
+const[
+ps,
+rs,
+cs,
+ss
+]=await Promise.all([
 
-            getDocs(
-                collection(db,"products")
-            ),
+getDocs(
+collection(db,"products")
+),
 
-            getDocs(
-                collection(db,"deliveryRegions")
-            ),
+getDocs(
+collection(db,"deliveryRegions")
+),
 
-            getDocs(
-                collection(db,"categories")
-            ),
+getDocs(
+collection(db,"categories")
+),
 
-            getDoc(
-                doc(db,"settings","main")
-            )
+getDoc(
+doc(db,"settings","main")
+)
 
-        ]);
-
-
-        products =
-        ps.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .filter(
-            p =>
-            p.hidden !== true
-        );
+]);
 
 
-        regions =
-        rs.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .sort(
-            (a,b) =>
-            (a.order ?? 999) -
-            (b.order ?? 999)
-        );
+products=
+ps.docs
+.map(
+d=>({
+id:d.id,
+...d.data()
+})
+)
+.filter(
+p=>p.hidden!==true
+);
 
 
-        categories =
-        cs.docs
-        .map(
-            d => ({
-                id:d.id,
-                ...d.data()
-            })
-        )
-        .sort(
-            (a,b) =>
-            (a.order ?? 999) -
-            (b.order ?? 999)
-        );
+regions=
+rs.docs
+.map(
+d=>({
+id:d.id,
+...d.data()
+})
+)
+.sort(
+(a,b)=>
+(a.order??999)-
+(b.order??999)
+);
 
 
-        settings =
-        ss.exists()
-        ? ss.data()
-        : {};
+categories=
+cs.docs
+.map(
+d=>({
+id:d.id,
+...d.data()
+})
+)
+.sort(
+(a,b)=>
+(a.order??999)-
+(b.order??999)
+);
 
 
-        applySettings();
+settings=
+ss.exists()
+?ss.data()
+:{};
 
-        showCategories();
 
-        showProducts();
+applySettings();
 
-        showRegions();
+showCategories();
 
-    }
-    catch(e){
+showProducts();
 
-        console.error(e);
+showRegions();
 
-        $("menu").innerHTML =
-        '<div class="empty">حدث خطأ أثناء تحميل المنيو<br>' +
-        esc(e.message) +
-        '</div>';
+}
+catch(e){
 
-    }
+console.error(e);
+
+$("menu").innerHTML=
+'<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+
+esc(e.message)+
+'</div>';
+
+}
 
 }
 
@@ -583,55 +583,55 @@ async function loadAll(){
 
 function applySettings(){
 
-    document.documentElement.style.setProperty(
-        "--primary",
-        settings.primaryColor ||
-        "#789262"
-    );
+document.documentElement.style.setProperty(
+"--primary",
+settings.primaryColor||
+"#789262"
+);
 
-    document.documentElement.style.setProperty(
-        "--bg",
-        settings.backgroundColor ||
-        "#d9e8b8"
-    );
+document.documentElement.style.setProperty(
+"--bg",
+settings.backgroundColor||
+"#d9e8b8"
+);
 
-    document.documentElement.style.setProperty(
-        "--text",
-        settings.textColor ||
-        "#222"
-    );
-
-
-    $("storeName").textContent =
-    settings.storeName ||
-    "🍰 Pistach D'Alep";
+document.documentElement.style.setProperty(
+"--text",
+settings.textColor||
+"#222"
+);
 
 
-    $("storeSubtitle").textContent =
-    settings.subtitle ||
-    "بيستاش دي ألب";
+$("storeName").textContent=
+settings.storeName||
+"🍰 Pistach D'Alep";
 
 
-    document.title =
-    settings.storeName ||
-    "منيو";
+$("storeSubtitle").textContent=
+settings.subtitle||
+"بيستاش دي ألب";
 
 
-    if(settings.logo){
+document.title=
+settings.storeName||
+"منيو";
 
-        $("logo").src =
-        settings.logo;
 
-        $("logo").style.display =
-        "block";
+if(settings.logo){
 
-    }
-    else{
+$("logo").src=
+settings.logo;
 
-        $("logo").style.display =
-        "none";
+$("logo").style.display=
+"block";
 
-    }
+}
+else{
+
+$("logo").style.display=
+"none";
+
+}
 
 }
 
@@ -642,16 +642,15 @@ function applySettings(){
 
 function showRegions(){
 
-    $("region").innerHTML =
-    '<option value="">اختر المنطقة</option>' +
-
-    regions.map(
-        r =>
-        `<option value="${esc(r.id)}">
-            ${esc(r.name)} - ${num(r.fee)} جنيه
-        </option>`
-    )
-    .join("");
+$("region").innerHTML=
+'<option value="">اختر المنطقة</option>'+
+regions.map(
+r=>
+`<option value="${esc(r.id)}">
+${esc(r.name)} - ${num(r.fee)} جنيه
+</option>`
+)
+.join("");
 
 }
 
@@ -662,624 +661,87 @@ function showRegions(){
 
 function showCategories(){
 
-    const names =
-    categories.length
-    ?
-    categories.map(
-        c => c.name
-    )
-    :
-    [
-        ...new Set(
-            products.map(
-                p =>
-                p.category ||
-                "أخرى"
-            )
-        )
-    ];
+const names=
+categories.length
+?
+categories.map(c=>c.name)
+:
+[
+...new Set(
+products.map(
+p=>p.category||"أخرى"
+)
+)
+];
 
 
-    const list = [
-        "الكل",
-        ...names.filter(
-            x =>
-            x &&
-            x !== "الكل"
-        )
-    ];
+const list=[
+"الكل",
+...names.filter(
+x=>x&&x!=="الكل"
+)
+];
 
 
-    $("categories").innerHTML =
-    list.map(
-        c =>
-        `<button
-            class="${c === currentCategory ? "active" : ""}"
-            data-cat="${esc(c)}"
-        >
-            ${esc(c)}
-        </button>`
-    )
-    .join("");
+$("categories").innerHTML=
+list.map(
+c=>
+`<button
+class="${c===currentCategory?"active":""}"
+data-cat="${esc(c)}"
+>
+${esc(c)}
+</button>`
+)
+.join("");
 
 
-    document
-    .querySelectorAll(
-        "#categories button"
-    )
-    .forEach(
-        b => {
+document
+.querySelectorAll(
+"#categories button"
+)
+.forEach(
+b=>{
 
-            b.onclick = () => {
+b.onclick=()=>{
 
-                currentCategory =
-                b.dataset.cat;
+currentCategory=
+b.dataset.cat;
 
-                showCategories();
+showCategories();
 
-                showProducts();
+showProducts();
 
-            };
+};
 
-        }
-    );
+}
+);
 
 }
 
 
 /* =========================
-استخراج سعر الكيلو
+سعر الكيلو
 ========================= */
 
 function getKiloPrice(p){
 
-    if(
-        p.kiloPrice !== undefined &&
-        num(p.kiloPrice) > 0
-    ){
+if(
+p.kiloPrice!==undefined &&
+num(p.kiloPrice)>0
+){
 
-        return num(p.kiloPrice);
-
-    }
-
-
-    if(
-        Array.isArray(p.units)
-    ){
-
-        const kilo =
-        p.units.find(
-            u =>
-            String(u.name || "")
-            .trim() === "كيلو" &&
-            num(u.price) > 0
-        );
-
-
-        if(kilo){
-
-            return num(kilo.price);
-
-        }
-
-    }
-
-
-    if(
-        p.prices &&
-        typeof p.prices === "object" &&
-        num(p.prices["كيلو"]) > 0
-    ){
-
-        return num(
-            p.prices["كيلو"]
-        );
-
-    }
-
-
-    return 0;
+return num(p.kiloPrice);
 
 }
 
 
-/* =========================
-استخراج القطعة / العلبة
-========================= */
-
-function getExtraOption(p){
-
-    let extraUnit =
-    String(
-        p.extraUnit || ""
-    )
-    .trim();
-
-
-    let extraPrice =
-    num(
-        p.extraPrice
-    );
-
-
-    /* البيانات الجديدة */
-
-    if(
-        extraUnit &&
-        extraPrice > 0
-    ){
-
-        return {
-            name:extraUnit,
-            price:extraPrice
-        };
-
-    }
-
-
-    /* البحث في units */
-
-    if(
-        Array.isArray(p.units)
-    ){
-
-        const extra =
-        p.units.find(
-            u => {
-
-                const name =
-                String(
-                    u.name || ""
-                )
-                .trim();
-
-
-                return (
-                    name &&
-                    name !== "كيلو" &&
-                    name !== "نصف كيلو" &&
-                    name !== "ربع كيلو" &&
-                    num(u.price) > 0
-                );
-
-            }
-        );
-
-
-        if(extra){
-
-            return {
-                name:
-                String(
-                    extra.name
-                ).trim(),
-
-                price:
-                num(extra.price)
-            };
-
-        }
-
-    }
-
-
-    /* البحث في prices */
-
-    if(
-        p.prices &&
-        typeof p.prices === "object"
-    ){
-
-        for(
-            const [name,price]
-            of Object.entries(p.prices)
-        ){
-
-            if(
-                name !== "كيلو" &&
-                name !== "نصف كيلو" &&
-                name !== "ربع كيلو" &&
-                num(price) > 0
-            ){
-
-                return {
-                    name:name,
-                    price:num(price)
-                };
-
-            }
-
-        }
-
-    }
-
-
-    /*
-    إذا لم يوجد كيلو
-    وكان هناك سعر قطعة مباشر
-    */
-
-    if(
-        num(p.price) > 0
-    ){
-
-        return {
-            name:
-            String(
-                p.extraUnit ||
-                "قطعة"
-            ).trim(),
-
-            price:
-            num(p.price)
-        };
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================
-خيارات المنتج
-========================= */
-
-function getOptions(p){
-
-    const kilo =
-    getKiloPrice(p);
-
-
-    const extra =
-    getExtraOption(p);
-
-
-    const options = [];
-
-
-    /*
-    إذا يوجد سعر كيلو
-    يظهر كيلو + نصف + ربع
-    */
-
-    if(kilo > 0){
-
-        options.push({
-            name:"كيلو",
-            price:kilo
-        });
-
-
-        options.push({
-            name:"نصف كيلو",
-            price:kilo / 2
-        });
-
-
-        options.push({
-            name:"ربع كيلو",
-            price:kilo / 4
-        });
-
-    }
-
-
-    /*
-    إذا يوجد قطعة / علبة
-    */
-
-    if(extra){
-
-        options.push(extra);
-
-    }
-
-
-    return options;
-
-}
-
-
-/* =========================
-الخيار الافتراضي
-========================= */
-
-function getDefaultOption(p){
-
-    const options =
-    getOptions(p);
-
-
-    /*
-    إذا يوجد كيلو
-    يظهر الكيلو أولًا
-    */
-
-    const kilo =
-    options.find(
-        o =>
-        o.name === "كيلو"
-    );
-
-
-    if(kilo){
-
-        return kilo;
-
-    }
-
-
-    /*
-    إذا لا يوجد كيلو
-    تظهر القطعة / العلبة
-    */
-
-    return options[0] ||
-    {
-        name:"قطعة",
-        price:0
-    };
-
-}
-
-
-/* =========================
-عرض المنتجات
-========================= */
-
-function showProducts(){
-
-    const list =
-    currentCategory === "الكل"
-    ?
-    products
-    :
-    products.filter(
-        p =>
-        (p.category || "أخرى")
-        === currentCategory
-    );
-
-
-    $("menu").innerHTML =
-    list.length
-    ?
-    list.map(
-        p => {
-
-            const options =
-            getOptions(p);
-
-
-            const defaultOption =
-            getDefaultOption(p);
-
-
-            const optionHtml =
-            options.map(
-                o =>
-                `<option
-                    value="${esc(o.name)}"
-                    ${o.name === defaultOption.name ? "selected" : ""}
-                >
-                    ${esc(o.name)} -
-                    ${o.price} جنيه
-                </option>`
-            )
-            .join("");
-
-
-            const hasMultipleOptions =
-            options.length > 1;
-
-
-            return `
-
-            <div class="item">
-
-                ${
-                    p.image
-                    ?
-                    `<img
-                        src="${esc(p.image)}"
-                        alt="${esc(p.name)}"
-                        onerror="this.style.display='none'"
-                    >`
-                    :
-                    ""
-                }
-
-                <div class="item-content">
-
-                    <h3>
-                        ${esc(p.name)}
-                    </h3>
-
-                    <div class="description">
-                        ${esc(p.description)}
-                    </div>
-
-
-                    <div
-                        class="price"
-                        id="price-${esc(p.id)}"
-                        ${
-                            hasMultipleOptions
-                            ?
-                            `onclick="toggleWeight('${esc(p.id)}')"`
-                            :
-                            ""
-                        }
-                    >
-
-                        ${esc(defaultOption.name)}
-                        :
-                        ${defaultOption.price}
-                        جنيه
-
-                        ${
-                            hasMultipleOptions
-                            ?
-                            `<span style="font-size:12px">▾</span>`
-                            :
-                            ""
-                        }
-
-                    </div>
-
-
-                    <div
-                        class="weight-box"
-                        id="weight-box-${esc(p.id)}"
-                    >
-
-                        ${
-                            hasMultipleOptions
-                            ?
-                            `
-                            <select
-                                class="weight-select"
-                                id="unit-${esc(p.id)}"
-                                onchange="changeDisplayedPrice('${esc(p.id)}')"
-                            >
-                                ${optionHtml}
-                            </select>
-                            `
-                            :
-                            `
-                            <input
-                                type="hidden"
-                                id="unit-${esc(p.id)}"
-                                value="${esc(defaultOption.name)}"
-                            >
-                            `
-                        }
-
-                    </div>
-
-
-                    <button
-                        class="add"
-                        onclick="addToCart('${esc(p.id)}')"
-                    >
-                        ➕ إضافة للسلة
-                    </button>
-
-                </div>
-
-            </div>
-
-            `;
-
-        }
-    )
-    .join("")
-    :
-    '<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
-
-}
-
-
-/* =========================
-فتح الخيارات
-========================= */
-
-window.toggleWeight =
-function(id){
-
-    const box =
-    $("weight-box-" + id);
-
-
-    if(!box)
-    return;
-
-
-    box.classList.toggle(
-        "open"
-    );
-
-};
-
-
-/* =========================
-تغيير السعر الظاهر
-========================= */
-
-window.changeDisplayedPrice =
-function(id){
-
-    const select =
-    $("unit-" + id);
-
-
-    const priceBox =
-    $("price-" + id);
-
-
-    if(
-        !select ||
-        !priceBox
-    )
-    return;
-
-
-    const p =
-    products.find(
-        x =>
-        x.id === id
-    );
-
-
-    if(!p)
-    return;
-
-
-    const options =
-    getOptions(p);
-
-
-    const selected =
-    options.find(
-        x =>
-        x.name === select.value
-    );
-
-
-    if(!selected)
-    return;
-
-
-    priceBox.innerHTML =
-    `${esc(selected.name)}
-    :
-    ${selected.price}
-    جنيه
-    <span style="font-size:12px">
-        ▾
-    </span>`;
-
-};
-
-
-/* =========================
-إضافة للسلة
-========================= */
-
-window.addToCart =
-function(id){
-
-    const p =
-    products.find(
-        x =>
-        x.id === id
-    );
-
-
-    if(!p)
-    return;
-
-
-    const select =
+if(
+Array.isArray(p.units)
+){
+
+const kilo=
+p.units.find(
+u=>
+String(u.name||"")
+.trim()==="كيل
