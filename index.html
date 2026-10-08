@@ -1286,3 +1286,278 @@ function showProducts(){
 
             button.addEventListener(
             
+    container
+        .querySelectorAll("[data-add-product]")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                const product = products.find(
+                    item => item.id === button.dataset.addProduct
+                );
+
+                if (!product) return;
+
+                const options = sortOptions(product, getOptions(product));
+                const card = button.closest(".product-card");
+                const select = card.querySelector(".price-select");
+                const selectedIndex = select ? Number(select.value) : 0;
+                const option = options[selectedIndex];
+
+                const custom = getPricingType(product, options) === "custom"
+                    || !option;
+
+                const unitName = custom
+                    ? "حسب الطلب"
+                    : option.name;
+
+                const price = custom ? 0 : option.price;
+
+                const existing = cart.find(item =>
+                    item.productId === product.id &&
+                    item.unitName === unitName
+                );
+
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({
+                        productId: product.id,
+                        name: product.name || "صنف",
+                        unitName,
+                        price,
+                        qty: 1,
+                        custom
+                    });
+                }
+
+                renderCart();
+                button.textContent = "تمت الإضافة ✓";
+                setTimeout(() => {
+                    button.textContent = "إضافة للسلة 🛒";
+                }, 900);
+            });
+        });
+}
+
+/* عرض السلة وحساب الأسعار */
+function renderCart() {
+    const container = $("cartItems");
+    container.innerHTML = "";
+
+    if (!cart.length) {
+        container.innerHTML =
+            '<div class="empty">السلة فارغة، أضف الأصناف التي تريدها</div>';
+    }
+
+    cart.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "cart-item";
+
+        row.innerHTML = `
+            <div class="cart-item-info">
+                <div class="cart-item-name">${esc(item.name)}</div>
+                <div class="cart-item-unit">${esc(item.unitName)}</div>
+                <div class="cart-item-price">
+                    ${item.custom ? "السعر حسب الطلب" : money(item.price * item.qty)}
+                </div>
+            </div>
+            <div class="cart-controls">
+                <button class="qty-btn" data-minus="${index}" type="button">−</button>
+                <span class="qty-number">${item.qty}</span>
+                <button class="qty-btn" data-plus="${index}" type="button">+</button>
+                <button class="remove-btn" data-remove="${index}" type="button">حذف</button>
+            </div>
+        `;
+
+        container.appendChild(row);
+    });
+
+    container.querySelectorAll("[data-plus]").forEach(button => {
+        button.addEventListener("click", () => {
+            cart[Number(button.dataset.plus)].qty++;
+            renderCart();
+        });
+    });
+
+    container.querySelectorAll("[data-minus]").forEach(button => {
+        button.addEventListener("click", () => {
+            const index = Number(button.dataset.minus);
+            cart[index].qty--;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            renderCart();
+        });
+    });
+
+    container.querySelectorAll("[data-remove]").forEach(button => {
+        button.addEventListener("click", () => {
+            cart.splice(Number(button.dataset.remove), 1);
+            renderCart();
+        });
+    });
+
+    const subtotal = cart.reduce(
+        (sum, item) => sum + item.price * item.qty, 0
+    );
+
+    const region = regions.find(
+        item => item.id === $("deliveryRegion").value
+    );
+
+    const deliveryFee = region
+        ? num(region.fee ?? region.deliveryFee ?? region.price ?? region.cost)
+        : 0;
+
+    $("subtotal").textContent = money(subtotal);
+    $("deliveryFee").textContent = money(deliveryFee);
+    $("grandTotal").textContent = money(subtotal + deliveryFee);
+    $("cartCount").textContent = cart.reduce(
+        (sum, item) => sum + item.qty, 0
+    );
+}
+
+/* تحميل مناطق التوصيل */
+function showRegions() {
+    const select = $("deliveryRegion");
+    select.innerHTML = '<option value="">اختر منطقة التوصيل</option>';
+
+    regions.forEach(region => {
+        const option = document.createElement("option");
+        option.value = region.id;
+        option.textContent =
+            `${region.name || region.title || "منطقة"} — ${
+                money(region.fee ?? region.deliveryFee ?? region.price ?? region.cost)
+            }`;
+        select.appendChild(option);
+    });
+}
+
+/* إرسال الطلب إلى واتساب */
+$("whatsappBtn").addEventListener("click", () => {
+    if (!cart.length) {
+        alert("أضف صنفاً واحداً على الأقل إلى السلة.");
+        return;
+    }
+
+    const selectedRegion = regions.find(
+        item => item.id === $("deliveryRegion").value
+    );
+
+    if (regions.length && !selectedRegion) {
+        alert("اختر منطقة التوصيل أولاً.");
+        return;
+    }
+
+    const subtotal = cart.reduce(
+        (sum, item) => sum + item.price * item.qty, 0
+    );
+
+    const deliveryFee = selectedRegion
+        ? num(selectedRegion.fee ?? selectedRegion.deliveryFee ??
+              selectedRegion.price ?? selectedRegion.cost)
+        : 0;
+
+    let message = "طلب جديد من فستق حلب\n\n";
+
+    cart.forEach(item => {
+        message += `• ${item.name} — ${item.unitName} — الكمية: ${item.qty}`;
+        message += item.custom
+            ? " — السعر يحدد عند التأكيد\n"
+            : ` — ${money(item.price * item.qty)}\n`;
+    });
+
+    message += `\nالمجموع: ${money(subtotal)}`;
+    message += `\nالتوصيل: ${money(deliveryFee)}`;
+    message += `\nالإجمالي المبدئي: ${money(subtotal + deliveryFee)}`;
+
+    if (selectedRegion) {
+        message += `\nمنطقة التوصيل: ${selectedRegion.name || selectedRegion.title || ""}`;
+    }
+
+    const phone = String(
+        settings.whatsapp ||
+        settings.whatsappNumber ||
+        settings.phoneNumber ||
+        settings.phone ||
+        ""
+    ).replace(/[^\d]/g, "");
+
+    if (!phone) {
+        alert("رقم واتساب غير موجود في إعدادات المتجر بلوحة التحكم.");
+        return;
+    }
+
+    window.open(
+        "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
+        "_blank"
+    );
+});
+
+/* زر السلة العائم */
+$("floatingCart").addEventListener("click", () => {
+    document.querySelector(".cart-section").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+/* تحميل بيانات Firebase */
+async function loadAll() {
+    $("menu").innerHTML = '<div class="empty">جارٍ تحميل الأصناف...</div>';
+
+    try {
+        const [productSnap, regionSnap, categorySnap, settingsSnap] =
+            await Promise.all([
+                getDocs(collection(db, "products")),
+                getDocs(collection(db, "deliveryRegions")),
+                getDocs(collection(db, "categories")),
+                getDoc(doc(db, "settings", "main"))
+            ]);
+
+        products = productSnap.docs
+            .map(d => ({ id: d.id, ...d.data() }))
+            .filter(p => p.hidden !== true);
+
+        regions = regionSnap.docs.map(d => ({
+            id: d.id, ...d.data()
+        }));
+
+        categories = categorySnap.docs
+            .map(d => ({ id: d.id, ...d.data() }))
+            .filter(c => c.hidden !== true);
+
+        settings = settingsSnap.exists()
+            ? settingsSnap.data()
+            : {};
+
+        applySettings();
+        showCategories();
+        showRegions();
+        showProducts();
+        renderCart();
+
+        if (!products.length) {
+            $("menu").innerHTML =
+                '<div class="empty">لا توجد أصناف في مجموعة products بقاعدة البيانات.</div>';
+        }
+    } catch (error) {
+        console.error("Firebase loading error:", error);
+
+        $("errorContainer").innerHTML = `
+            <div class="error-box">
+                <strong>تعذر تحميل المنيو من قاعدة البيانات.</strong>
+                <p>تأكد من اتصال الإنترنت وصلاحيات قراءة بيانات Firebase.</p>
+                <code>${esc(error.code || error.message || "خطأ غير معروف")}</code>
+                <button id="retryLoad" type="button">إعادة المحاولة</button>
+            </div>
+        `;
+
+        $("retryLoad").addEventListener("click", loadAll);
+        $("menu").innerHTML = "";
+    }
+}
+
+$("deliveryRegion").addEventListener("change", renderCart);
+
+loadAll();
+</script>
+</body>
+</html>
