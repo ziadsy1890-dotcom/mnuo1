@@ -1,549 +1,435 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منيو</title>
-
-<style>
-:root{
- --primary:#789262;
- --bg:#d9e8b8;
- --text:#222;
- --card:#fff;
- --soft:#f7f9ef
-}
-
-*{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:var(--bg);
- color:var(--text)
-}
-
-header{
- background:var(--primary);
- color:#fff;
- text-align:center;
- padding:18px 10px;
- position:relative
-}
-
-header img{
- max-width:110px;
- max-height:80px;
- object-fit:contain;
- display:none;
- margin:0 auto 8px;
- border-radius:10px
-}
-
-header h1{
- margin:0;
- font-size:28px
-}
-
-header p{
- margin:7px 0 0
-}
-
-.container{
- max-width:760px;
- margin:auto;
- padding:15px
-}
-
-.categories{
- display:flex;
- gap:8px;
- overflow-x:auto;
- margin-bottom:15px
-}
-
-.categories button{
- border:0;
- background:var(--soft);
- padding:10px 16px;
- border-radius:20px;
- white-space:nowrap;
- cursor:pointer
-}
-
-.categories button.active{
- background:var(--primary);
- color:#fff
-}
-
-.menu{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:14px
-}
-
-.item{
- background:var(--card);
- border-radius:12px;
- overflow:hidden;
- box-shadow:0 2px 8px #0002
-}
-
-.item img{
- width:100%;
- height:155px;
- object-fit:cover
-}
-
-.item-content{
- padding:12px
-}
-
-.item h3{
- margin:0 0 6px
-}
-
-.description{
- color:#777;
- font-size:13px;
- min-height:32px
-}
-
-.price{
- font-size:16px;
- font-weight:bold;
- margin:8px 0
-}
-
-.weight-select,
-input,
-textarea{
- width:100%;
- padding:11px;
- margin:6px 0;
- border:1px solid #ddd;
- border-radius:8px;
- font-family:inherit;
- background:#fff
-}
-
-.add,
-.whatsapp{
- width:100%;
- padding:11px;
- border:0;
- border-radius:8px;
- background:var(--primary);
- color:#fff;
- cursor:pointer
-}
-
-.cart{
- background:#fff;
- margin-top:20px;
- padding:15px;
- border-radius:12px
-}
-
-.cart-item{
- border-bottom:1px solid #eee;
- padding:12px 0
-}
-
-.cart-top{
- display:flex;
- justify-content:space-between;
- gap:10px
-}
-
-.cart-details{
- color:#666;
- font-size:14px;
- margin-top:5px
-}
-
-.qty{
- display:flex;
- align-items:center;
- gap:7px;
- margin-top:10px
-}
-
-.qty button{
- width:32px;
- height:32px;
- border:0;
- border-radius:6px;
- cursor:pointer
-}
-
-.qty span{
- min-width:25px;
- text-align:center;
- font-weight:bold
-}
-
-.total{
- font-size:20px;
- font-weight:bold;
- margin:15px 0
-}
-
-.whatsapp{
- background:#25D366;
- font-size:17px;
- font-weight:bold
-}
-
-.empty,
-.loading{
- text-align:center;
- color:#777;
- padding:20px
-}
-
-.floating-cart{
- position:fixed;
- bottom:18px;
- right:18px;
- width:58px;
- height:58px;
- border:0;
- border-radius:50%;
- background:var(--primary);
- color:#fff;
- font-size:25px;
- box-shadow:0 4px 14px #0004;
- z-index:20;
- cursor:pointer
-}
-
-.cart-count{
- position:absolute;
- top:-5px;
- left:-5px;
- background:#c62828;
- color:#fff;
- border-radius:50%;
- min-width:24px;
- height:24px;
- font-size:13px;
- display:flex;
- align-items:center;
- justify-content:center;
- font-weight:bold
-}
-
-#cartSection{
- scroll-margin-top:15px
-}
-
-.delivery{
- background:#f7f7f7;
- padding:10px;
- border-radius:9px;
- margin:8px 0
-}
-
-.delivery label{
- display:block;
- font-size:14px;
- margin-bottom:4px
-}
-
-@media(max-width:500px){
- .menu{
-  grid-template-columns:1fr
- }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فستق حلب – Pistach D'Alep</title>
+  <!-- Google Fonts & Tailwind CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pistachio: {
+              50: '#f4f8f3',
+              100: '#e5eedf',
+              500: '#5c8001',
+              600: '#4a6801',
+              700: '#385001',
+            }
+          },
+          fontFamily: { cairo: ['Cairo', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background-color: #f8fafa; }
+  </style>
 </head>
-
-<body>
-
-<header>
-<img id="logo" alt="الشعار">
-
-<h1 id="storeName">🍰 Pistach D'Alep</h1>
-
-<p id="storeSubtitle">بيستاش دي ألب</p>
-</header>
-
-<div class="container">
-
-<div class="categories" id="categories"></div>
-
-<div class="menu" id="menu">
-<div class="loading">جاري تحميل المنيو...</div>
-</div>
-
-<section class="cart" id="cartSection">
-
-<h2>🛒 سلة الطلب</h2>
-
-<div id="cartItems">
-<div class="empty">السلة فارغة</div>
-</div>
-
-<div class="total">
-الإجمالي:
-<span id="subtotal">0</span>
-جنيه
-</div>
-
-<div class="delivery">
-
-<label>🚚 منطقة التوصيل</label>
-
-<select id="region" onchange="updateCart()">
-
-<option value="">
-اختر المنطقة
-</option>
-
-</select>
-
-<div>
-رسوم التوصيل:
-<strong>
-<span id="deliveryFee">0</span>
-جنيه
-</strong>
-</div>
-
-</div>
-
-<div class="total">
-الإجمالي النهائي:
-<span id="grandTotal">0</span>
-جنيه
-</div>
-
-<input
- id="name"
- placeholder="اسم العميل *"
->
-
-<input
- id="phone"
- type="tel"
- placeholder="رقم الهاتف *"
->
-
-<textarea
- id="address"
- rows="3"
- placeholder="العنوان بالتفصيل *"
-></textarea>
-
-<button
- class="whatsapp"
- onclick="sendWhatsApp()"
->
-📲 إرسال الطلب عبر واتساب
-</button>
-
-</section>
-
-</div>
-
-<button
- class="floating-cart"
- onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})"
- aria-label="السلة"
->
-🛒
-<span class="cart-count" id="cartCount">0</span>
-</button>
-
-<script type="module">
-
-import{
- initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
-import{
- getFirestore,
- collection,
- getDocs,
- doc,
- getDoc
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
-
-const firebaseConfig={
-
- apiKey:
- "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
-
- authDomain:
- "pistach-d-alep.firebaseapp.com",
-
- projectId:
- "pistach-d-alep",
-
- storageBucket:
- "pistach-d-alep.firebasestorage.app",
-
- messagingSenderId:
- "288943885593",
-
- appId:
- "1:288943885593:web:4737041244be376c274988",
-
- measurementId:
- "G-569W2MXBTJ"
-};
-
-
-const db=
-getFirestore(
- initializeApp(firebaseConfig)
-);
-
-
-const whatsappNumber=
-"201010644644";
-
-
-let products=[];
-
-let cart=[];
-
-let regions=[];
-
-let categories=[];
-
-let currentCategory="الكل";
-
-let settings={};
-
-
-const $=
-id=>
-document.getElementById(id);
-
-
-const esc=v=>
-String(v??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-
-const num=
-v=>
-Number(v)||0;
-
-
-/* =========================
-   تحميل البيانات
-========================= */
-
-async function loadAll(){
-
- try{
-
-  const [
-   ps,
-   rs,
-   cs,
-   ss
-  ]=
-  await Promise.all([
-
-   getDocs(
-    collection(
-     db,
-     "products"
-    )
-   ),
-
-   getDocs(
-    collection(
-     db,
-     "deliveryRegions"
-    )
-   ),
-
-   getDocs(
-    collection(
-     db,
-     "categories"
-    )
-   ),
-
-   getDoc(
-    doc(
-     db,
-     "settings",
-     "main"
-    )
-   )
-
-  ]);
-
-
-  products=
-  ps.docs
-  .map(d=>({
-   id:d.id,
-   ...d.data()
-  }))
-  .filter(
-   p=>p.hidden!==true
-  );
-
-
-  regions=
-  rs.docs
-  .map(d=>({
-   id:d.id,
-   ...d.data()
-  }))
-  .sort(
-   (a,b)=>
-   (a.order??999)-
-   (b.order??999)
-  );
-
-
-  categories=
-  cs.docs
-  .map(d=>({
-   id:d.id,
-   ...d.data()
-  }))
-  .sort(
-   (a,b)=>
-   (a.order??999)-
-   (b.order??999)
-  );
-
-
-  settings=
-  ss.exists()
-  ?ss.data()
-  :{};
-
-
-  applySettings();
-
-  showCategories();
-
-  showProducts();
-
-  showRegions();
-
-
- }catch(e){
-
-  console.error(e);
-
-  $("
+<body class="text-gray-800 pb-24">
+
+  <!-- الهيدر الرئيسي -->
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-pistachio-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow">
+          🌰
+        </div>
+        <div>
+          <h1 class="text-lg font-extrabold text-gray-900 leading-tight">فستق حلب</h1>
+          <p class="text-xs text-pistachio-600 font-semibold">Pistach D'Alep</p>
+        </div>
+      </div>
+
+      <!-- أيقونة السلة -->
+      <button onclick="toggleCartModal(true)" class="relative p-2 text-gray-700 hover:text-pistachio-600 transition">
+        <i class="fa-solid fa-cart-shopping text-2xl"></i>
+        <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">
+          0
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- شريط الأقسام (تصفية المنتجات) -->
+  <nav class="bg-white border-b border-gray-200 sticky top-[61px] z-30 shadow-xs">
+    <div class="max-w-4xl mx-auto px-4 py-2.5 flex gap-2 overflow-x-auto no-scrollbar" id="categoryNav">
+      <button onclick="filterCategory('all')" class="cat-btn active bg-pistachio-500 text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-xs">الكل</button>
+      <!-- سيتم تحميل الأقسام ديناميكياً -->
+    </div>
+  </nav>
+
+  <!-- شبكة المنتجات والإعلانات -->
+  <main class="max-w-4xl mx-auto px-3 py-6">
+    <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      <!-- تحميل المنتجات والإعلانات -->
+    </div>
+    <div id="loadingSpinner" class="text-center py-12">
+      <i class="fa-solid fa-spinner fa-spin text-3xl text-pistachio-500"></i>
+      <p class="mt-2 text-sm text-gray-500">جاري تحميل المنتجات...</p>
+    </div>
+  </main>
+
+  <!-- نافذة سلة المشتريات (Modal) -->
+  <div id="cartModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex justify-end hidden">
+    <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl animate-slide-left">
+      <!-- رأس السلة -->
+      <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-pistachio-50">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-bag-shopping text-pistachio-600 text-xl"></i>
+          <h2 class="font-bold text-lg text-gray-800">سلة المشتريات</h2>
+        </div>
+        <button onclick="toggleCartModal(false)" class="text-gray-400 hover:text-gray-600 p-1">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- عناصر السلة -->
+      <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- المنتجات تظهر هنا -->
+      </div>
+
+      <!-- أسفل السلة وإنهاء الطلب -->
+      <div class="p-4 border-t border-gray-100 bg-white space-y-3">
+        <div class="space-y-1 text-sm">
+          <div class="flex justify-between text-gray-600">
+            <span>إجمالي المنتجات:</span>
+            <span id="cartSubtotal">0 ج.م</span>
+          </div>
+          <div class="flex justify-between text-gray-600" id="deliveryRow">
+            <span>رسوم التوصيل:</span>
+            <span id="cartDeliveryFee">0 ج.م</span>
+          </div>
+          <div class="flex justify-between font-extrabold text-base text-gray-900 pt-2 border-t border-gray-100">
+            <span>المبلغ الإجمالي:</span>
+            <span id="cartTotal" class="text-pistachio-600">0 ج.م</span>
+          </div>
+        </div>
+
+        <!-- بيانات العميل -->
+        <div class="space-y-2 pt-2 border-t border-gray-100">
+          <input type="text" id="custName" placeholder="الاسم الكامل" class="w-full text-sm px-3 py-2 border rounded-lg focus:ring-1 focus:ring-pistachio-500 outline-none">
+          <input type="tel" id="custPhone" placeholder="رقم الهاتف" class="w-full text-sm px-3 py-2 border rounded-lg focus:ring-1 focus:ring-pistachio-500 outline-none">
+          
+          <div class="flex gap-2 text-xs font-semibold">
+            <label class="flex-1 p-2 border rounded-lg flex items-center gap-2 cursor-pointer bg-gray-50">
+              <input type="radio" name="orderType" value="delivery" checked onclick="toggleDeliveryFields(true)">
+              توصيل للمنزل
+            </label>
+            <label class="flex-1 p-2 border rounded-lg flex items-center gap-2 cursor-pointer bg-gray-50">
+              <input type="radio" name="orderType" value="pickup" onclick="toggleDeliveryFields(false)">
+              استلام من المتجر
+            </label>
+          </div>
+
+          <textarea id="custAddress" placeholder="عنوان التوصيل التفصيلي..." class="w-full text-sm px-3 py-2 border rounded-lg focus:ring-1 focus:ring-pistachio-500 outline-none h-16 resize-none"></textarea>
+        </div>
+
+        <button onclick="sendOrderToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+          إرسال الطلب عبر واتساب
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // إعدادات Firebase
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "pistach-d-alep.firebaseapp.com",
+      projectId: "pistach-d-alep",
+      storageBucket: "pistach-d-alep.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // الحالة العامة
+    let productsList = [];
+    let bannersList = [];
+    let cart = JSON.parse(localStorage.getItem('pistach_cart') || '[]');
+    let storeConfig = { whatsappNumber: '', deliveryFee: 0, enableDelivery: true };
+    let currentCategory = 'all';
+
+    // التشغيل عند البدء
+    window.addEventListener('DOMContentLoaded', async () => {
+      await fetchConfig();
+      await fetchCategories();
+      await fetchBanners();
+      await fetchProducts();
+      updateCartUI();
+    });
+
+    async function fetchConfig() {
+      try {
+        const doc = await db.collection('settings').doc('store_config').get();
+        if (doc.exists) {
+          storeConfig = doc.data();
+          document.getElementById('cartDeliveryFee').innerText = `${storeConfig.deliveryFee || 0} ج.م`;
+        }
+      } catch (err) { console.error("خطأ في جلب الإعدادات:", err); }
+    }
+
+    async function fetchCategories() {
+      try {
+        const snap = await db.collection('categories').orderBy('sortOrder', 'asc').get();
+        const nav = document.getElementById('categoryNav');
+        snap.forEach(doc => {
+          const cat = doc.data();
+          nav.innerHTML += `
+            <button onclick="filterCategory('${cat.name}')" class="cat-btn bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap hover:bg-gray-200">${cat.name}</button>
+          `;
+        });
+      } catch (err) { console.error("خطأ في جلب الأقسام:", err); }
+    }
+
+    async function fetchBanners() {
+      try {
+        const snap = await db.collection('banner_ads').where('isActive', '==', true).orderBy('sortOrder', 'asc').get();
+        bannersList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } catch (err) { console.error("خطأ في جلب الإعلانات:", err); }
+    }
+
+    async function fetchProducts() {
+      try {
+        const snap = await db.collection('products').where('isHidden', '==', false).get();
+        productsList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderProductsAndBanners();
+      } catch (err) {
+        console.error("خطأ في جلب المنتجات:", err);
+      } finally {
+        document.getElementById('loadingSpinner').classList.add('hidden');
+      }
+    }
+
+    function renderProductsAndBanners() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      let filtered = currentCategory === 'all' 
+        ? productsList 
+        : productsList.filter(p => p.category === currentCategory);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400">لا توجد منتجات في هذا القسم</div>`;
+        return;
+      }
+
+      let bannerIndex = 0;
+      let itemsSinceLastBanner = 0;
+      const bannerInterval = 3; // إظهار بانر بعد كل 3 منتجات
+
+      filtered.forEach((p, idx) => {
+        // إضافة بطاقة المنتج
+        grid.innerHTML += createProductCardHTML(p);
+        itemsSinceLastBanner++;
+
+        // دمج إعلان إن وجد
+        if (itemsSinceLastBanner >= bannerInterval && bannerIndex < bannersList.length) {
+          const banner = bannersList[bannerIndex];
+          grid.innerHTML += `
+            <div class="col-span-full my-2 overflow-hidden rounded-xl shadow-xs border border-gray-100">
+              <img src="${banner.imageUrl}" alt="إعلان" class="w-full h-auto object-cover max-h-48">
+            </div>
+          `;
+          bannerIndex++;
+          itemsSinceLastBanner = 0;
+        }
+      });
+    }
+
+    function createProductCardHTML(p) {
+      let optionsHTML = '';
+      if (p.saleType === 'by_weight') {
+        const pKg = p.priceKg || 0;
+        const pHalf = (p.customPrices && p.customPrices.halfKg) ? p.customPrices.halfKg : (pKg / 2);
+        const pQuarter = (p.customPrices && p.customPrices.quarterKg) ? p.customPrices.quarterKg : (pKg / 4);
+
+        optionsHTML = `
+          <select id="unit_${p.id}" class="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg p-1.5 mb-2 outline-none font-semibold text-gray-700">
+            <option value="1kg" data-price="${pKg}">كيلو - ${pKg} ج.م</option>
+            <option value="0.5kg" data-price="${pHalf}">نصف كيلو - ${pHalf} ج.م</option>
+            <option value="0.25kg" data-price="${pQuarter}">ربع كيلو - ${pQuarter} ج.م</option>
+          </select>
+        `;
+      } else {
+        optionsHTML = `
+          <div class="text-xs font-bold text-pistachio-600 mb-2 py-1">
+            السعر: ${p.unitPrice || 0} ج.م / ${p.unitLabel || 'قطعة'}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="bg-white rounded-xl shadow-xs border border-gray-100 p-2.5 flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <img src="${p.imageUrl || 'https://via.placeholder.com/150'}" class="w-full h-28 object-cover rounded-lg mb-2">
+            <h3 class="font-bold text-sm text-gray-800 line-clamp-1">${p.name}</h3>
+            <p class="text-xs text-gray-400 mb-2 line-clamp-1">${p.description || ''}</p>
+          </div>
+          <div>
+            ${optionsHTML}
+            <button onclick="addToCart('${p.id}')" class="w-full bg-pistachio-500 hover:bg-pistachio-600 text-white text-xs font-bold py-2 rounded-lg transition flex items-center justify-center gap-1">
+              <i class="fa-solid fa-plus"></i> إضافة للسلة
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterCategory(catName) {
+      currentCategory = catName;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-pistachio-500', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      event.target.classList.remove('bg-gray-100', 'text-gray-700');
+      event.target.classList.add('bg-pistachio-500', 'text-white');
+      renderProductsAndBanners();
+    }
+
+    function addToCart(productId) {
+      const p = productsList.find(item => item.id === productId);
+      if (!p) return;
+
+      let selectedUnit = '1_unit';
+      let selectedLabel = p.unitLabel || 'قطعة';
+      let price = p.unitPrice || 0;
+
+      if (p.saleType === 'by_weight') {
+        const select = document.getElementById(`unit_${p.id}`);
+        const opt = select.options[select.selectedIndex];
+        selectedUnit = select.value;
+        price = parseFloat(opt.dataset.price);
+        selectedLabel = opt.text.split('-')[0].trim();
+      }
+
+      const cartItemId = `${p.id}_${selectedUnit}`;
+      const existing = cart.find(item => item.cartItemId === cartItemId);
+
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({
+          cartItemId,
+          id: p.id,
+          name: p.name,
+          unitLabel: selectedLabel,
+          price,
+          qty: 1
+        });
+      }
+
+      saveCart();
+      updateCartUI();
+      toggleCartModal(true);
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cartBadge');
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      badge.innerText = totalQty;
+      badge.classList.toggle('hidden', totalQty === 0);
+
+      const list = document.getElementById('cartItemsList');
+      list.innerHTML = '';
+
+      let subtotal = 0;
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        list.innerHTML += `
+          <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+            <div>
+              <h4 class="font-bold text-xs text-gray-800">${item.name}</h4>
+              <p class="text-[11px] text-gray-500">${item.unitLabel} × ${item.price} ج.م</p>
+              <p class="text-xs font-extrabold text-pistachio-600">${itemTotal} ج.م</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="changeQty(${index}, -1)" class="w-6 h-6 bg-white border rounded flex items-center justify-center text-xs font-bold">-</button>
+              <span class="text-xs font-bold">${item.qty}</span>
+              <button onclick="changeQty(${index}, 1)" class="w-6 h-6 bg-white border rounded flex items-center justify-center text-xs font-bold">+</button>
+            </div>
+          </div>
+        `;
+      });
+
+      const isDelivery = document.querySelector('input[name="orderType"]:checked').value === 'delivery';
+      const deliveryFee = isDelivery ? (storeConfig.deliveryFee || 0) : 0;
+
+      document.getElementById('cartSubtotal').innerText = `${subtotal} ج.م`;
+      document.getElementById('cartTotal').innerText = `${subtotal + deliveryFee} ج.م`;
+    }
+
+    function changeQty(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+      updateCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('pistach_cart', JSON.stringify(cart));
+    }
+
+    function toggleCartModal(show) {
+      document.getElementById('cartModal').classList.toggle('hidden', !show);
+    }
+
+    function toggleDeliveryFields(show) {
+      document.getElementById('custAddress').classList.toggle('hidden', !show);
+      document.getElementById('deliveryRow').classList.toggle('hidden', !show);
+      updateCartUI();
+    }
+
+    function sendOrderToWhatsApp() {
+      if (cart.length === 0) return alert('السلة فارغة!');
+
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const isDelivery = document.querySelector('input[name="orderType"]:checked').value === 'delivery';
+      const address = document.getElementById('custAddress').value.trim();
+
+      if (!name || !phone || (isDelivery && !address)) {
+        return alert('يرجى ملء جميع البيانات المطلوب للطلب!');
+      }
+
+      let msg = `*طلب جديد من متجر فستق حلب* 🌰\n\n`;
+      msg += `👤 *الاسم:* ${name}\n`;
+      msg += `📞 *الهاتف:* ${phone}\n`;
+      msg += `🚚 *نوع الطلب:* ${isDelivery ? 'توصيل للمنزل' : 'استلام من المتجر'}\n`;
+      if (isDelivery) msg += `📍 *العنوان:* ${address}\n`;
+      msg += `\n*الطلبات:*\n`;
+
+      let subtotal = 0;
+      cart.forEach((item, i) => {
+        const tot = item.price * item.qty;
+        subtotal += tot;
+        msg += `${i+1}. ${item.name} (${item.unitLabel}) × ${item.qty} = ${tot} ج.م\n`;
+      });
+
+      const deliveryFee = isDelivery ? (storeConfig.deliveryFee || 0) : 0;
+      msg += `\n*إجمالي المنتجات:* ${subtotal} ج.م`;
+      if (isDelivery) msg += `\n*رسوم التوصيل:* ${deliveryFee} ج.م`;
+      msg += `\n*المبلغ النهائي:* ${subtotal + deliveryFee} ج.م\n`;
+
+      const targetPhone = storeConfig.whatsappNumber || '201000000000';
+      const url = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
