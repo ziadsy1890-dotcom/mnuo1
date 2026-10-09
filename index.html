@@ -1,53 +1,409 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>تسجيل دخول المدير</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فستق حلب - Pistach D'Alep</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f8f9fa;color:#212529}
+header{background:#1c1e21;color:#fff;text-align:center;padding:25px 15px;border-bottom:4px solid #1877f2}
+header h1{margin:0;font-size:26px}
+header p{margin:5px 0 0;color:#b0b3b8;font-size:14px}
+.container{max-width:800px;margin:auto;padding:15px}
+.categories{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:15px;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.categories button{border:1px solid #ced4da;background:#fff;padding:8px 18px;border-radius:20px;white-space:nowrap;font-weight:600;cursor:pointer;transition:all .2s}
+.categories button.active{background:#1c1e21;color:#fff;border-color:#1c1e21}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:550px){.menu{grid-template-columns:1fr}}
+.item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;flex-direction:column;justify-content:space-between}
+.item img{width:100%;height:160px;object-fit:cover;background:#e9ecef}
+.item-content{padding:12px;flex:1;display:flex;flex-direction:column}
+.item h3{margin:0 0 6px;font-size:18px}
+.description{color:#6c757d;font-size:13px;margin-bottom:10px;flex:1}
+.option-select{width:100%;padding:8px;border:1px solid #ced4da;border-radius:6px;margin-bottom:10px;font-size:14px}
+.price-tag{font-size:18px;font-weight:bold;color:#1877f2;margin-bottom:10px}
+.add-btn{width:100%;padding:10px;border:none;border-radius:8px;background:#1c1e21;color:#fff;font-weight:bold;cursor:pointer;transition:background .2s}
+.add-btn:hover{background:#333}
+.cart{background:#fff;margin-top:25px;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+.cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e9ecef;padding:12px 0}
+.qty-ctrl{display:flex;align-items:center;gap:8px}
+.qty-ctrl button{width:28px;height:28px;border:none;border-radius:6px;background:#e9ecef;font-weight:bold;cursor:pointer}
+.summary-line{display:flex;justify-content:space-between;margin:8px 0;font-size:15px}
+.total-line{display:flex;justify-content:space-between;margin:15px 0 5px;font-size:20px;font-weight:bold;color:#1c1e21}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ced4da;border-radius:8px;font-size:14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#1877f2}
+.whatsapp-btn{width:100%;padding:14px;border:none;border-radius:8px;background:#25D366;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;margin-top:10px;transition:opacity .2s}
+.whatsapp-btn:disabled{background:#6c757d;cursor:not-allowed;opacity:0.7}
+.empty{text-align:center;color:#6c757d;padding:20px}
+.payment-methods{margin:10px 0}
+.payment-methods label{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px;cursor:pointer}
+</style>
 </head>
 <body>
 
-  <h2>تسجيل دخول المدير</h2>
-  <input type="email" id="email" placeholder="البريد الإلكتروني"><br><br>
-  <input type="password" id="password" placeholder="كلمة المرور"><br><br>
-  <button id="loginBtn">دخول</button>
+<header>
+    <h1>🍰 فستق حلب</h1>
+    <p>Pistach D'Alep - أطياب الحلويات والمكسرات</p>
+</header>
 
-  <p id="message" style="color: red;"></p>
+<div class="container">
+    <div class="categories" id="categories"></div>
+    <div class="menu" id="menu">جاري تحميل المنتجات...</div>
 
-  <!-- كود الاتصال المباشر بـ Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    <!-- سلة الشراء -->
+    <div class="cart">
+        <h2>🛒 سلة الشراء</h2>
+        <div id="cartItems"><div class="empty">السلة فارغة حالياً</div></div>
 
-    // 1. انسخ بياناتك من Firebase Console وضغطها هنا
-    const firebaseConfig = {
-      apiKey: "ضع_مفتاح_الـ_API_الجديد_هنا",
-      authDomain: "your-app.firebaseapp.com",
-      projectId: "your-app-id",
-      storageBucket: "your-app.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef..."
+        <div style="margin-top:15px;border-top:2px dashed #e9ecef;padding-top:10px">
+            <div class="summary-line">
+                <span>المجموع الفرعي:</span>
+                <span><span id="subtotal">0</span> جنيه</span>
+            </div>
+            <div class="summary-line">
+                <span>خدمة التوصيل:</span>
+                <span><span id="deliveryFee">0</span> جنيه</span>
+            </div>
+            <div class="total-line">
+                <span>الإجمالي النهائي:</span>
+                <span><span id="grandTotal">0</span> جنيه</span>
+            </div>
+        </div>
+
+        <hr style="margin:15px 0;border:0;border-top:1px solid #eee">
+
+        <h3>بيانات الطلب والتوصيل</h3>
+        <input type="text" id="custName" placeholder="الاسم بالكامل">
+        <input type="tel" id="custPhone" placeholder="رقم الهاتف">
+        <select id="custZone" onchange="updateDeliveryFee()">
+            <option value="">اختر منطقة التوصيل...</option>
+        </select>
+        <textarea id="custAddress" rows="2" placeholder="العنوان بالتفصيل (الحي / الشارع / رقم العمارة والشقة)"></textarea>
+
+        <h3>طريقة الدفع</h3>
+        <div class="payment-methods">
+            <label>
+                <input type="radio" name="paymentMethod" value="cod" checked>
+                💵 الدفع عند الاستلام (COD)
+            </label>
+            <label style="color:#888;cursor:not-allowed">
+                <input type="radio" name="paymentMethod" value="online" disabled>
+                💳 دفع إلكتروني (غير متاح حالياً)
+            </label>
+        </div>
+
+        <button class="whatsapp-btn" id="submitBtn" onclick="submitOrder()">
+            📲 تأكيد الطلب والإرسال عبر واتساب
+        </button>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+    authDomain: "pistach-d-alep.firebaseapp.com",
+    projectId: "pistach-d-alep",
+    storageBucket: "pistach-d-alep.firebasestorage.app",
+    messagingSenderId: "288943885593",
+    appId: "1:288943885593:web:4737041244be376c274988"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let storeSettings = { whatsappNumber: "201140653708", deliveryZones: [] };
+let productsList = [];
+let cart = [];
+let currentCategory = "الكل";
+let selectedDeliveryFee = 0;
+
+// الاستماع لإعدادات المتجر
+onSnapshot(doc(db, "settings", "store"), (docSnap) => {
+    if (docSnap.exists()) {
+        storeSettings = docSnap.data();
+        renderDeliveryZones();
+    }
+});
+
+// الاستماع للمنتجات
+onSnapshot(collection(db, "products"), (snapshot) => {
+    productsList = [];
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (!data.hidden) {
+            productsList.push({ id: docSnap.id, ...data });
+        }
+    });
+    renderCategories();
+    renderProducts();
+});
+
+function renderDeliveryZones() {
+    const select = document.getElementById("custZone");
+    select.innerHTML = `<option value="">اختر منطقة التوصيل...</option>` +
+        (storeSettings.deliveryZones || []).map(z => `<option value="${z.fee}">${z.name} (+${z.fee} ج)</option>`).join("");
+}
+
+window.updateDeliveryFee = function() {
+    const val = document.getElementById("custZone").value;
+    selectedDeliveryFee = val ? Number(val) : 0;
+    updateCartUI();
+};
+
+function renderCategories() {
+    const categoriesDiv = document.getElementById("categories");
+    const categories = ["الكل", ...new Set(productsList.map(p => p.category || "أخرى"))];
+    
+    categoriesDiv.innerHTML = categories.map(cat => `
+        <button class="${cat === currentCategory ? 'active' : ''}" onclick="setCategory('${cat}')">
+            ${cat}
+        </button>
+    `).join("");
+}
+
+window.setCategory = function(cat) {
+    currentCategory = cat;
+    renderCategories();
+    renderProducts();
+};
+
+function renderProducts() {
+    const menuDiv = document.getElementById("menu");
+    const filtered = currentCategory === "الكل" 
+        ? productsList 
+        : productsList.filter(p => (p.category || "أخرى") === currentCategory);
+
+    if (!filtered.length) {
+        menuDiv.innerHTML = `<div class="empty" style="grid-column:1/-1">لا توجد منتجات متوفرة حالياً في هذا القسم.</div>`;
+        return;
+    }
+
+    menuDiv.innerHTML = filtered.map(p => {
+        let optionsHTML = "";
+        let defaultPrice = 0;
+
+        if (p.saleType === "weight") {
+            const pricing = p.pricing || { kilo: p.price || 0, half: (p.price||0)/2, quarter: (p.price||0)/4 };
+            defaultPrice = pricing.kilo;
+            optionsHTML = `
+                <select class="option-select" id="opt-${p.id}" onchange="updateItemPrice('${p.id}')">
+                    <option value="kilo" data-price="${pricing.kilo}">كيلو (1000 غرام) - ${pricing.kilo} ج</option>
+                    <option value="half" data-price="${pricing.half}">نصف كيلو (500 غرام) - ${pricing.half} ج</option>
+                    <option value="quarter" data-price="${pricing.quarter}">ربع كيلو (250 غرام) - ${pricing.quarter} ج</option>
+                </select>`;
+        } else {
+            defaultPrice = p.unitPrice || p.price || 0;
+            const unitLabel = p.saleType === "box" ? "علبة" : "قطعة";
+            optionsHTML = `<div style="margin-bottom:10px;font-size:14px;color:#555">البيع: بالـ${unitLabel}</div>`;
+        }
+
+        return `
+            <div class="item">
+                <img src="${p.image || 'https://via.placeholder.com/300'}" alt="${escapeHtml(p.name)}">
+                <div class="item-content">
+                    <h3>${escapeHtml(p.name)}</h3>
+                    <div class="description">${escapeHtml(p.description || '')}</div>
+                    ${optionsHTML}
+                    <div class="price-tag" id="price-display-${p.id}">${defaultPrice} جنيه</div>
+                    <button class="add-btn" onclick="addToCart('${p.id}')">➕ إضافة للسلة</button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+window.updateItemPrice = function(pId) {
+    const select = document.getElementById(`opt-${pId}`);
+    const selectedOption = select.options[select.selectedIndex];
+    const price = selectedOption.getAttribute("data-price");
+    document.getElementById(`price-display-${pId}`).textContent = `${price} جنيه`;
+};
+
+window.addToCart = function(pId) {
+    const p = productsList.find(item => item.id === pId);
+    if (!p) return;
+
+    let selectedOptionText = "الوحدة";
+    let price = p.unitPrice || p.price || 0;
+
+    if (p.saleType === "weight") {
+        const select = document.getElementById(`opt-${pId}`);
+        const selectedOption = select.options[select.selectedIndex];
+        selectedOptionText = selectedOption.text.split(" - ")[0];
+        price = Number(selectedOption.getAttribute("data-price"));
+    } else {
+        selectedOptionText = p.saleType === "box" ? "علبة" : "قطعة";
+    }
+
+    const cartKey = `${p.id}_${selectedOptionText}`;
+    const existing = cart.find(item => item.cartKey === cartKey);
+
+    const max = p.maxQuantity || 10;
+
+    if (existing) {
+        if (existing.quantity < max) {
+            existing.quantity++;
+        } else {
+            alert(`الحد الأقصى للطلب من هذا الصنف هو ${max}`);
+            return;
+        }
+    } else {
+        cart.push({
+            cartKey,
+            productId: p.id,
+            name: p.name,
+            selectedOption: selectedOptionText,
+            unitPrice: price,
+            quantity: 1,
+            maxQuantity: max
+        });
+    }
+
+    updateCartUI();
+};
+
+function updateCartUI() {
+    const cartItemsDiv = document.getElementById("cartItems");
+    const subtotalEl = document.getElementById("subtotal");
+    const deliveryFeeEl = document.getElementById("deliveryFee");
+    const grandTotalEl = document.getElementById("grandTotal");
+
+    if (!cart.length) {
+        cartItemsDiv.innerHTML = `<div class="empty">السلة فارغة حالياً</div>`;
+        subtotalEl.textContent = "0";
+        deliveryFeeEl.textContent = "0";
+        grandTotalEl.textContent = "0";
+        return;
+    }
+
+    let subtotal = 0;
+    cartItemsDiv.innerHTML = cart.map((item, idx) => {
+        const itemTotal = item.unitPrice * item.quantity;
+        subtotal += itemTotal;
+        return `
+            <div class="cart-item">
+                <div>
+                    <strong>${escapeHtml(item.name)}</strong> (${item.selectedOption})<br>
+                    <small>${item.unitPrice} × ${item.quantity} = ${itemTotal} جنيه</small>
+                </div>
+                <div class="qty-ctrl">
+                    <button onclick="changeQty(${idx}, 1)">+</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="changeQty(${idx}, -1)">-</button>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    const grandTotal = subtotal + selectedDeliveryFee;
+    subtotalEl.textContent = subtotal;
+    deliveryFeeEl.textContent = selectedDeliveryFee;
+    grandTotalEl.textContent = grandTotal;
+}
+
+window.changeQty = function(idx, delta) {
+    const item = cart[idx];
+    item.quantity += delta;
+    if (item.quantity > item.maxQuantity) {
+        alert(`الحد الأقصى للطلب هو ${item.maxQuantity}`);
+        item.quantity = item.maxQuantity;
+        return;
+    }
+    if (item.quantity <= 0) cart.splice(idx, 1);
+    updateCartUI();
+};
+
+window.submitOrder = async function() {
+    if (!cart.length) {
+        alert("يرجى إضافة منتجات إلى السلة أولاً");
+        return;
+    }
+
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const zoneSelect = document.getElementById("custZone");
+    const zoneText = zoneSelect.options[zoneSelect.selectedIndex]?.text.split(" (+")[0] || "";
+    const address = document.getElementById("custAddress").value.trim();
+    const btn = document.getElementById("submitBtn");
+
+    if (!name || !phone || !zoneSelect.value || !address) {
+        alert("يرجى ملء جميع البيانات (الاسم، الهاتف، المنطقة، والعنوان)");
+        return;
+    }
+
+    // تعطيل الزر لمنع التكرار
+    btn.disabled = true;
+    btn.textContent = "جاري تسجيل الطلب...";
+
+    const subtotal = cart.reduce((acc, i) => acc + (i.unitPrice * i.quantity), 0);
+    const grandTotal = subtotal + selectedDeliveryFee;
+    const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const orderPayload = {
+        orderId,
+        customer: { name, phone, address, deliveryZone: zoneText, deliveryFee: selectedDeliveryFee },
+        items: cart.map(i => ({ productId: i.productId, name: i.name, selectedOption: i.selectedOption, unitPrice: i.unitPrice, quantity: i.quantity, totalPrice: i.unitPrice * i.quantity })),
+        subtotal,
+        deliveryFee: selectedDeliveryFee,
+        grandTotal,
+        paymentMethod: "cod",
+        status: "pending",
+        createdAt: Date.now()
     };
 
-    // 2. تهيئة الاتصال
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    try {
+        // 1. التخزين في Firestore أولاً
+        await addDoc(collection(db, "orders"), orderPayload);
 
-    // 3. عند الضغط على زر الدخول
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const msg = document.getElementById("message");
+        // 2. تجهيز رسالة الواتساب
+        let msg = `📋 *طلب جديد رقم: ${orderId}*\n\n`;
+        msg += `👤 *الاسم:* ${name}\n`;
+        msg += `📞 *الهاتف:* ${phone}\n`;
+        msg += `📍 *المنطقة:* ${zoneText}\n`;
+        msg += `🏠 *العنوان:* ${address}\n\n`;
+        msg += `🛒 *تفاصيل الطلب:*\n`;
 
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        msg.style.color = "green";
-        msg.innerText = "تم تسجيل الدخول بنجاح! مرحباً " + userCredential.user.email;
-      } catch (error) {
-        msg.style.color = "red";
-        msg.innerText = "خطأ: " + error.message;
-      }
-    });
-  </script>
+        cart.forEach(i => {
+            msg += `• ${i.name} (${i.selectedOption}) × ${i.quantity} = ${i.unitPrice * i.quantity} ج\n`;
+        });
 
+        msg += `\n💰 *المجموع الفرعي:* ${subtotal} ج`;
+        msg += `\n🛵 *التوصيل:* ${selectedDeliveryFee} ج`;
+        msg += `\n💵 *الإجمالي النهائي:* ${grandTotal} ج\n`;
+        msg += `💳 *طريقة الدفع:* الدفع عند الاستلام`;
+
+        const waNum = storeSettings.whatsappNumber || "201140653708";
+        const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
+
+        // إعادة ضبط السلة والنموذج
+        cart = [];
+        updateCartUI();
+        document.getElementById("custName").value = "";
+        document.getElementById("custPhone").value = "";
+        document.getElementById("custAddress").value = "";
+        document.getElementById("custZone").value = "";
+        selectedDeliveryFee = 0;
+
+        // التحويل إلى واتساب
+        window.open(waUrl, "_blank");
+
+    } catch (e) {
+        console.error(e);
+        alert("حدث خطأ أثناء حفظ الطلب، يرجى المحاولة مرة أخرى.");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "📲 تأكيد الطلب والإرسال عبر واتساب";
+    }
+};
+
+function escapeHtml(val) {
+    return String(val || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+</script>
 </body>
 </html>
