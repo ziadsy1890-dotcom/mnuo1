@@ -1,337 +1,181 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم - فستق حلب</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #222;
-        }
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 15px;
-        }
-        .card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2, h3 {
-            margin-top: 0;
-        }
-        input, textarea, select, button {
-            width: 100%;
-            padding: 12px;
-            margin: 6px 0;
-            border: 1px solid #ddd;
-            border-radius: 9px;
-            font-size: 16px;
-        }
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-        button {
-            background: #222;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:active {
-            opacity: .8;
-        }
-        .logout {
-            background: #b00020;
-        }
-        #adminPanel {
-            display: none;
-        }
-        .message {
-            text-align: center;
-            font-weight: bold;
-            min-height: 20px;
-        }
-        .success { color: green; }
-        .error { color: #c62828; }
-        .small { color: #666; font-size: 14px; }
-        .info {
-            background: #e7f1ff;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        .warning {
-            background: #fff3cd;
-            color: #664d03;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 15px;
-        }
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .section-title button {
-            width: auto;
-            min-width: 140px;
-        }
-        .tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .tab-button {
-            width: auto;
-            padding: 11px 18px;
-            background: #777;
-        }
-        .tab-button.active {
-            background: #198754;
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        @media(max-width: 700px) {
-            .grid { grid-template-columns: 1fr; }
-        }
-        .field { margin-bottom: 5px; }
-        .field label {
-            display: block;
-            font-weight: bold;
-            margin: 7px 0;
-        }
-        .options {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 14px;
-            margin: 12px 0;
-            background: #fafafa;
-        }
-        .unit-row {
-            display: grid;
-            grid-template-columns: 40px 1fr 150px;
-            gap: 8px;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .unit-row:last-child { border-bottom: none; }
-        .unit-row input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-        .auto-price { background: #eee; }
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 14px;
-            padding: 15px;
-            margin: 12px 0;
-            background: #fafafa;
-        }
-        .product.hidden { opacity: .65; background: #eee; }
-        .product.dragging { opacity: .4; }
-        .product img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .actions button { flex: 1; min-width: 120px; }
-        
-        /* أسماء الكلاسات بالإنجليزية لضمان عملها بشكل صحيح */
-        .btn-edit { background: #0069d9; }
-        .btn-hide { background: #777; }
-        .btn-show { background: #198754; }
-        .btn-delete { background: #c62828; }
-        .btn-move { background: #6f42c1; }
-        .btn-save { background: #198754; }
-        .btn-add { background: #0069d9; }
-
-        .item-box {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 12px;
-            margin: 10px 0;
-            background: #fafafa;
-        }
-        .drag-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: #fff;
-            cursor: grab;
-        }
-        .drag-item:active { cursor: grabbing; }
-        .drag-handle { font-size: 22px; }
-        .drag-number { min-width: 30px; font-weight: bold; }
-        .drag-name { flex: 1; font-weight: bold; }
-        .drag-buttons { display: flex; gap: 5px; }
-        .drag-buttons button { width: auto; padding: 8px 12px; margin: 0; }
-        
-        .status {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin: 5px 0;
-        }
-        .status-visible { background: #d1e7dd; color: #0f5132; }
-        .status-hidden { background: #f8d7da; color: #842029; }
-        .empty { text-align: center; padding: 25px; color: #777; }
-        
-        .zone-row, .branch-row, .social-row {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 12px;
-            margin: 10px 0;
-            background: #fafafa;
-        }
-        .zone-header, .branch-header, .social-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .zone-header button, .branch-header button, .social-header button {
-            width: auto;
-            padding: 8px 12px;
-        }
-        
-        .danger { background: #c62828; }
-        .gray { background: #777; }
-        .green { background: #198754; }
-        .blue { background: #0069d9; }
-        .purple { background: #6f42c1; }
-        .orange { background: #fd7e14; }
-        
-        .backup-box {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 12px 0;
-        }
-        .file-input { background: #fff; }
-        .category-badge {
-            display: inline-block;
-            background: #e9ecef;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-        .product-list-title {
-            background: #f1f3f5;
-            padding: 10px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        hr {
-            border: 0;
-            border-top: 1px solid #eee;
-            margin: 20px 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منيو</title>
+<!-- Google Font: Cairo -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#789262;--bg:#d9e8b8;--text:#222;--card:#ffffff;--soft:#f7f9ef;--accent:#25D366}
+*{box-sizing:border-box; transition: all 0.2s ease-in-out;}
+body{margin:0;font-family:'Cairo', sans-serif;background:var(--bg);color:var(--text); line-height: 1.6;}
+header{background:linear-gradient(135deg, var(--primary), #5a7346);color:#fff;text-align:center;padding:25px 15px;position:relative; border-bottom-left-radius:24px; border-bottom-right-radius:24px; box-shadow:0 8px 20px rgba(0,0,0,0.12);}
+header img{max-width:110px;max-height:80px;object-fit:contain;display:none;margin:0 auto 10px;border-radius:12px; background:#fff; padding:4px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+header h1{margin:0;font-size:30px; font-weight:800; letter-spacing: -0.5px;}
+header p{margin:6px 0 0; opacity:0.9; font-size:15px;}
+.container{max-width:780px;margin:auto;padding:20px 15px;}
+.categories{display:flex;gap:10px;overflow-x:auto;margin-bottom:20px; padding-bottom:8px; scrollbar-width: none;}
+.categories::-webkit-scrollbar { display: none; }
+.categories button{border:0;background:var(--card);color:var(--text);padding:10px 20px;border-radius:30px;white-space:nowrap;cursor:pointer; font-family:inherit; font-weight:600; font-size:14px; box-shadow:0 3px 8px rgba(0,0,0,0.05);}
+.categories button.active{background:var(--primary);color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.item{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; flex-direction:column; border:1px solid rgba(255,255,255,0.6);}
+.item:hover{transform:translateY(-4px); box-shadow:0 8px 25px rgba(0,0,0,0.12);}
+.item img{width:100%;height:165px;object-fit:cover;}
+.item-content{padding:14px; display:flex; flex-direction:column; flex:1; justify-content:space-between;}
+.item h3{margin:0 0 6px; font-size:17px; font-weight:700;}
+.description{color:#666;font-size:13px;min-height:36px; line-height:1.4;}
+.price{font-size:15px;font-weight:700;margin:10px 0; color:var(--primary); background:var(--soft); padding:6px 10px; border-radius:8px; text-align:center;}
+.weight-select,input,textarea,select{width:100%;padding:11px 14px;margin:6px 0;border:1px solid #e0e0e0;border-radius:10px;font-family:inherit;background:#fff; font-size:14px; outline:none;}
+.weight-select:focus,input:focus,textarea:focus,select:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(120,146,98,0.2);}
+.add{width:100%;padding:12px;border:0;border-radius:10px;background:var(--primary);color:#fff;cursor:pointer; font-weight:700; font-size:15px; font-family:inherit;}
+.add:active{transform:scale(0.98);}
+.cart{background:#fff;margin-top:30px;padding:22px;border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.08);}
+.cart h2{margin-top:0; font-size:22px; border-bottom:2px solid var(--soft); padding-bottom:10px;}
+.cart-item{border-bottom:1px solid #f0f0f0;padding:12px 0;}
+.cart-top{display:flex;justify-content:space-between;gap:10px;}
+.cart-details{color:#777;font-size:13px;margin-top:4px;}
+.qty{display:flex;align-items:center;gap:8px;margin-top:10px;}
+.qty button{width:34px;height:34px;border:0;border-radius:8px;background:var(--soft); font-weight:bold; cursor:pointer;}
+.qty span{min-width:25px;text-align:center;font-weight:bold;}
+.total{font-size:19px;font-weight:700;margin:15px 0;}
+.whatsapp{background:var(--accent);font-size:17px;font-weight:700; color:#fff; border:0; border-radius:12px; padding:14px; width:100%; cursor:pointer; font-family:inherit; box-shadow:0 4px 15px rgba(37,211,102,0.3);}
+.whatsapp:hover{background:#20bd5a;}
+.empty,.loading{text-align:center;color:#777;padding:30px; font-weight:600;}
+.floating-cart{position:fixed;bottom:22px;right:22px;width:62px;height:62px;border:0;border-radius:50%;background:var(--primary);color:#fff;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,0.25);z-index:20;cursor:pointer; display:flex; align-items:center; justify-content:center;}
+.cart-count{position:absolute;top:-2px;left:-2px;background:#e53935;color:#fff;border-radius:50%;min-width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold; border:2px solid #fff;}
+#cartSection{scroll-margin-top:20px;}
+.delivery{background:var(--soft);padding:14px;border-radius:12px;margin:12px 0;}
+.delivery label{display:block;font-size:14px;margin-bottom:6px; font-weight:700;}
+@media(max-width:550px){.menu{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
+<header>
+<img id="logo" alt="الشعار">
+<h1 id="storeName">🍰 Pistach D'Alep</h1>
+<p id="storeSubtitle">بيستاش دي ألب</p>
+</header>
 
 <div class="container">
-    <!-- Login Form -->
-    <div id="loginPanel" class="card">
-        <h1>🔐 لوحة تحكم فستق حلب</h1>
-        <p>تسجيل دخول الإدارة</p>
-        <input type="email" id="email" placeholder="البريد الإلكتروني" autocomplete="email">
-        <input type="password" id="password" placeholder="كلمة المرور" autocomplete="current-password">
-        <button onclick="login()">تسجيل الدخول</button>
-        <p id="loginMessage" class="message"></p>
-    </div>
+<div class="categories" id="categories"></div>
+<div class="menu" id="menu"><div class="loading">جاري تحميل المنيو...</div></div>
 
-    <!-- Admin Panel Structure -->
-    <div id="adminPanel">
-        <div class="card">
-            <div class="section-title">
-                <div>
-                    <h1>🍰 فستق حلب</h1>
-                    <p class="small">لوحة التحكم الكاملة للمنيو</p>
-                </div>
-                <button class="logout" onclick="logout()">تسجيل الخروج</button>
-            </div>
-        </div>
+<section class="cart" id="cartSection">
+<h2>🛒 سلة الطلب</h2>
+<div id="cartItems"><div class="empty">السلة فارغة</div></div>
+<div class="total">الإجمالي: <span id="subtotal">0</span> جنيه</div>
 
-        <!-- Navigation Tabs -->
-        <div class="tabs">
-            <button class="tab-button active" onclick="showTab('productsTab', this)">🍰 الأصناف</button>
-            <button class="tab-button" onclick="showTab('categoriesTab', this)">🗂️ الأقسام</button>
-            <button class="tab-button" onclick="showTab('deliveryTab', this)">🚚 التوصيل والفروع</button>
-            <button class="tab-button" onclick="showTab('socialTab', this)">📱 السوشيال ميديا</button>
-        </div>
-
-        <!-- Tab Contents -->
-        <div id="productsTab" class="tab-content active">
-            <!-- محتوى الأصناف -->
-        </div>
-        <div id="categoriesTab" class="tab-content">
-            <!-- محتوى الأقسام -->
-        </div>
-        <div id="deliveryTab" class="tab-content">
-            <!-- محتوى التوصيل والفروع -->
-        </div>
-        <div id="socialTab" class="tab-content">
-            <!-- محتوى السوشيال ميديا -->
-        </div>
-    </div>
+<div class="delivery">
+<label>🚚 منطقة التوصيل</label>
+<select id="region" onchange="updateCart()"><option value="">اختر المنطقة</option></select>
+<div style="margin-top:6px;">رسوم التوصيل: <strong><span id="deliveryFee">0</span> جنيه</strong></div>
 </div>
 
-<script>
-    function showTab(tabId, btn) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        btn.classList.add('active');
-    }
+<div class="total" style="color:var(--primary); font-size:21px;">الإجمالي النهائي: <span id="grandTotal">0</span> جنيه</div>
+<input id="name" placeholder="اسم العميل *">
+<input id="phone" type="tel" placeholder="رقم الهاتف *">
+<textarea id="address" rows="3" placeholder="العنوان بالتفصيل *"></textarea>
+<button class="whatsapp" onclick="sendWhatsApp()">📲 إرسال الطلب عبر واتساب</button>
+</section>
+</div>
 
-    function login() {
-        // إضافة منطق البرمجة لتسجيل الدخول هنا
-        document.getElementById('loginPanel').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-    }
+<button class="floating-cart" onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})" aria-label="السلة">
+🛒<span class="cart-count" id="cartCount">0</span>
+</button>
 
-    function logout() {
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('loginPanel').style.display = 'block';
-    }
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import{getFirestore,collection,getDocs,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",authDomain:"pistach-d-alep.firebaseapp.com",projectId:"pistach-d-alep",storageBucket:"pistach-d-alep.firebasestorage.app",messagingSenderId:"288943885593",appId:"1:288943885593:web:4737041244be376c274988",measurementId:"G-569W2MXBTJ"};
+const db=getFirestore(initializeApp(firebaseConfig));
+const whatsappNumber="201010644644";
+let products=[],cart=[],regions=[],categories=[],currentCategory="الكل",settings={};
+
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const num=v=>Number(v)||0;
+
+async function loadAll(){
+ try{
+  const [ps,rs,cs,ss]=await Promise.all([
+   getDocs(collection(db,"products")),getDocs(collection(db,"deliveryRegions")),
+   getDocs(collection(db,"categories")),getDoc(doc(db,"settings","main"))
+  ]);
+  products=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.hidden!==true);
+  regions=rs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
+  categories=cs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
+  settings=ss.exists()?ss.data():{};
+  applySettings();showCategories();showProducts();showRegions();
+ }catch(e){console.error(e);$("menu").innerHTML='<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+esc(e.message)+'</div>'}
+}
+function applySettings(){
+ document.documentElement.style.setProperty("--primary",settings.primaryColor||"#789262");
+ document.documentElement.style.setProperty("--bg",settings.backgroundColor||"#d9e8b8");
+ document.documentElement.style.setProperty("--text",settings.textColor||"#222");
+ $("storeName").textContent=settings.storeName||"🍰 Pistach D'Alep";
+ $("storeSubtitle").textContent=settings.subtitle||"بيستاش دي ألب";
+ document.title=settings.storeName||"منيو";
+ if(settings.logo){$("logo").src=settings.logo;$("logo").style.display="block"}else $("logo").style.display="none";
+}
+function showRegions(){
+ $("region").innerHTML='<option value="">اختر المنطقة</option>'+regions.map(r=>`<option value="${esc(r.id)}">${esc(r.name)} - ${num(r.fee)} جنيه</option>`).join("");
+}
+function showCategories(){
+ const names=categories.length?categories.map(c=>c.name):[...new Set(products.map(p=>p.category||"أخرى"))];
+ const list=["الكل",...names.filter(x=>x&&x!=="الكل")];
+ $("categories").innerHTML=list.map(c=>`<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+ document.querySelectorAll("#categories button").forEach(b=>b.onclick=()=>{currentCategory=b.dataset.cat;showCategories();showProducts()});
+}
+function getOptions(p){
+ if(Array.isArray(p.units)&&p.units.length)return p.units.map(u=>({name:u.name,price:num(u.price)}));
+ if(p.prices&&typeof p.prices==="object")return Object.entries(p.prices).map(([name,price])=>({name,price:num(price)}));
+ const base=num(p.price);return (p.weights||["كيلو"]).map(w=>({name:w,price:w==="ربع كيلو"?base*.25:w==="نصف كيلو"?base*.5:base}));
+}
+function showProducts(){
+ const list=currentCategory==="الكل"?products:products.filter(p=>(p.category||"أخرى")===currentCategory);
+ $("menu").innerHTML=list.length?list.map(p=>{
+  const opts=getOptions(p);
+  return `<div class="item">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:""}<div class="item-content">
+  <h3>${esc(p.name)}</h3><div class="description">${esc(p.description)}</div>
+  <div class="price">${opts.map(o=>`${esc(o.name)}:${o.price} جنيه`).join(" | ")}</div>
+  <select class="weight-select" id="unit-${esc(p.id)}">${opts.map(o=>`<option value="${esc(o.name)}">${esc(o.name)} -${o.price} جنيه</option>`).join("")}</select>
+  <button class="add" onclick="addToCart('${esc(p.id)}')">➕ إضافة للسلة</button></div></div>`;
+ }).join(""):'<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
+}
+window.addToCart=id=>{
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const unit=$(("unit-"+id)).value;const u=getOptions(p).find(x=>x.name===unit);if(!u)return;
+ const max=num(p.maxQuantity)||10;const old=cart.find(x=>x.id===id&&x.unit===unit);
+ if(old){if(old.quantity>=max)return alert("وصلت للحد الأقصى لهذا الصنف.");old.quantity++}
+ else cart.push({id,name:p.name,unit,price:u.price,quantity:1,maxQuantity:max});
+ updateCart();
+};
+window.increase=i=>{let x=cart[i];if(!x)return;if(x.quantity>=x.maxQuantity)return alert("وصلت للحد الأقصى لهذا الصنف.");x.quantity++;updateCart()};
+window.decrease=i=>{let x=cart[i];if(!x)return;x.quantity--;if(x.quantity<=0)cart.splice(i,1);updateCart()};
+window.removeItem=i=>{cart.splice(i,1);updateCart()};
+function updateCart(){
+ let sub=0,count=0;cart.forEach(x=>{sub+=x.price*x.quantity;count+=x.quantity});
+ $("cartCount").textContent=count; $("subtotal").textContent=sub;
+ const r=regions.find(x=>x.id===$("region").value);const fee=r?num(r.fee):0;
+ $("deliveryFee").textContent=fee;$("grandTotal").textContent=sub+fee;
+ $("cartItems").innerHTML=cart.length?cart.map((x,i)=>`<div class="cart-item"><div class="cart-top"><strong>${esc(x.name)}</strong><strong>${x.price*x.quantity} جنيه</strong></div><div class="cart-details">${esc(x.unit)} — ${x.price} جنيه للوحدة</div><div class="qty"><button onclick="decrease(${i})">−</button><span>${x.quantity}</span><button onclick="increase(${i})">+</button><button onclick="removeItem(${i})">🗑️</button></div></div>`).join(""):'<div class="empty">السلة فارغة</div>';
+}
+window.sendWhatsApp=()=>{
+ if(!cart.length)return alert("أضف صنفًا إلى السلة أولاً.");
+ const name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),r=regions.find(x=>x.id===$("region").value);
+ if(!name)return alert("اكتب اسم العميل.");
+ if(!phone)return alert("اكتب رقم الهاتف.");
+ if(!r)return alert("اختر منطقة التوصيل.");
+ if(!address)return alert("اكتب العنوان بالتفصيل.");
+ let sub=0,msg=`🛒 طلب جديد\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n🚚 المنطقة: ${r.name}\n📍 العنوان: ${address}\n\n📦 تفاصيل الطلب:\n`;
+ cart.forEach(x=>{let t=x.price*x.quantity;sub+=t;msg+=`• ${x.name}\n  ${x.unit} × ${x.quantity} = ${t} جنيه\n`});
+ const total=sub+num(r.fee);msg+=`\n💵 قيمة الطلب: ${sub} جنيه\n🚚 التوصيل: ${num(r.fee)} جنيه\n💰 الإجمالي النهائي: ${total} جنيه`;
+ window.open("https://wa.me/"+whatsappNumber+"?text="+encodeURIComponent(msg),"_blank");
+};
+loadAll();
 </script>
-
 </body>
 </html>
