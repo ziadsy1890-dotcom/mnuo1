@@ -1,261 +1,455 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم – فستق حلب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم - فستق حلب</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#1c1e21}
+.container{max-width:1000px;margin:auto;padding:15px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+h1,h2,h3{margin-top:0;color:#050505}
+input,select,textarea,button{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd0d5;border-radius:8px;font-size:15px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#1877f2}
+textarea{min-height:80px;resize:vertical}
+button{background:#1877f2;color:#fff;border:none;font-weight:bold;cursor:pointer;transition:background .2s}
+button:hover{opacity:0.95}
+.btn-danger{background:#dc3545}
+.btn-success{background:#198754}
+.btn-secondary{background:#6c757d}
+.btn-warning{background:#ffc107;color:#000}
+.nav-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:15px;border-bottom:2px solid #e4e6eb}
+.nav-tabs button{width:auto;white-space:nowrap;background:#e4e6eb;color:#050505;padding:10px 18px;border-radius:20px;font-weight:600}
+.nav-tabs button.active{background:#1877f2;color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid-2{grid-template-columns:1fr}}
+.product-item{border:1px solid #e4e6eb;border-radius:10px;padding:15px;margin-bottom:12px;background:#fff;display:flex;gap:15px;align-items:center}
+.product-item img{width:90px;height:90px;object-fit:cover;border-radius:8px;background:#f0f2f5}
+.product-info{flex:1}
+.product-actions{display:flex;flex-direction:column;gap:5px;min-width:100px}
+.product-actions button{padding:8px;font-size:13px;margin:0}
+.badge{display:inline-block;padding:4px 8px;border-radius:12px;font-size:12px;font-weight:bold;margin-top:4px}
+.badge-visible{background:#e7f6ed;color:#0f5132}
+.badge-hidden{background:#fce8e6;color:#c5221f}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;padding:15px}
+.modal-content{background:#fff;border-radius:12px;padding:20px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto}
+.message{text-align:center;font-weight:bold;padding:8px;margin:8px 0;border-radius:6px}
+.message.success{background:#d4edda;color:#155724}
+.message.error{background:#f8d7da;color:#721c24}
+.order-card{border:1px solid #ddd;border-radius:10px;padding:15px;margin-bottom:15px;background:#fefefe}
+</style>
 </head>
-<body class="p-3 md:p-6 text-gray-800">
+<body>
 
-  <!-- شاشة تسجيل الدخول -->
-  <div id="loginScreen" class="max-w-md mx-auto mt-16 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-    <div class="text-center mb-6">
-      <div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-2">🔐</div>
-      <h2 class="text-xl font-bold">تسجيل دخول المدير</h2>
-    </div>
-    <form onsubmit="handleLogin(event)" class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold mb-1">البريد الإلكتروني</label>
-        <input type="email" id="loginEmail" required class="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:ring-1 focus:ring-emerald-500">
-      </div>
-      <div>
-        <label class="block text-xs font-bold mb-1">كلمة المرور</label>
-        <input type="password" id="loginPassword" required class="w-full px-3 py-2 border rounded-xl text-sm outline-none focus:ring-1 focus:ring-emerald-500">
-      </div>
-      <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl shadow-md hover:bg-emerald-700 transition text-sm">تسجيل الدخول</button>
-    </form>
-  </div>
+<div class="container">
 
-  <!-- لوحة الإدارة الرئيسية -->
-  <div id="adminPanel" class="max-w-4xl mx-auto hidden space-y-6">
-    <!-- الشريط العلوي -->
-    <div class="bg-white p-4 rounded-2xl shadow-xs flex justify-between items-center border border-gray-100">
-      <div>
-        <h1 class="font-extrabold text-lg">لوحة تحكم المتجر</h1>
-        <p class="text-xs text-gray-400">إدارة المنتجات، الإعلانات، والواتساب</p>
-      </div>
-      <button onclick="handleLogout()" class="bg-red-50 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-100">تسجيل الخروج</button>
-    </div>
+<!-- تسجيل الدخول -->
+<div id="loginPanel" class="card">
+    <h1>🔐 تسجيل الدخول للإدارة</h1>
+    <p>لوحة التحكم - فستق حلب</p>
+    <input type="email" id="email" placeholder="البريد الإلكتروني" autocomplete="email">
+    <input type="password" id="password" placeholder="كلمة المرور" autocomplete="current-password">
+    <button onclick="login()">تسجيل الدخول</button>
+    <p id="loginMessage" class="message" style="display:none"></p>
+</div>
 
-    <!-- إعدادات الواتساب والتوصيل -->
-    <div class="bg-white p-4 rounded-2xl shadow-xs border border-gray-100 space-y-3">
-      <h3 class="font-bold text-sm text-gray-700 flex items-center gap-2">
-        <i class="fa-solid fa-gear text-emerald-600"></i> إعدادات المتجر العامة
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- لوحة التحكم -->
+<div id="adminPanel" style="display:none">
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
         <div>
-          <label class="block text-xs font-bold mb-1">رقم الواتساب (مع رمز الدولة)</label>
-          <input type="text" id="cfgWhatsapp" placeholder="201000000000" class="w-full px-3 py-2 border rounded-xl text-sm">
+            <h1 style="margin:0">🍰 فستق حلب</h1>
+            <small>إدارة المتجر والطلبات</small>
         </div>
-        <div>
-          <label class="block text-xs font-bold mb-1">رسوم التوصيل (ج.م)</label>
-          <input type="number" id="cfgDelivery" placeholder="50" class="w-full px-3 py-2 border rounded-xl text-sm">
-        </div>
-      </div>
-      <button onclick="saveSettings()" class="bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl">حفظ الإعدادات</button>
+        <button class="btn-danger" style="width:auto;padding:8px 16px" onclick="logout()">تسجيل الخروج</button>
     </div>
 
-    <!-- إضافة/تعديل منتج -->
-    <div class="bg-white p-4 rounded-2xl shadow-xs border border-gray-100 space-y-4">
-      <h3 class="font-bold text-sm text-gray-700 flex items-center gap-2">
-        <i class="fa-solid fa-plus text-emerald-600"></i> إضافة / تعديل منتج
-      </h3>
-      <form onsubmit="saveProduct(event)" class="space-y-3">
-        <input type="hidden" id="prodId">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input type="text" id="prodName" placeholder="اسم المنتج" required class="px-3 py-2 border rounded-xl text-sm">
-          <input type="text" id="prodCategory" placeholder="القسم (مثال: مكسرات)" required class="px-3 py-2 border rounded-xl text-sm">
-        </div>
-        <textarea id="prodDesc" placeholder="وصف قصير للمنتج..." class="w-full px-3 py-2 border rounded-xl text-sm h-16 resize-none"></textarea>
-        <input type="url" id="prodImage" placeholder="رابط صورة المنتج (URL)" required class="w-full px-3 py-2 border rounded-xl text-sm">
-
-        <!-- نوع البيع -->
-        <div class="flex gap-4 text-xs font-bold">
-          <label class="flex items-center gap-1 cursor-pointer">
-            <input type="radio" name="saleType" value="by_weight" checked onclick="togglePricingInputs('weight')"> بيع بالوزن (كيلو)
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer">
-            <input type="radio" name="saleType" value="by_unit" onclick="togglePricingInputs('unit')"> بيع بالقطعة / العلبة
-          </label>
-        </div>
-
-        <!-- أسعار الوزن -->
-        <div id="weightPricing" class="grid grid-cols-3 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-          <div>
-            <label class="block text-[11px] font-bold">سعر الكيلو</label>
-            <input type="number" id="priceKg" class="w-full px-2 py-1.5 border rounded-lg text-xs">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold">نصف كيلو (اختياري)</label>
-            <input type="number" id="priceHalf" placeholder="تلقائي" class="w-full px-2 py-1.5 border rounded-lg text-xs">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold">ربع كيلو (اختياري)</label>
-            <input type="number" id="priceQuarter" placeholder="تلقائي" class="w-full px-2 py-1.5 border rounded-lg text-xs">
-          </div>
-        </div>
-
-        <!-- سعر الوحدة المستقلة -->
-        <div id="unitPricing" class="grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100 hidden">
-          <div>
-            <label class="block text-[11px] font-bold">مسمى الوحدة</label>
-            <input type="text" id="unitLabel" placeholder="علبة / قطعة" class="w-full px-2 py-1.5 border rounded-lg text-xs">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold">السعر</label>
-            <input type="number" id="unitPrice" class="w-full px-2 py-1.5 border rounded-lg text-xs">
-          </div>
-        </div>
-
-        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs">حفظ المنتج</button>
-      </form>
+    <!-- القائمة الرئيسية -->
+    <div class="nav-tabs">
+        <button class="active" onclick="switchTab('productsTab', this)">📦 المنتجات</button>
+        <button onclick="switchTab('ordersTab', this)">📑 الطلبات</button>
+        <button onclick="switchTab('deliveryTab', this)">🛵 المناطق والدفع</button>
+        <button onclick="switchTab('settingsTab', this)">⚙️ إعدادات المتجر</button>
+        <button onclick="switchTab('reportsTab', this)">📊 التقارير</button>
     </div>
 
-    <!-- قائمة المنتجات -->
-    <div class="bg-white p-4 rounded-2xl shadow-xs border border-gray-100 space-y-3">
-      <h3 class="font-bold text-sm text-gray-700">قائمة المنتجات الحالية</h3>
-      <div id="adminProductsList" class="space-y-2">
-        <!-- قائمة المنتجات -->
-      </div>
+    <!-- تبويب المنتجات -->
+    <div id="productsTab" class="tab-content active">
+        <div class="card">
+            <button class="btn-success" onclick="openProductModal()">➕ إضافة منتج جديد</button>
+        </div>
+        <div class="card">
+            <h2>📋 قائمة المنتجات</h2>
+            <div id="productsList">جاري تحميل المنتجات...</div>
+        </div>
     </div>
-  </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <!-- تبويب الطلبات -->
+    <div id="ordersTab" class="tab-content">
+        <div class="card">
+            <h2>📑 الطلبات الواردة</h2>
+            <div id="ordersList">جاري تحميل الطلبات...</div>
+        </div>
+    </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "pistach-d-alep.firebaseapp.com",
-      projectId: "pistach-d-alep",
-      storageBucket: "pistach-d-alep.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    <!-- تبويب مناطق التوصيل والدفع -->
+    <div id="deliveryTab" class="tab-content">
+        <div class="card">
+            <h2>🛵 مناطق التوصيل</h2>
+            <div class="grid-2">
+                <input type="text" id="zoneName" placeholder="اسم المنطقة (مثال: القاهرة الكبرى)">
+                <input type="number" id="zoneFee" placeholder="تكلفة التوصيل (جنيه)">
+            </div>
+            <button onclick="addDeliveryZone()">إضافة منطقة توصيل</button>
+            <div id="zonesList" style="margin-top:15px"></div>
+        </div>
+    </div>
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    <!-- تبويب إعدادات المتجر -->
+    <div id="settingsTab" class="tab-content">
+        <div class="card">
+            <h2>⚙️ إعدادات المتجر العامة</h2>
+            <label>رقم الواتساب لاستقبال الطلبات (مع رمز الدولة بدون +):</label>
+            <input type="text" id="whatsappNumberInput" placeholder="201140653708">
+            
+            <label>إدارة أقسام المتجر (افصل بين الأقسام بفاصلة):</label>
+            <input type="text" id="categoriesInput" placeholder="حلويات, مكسرات, مشروبات">
+            
+            <button onclick="saveStoreSettings()">حفظ الإعدادات</button>
+            <p id="settingsMsg" class="message" style="display:none"></p>
+        </div>
+    </div>
 
-    auth.onAuthStateChanged(user => {
-      document.getElementById('loginScreen').classList.toggle('hidden', !!user);
-      document.getElementById('adminPanel').classList.toggle('hidden', !user);
-      if (user) {
-        loadSettings();
-        loadAdminProducts();
-      }
+    <!-- تبويب التقارير -->
+    <div id="reportsTab" class="tab-content">
+        <div class="card">
+            <h2>📊 ملخص المبيعات والطلبات</h2>
+            <div id="reportsContainer">جاري حساب التقارير...</div>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<!-- نافذة إضافة / تعديل منتج (Modal) -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">إضافة منتج</h2>
+        <input type="hidden" id="editProductId">
+        
+        <label>اسم المنتج:</label>
+        <input type="text" id="productName" placeholder="اسم المنتج">
+
+        <label>التصنيف:</label>
+        <select id="productCategory"></select>
+
+        <label>نوع البيع:</label>
+        <select id="saleType" onchange="togglePricingInputs()">
+            <option value="weight">بالكيلو (أوزان متعدده)</option>
+            <option value="box">بالعلبة</option>
+            <option value="piece">بالقطعة</option>
+        </select>
+
+        <!-- تسعير الوزن -->
+        <div id="weightPricingSection">
+            <label>أسعار الأوزان (جنيه):</label>
+            <div class="grid-2">
+                <input type="number" id="priceQuarter" placeholder="سعر ربع كيلو (250 جرام)">
+                <input type="number" id="priceHalf" placeholder="سعر نصف كيلو (500 جرام)">
+            </div>
+            <input type="number" id="priceKilo" placeholder="سعر الكيلو (1000 جرام)">
+        </div>
+
+        <!-- تسعير العلبة/القطعة -->
+        <div id="unitPricingSection" style="display:none">
+            <label>السعر الفردي للوحدة (جنيه):</label>
+            <input type="number" id="unitPrice" placeholder="السعر">
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <label>الكمية المتاحة (المخزون):</label>
+                <input type="number" id="stock" value="100">
+            </div>
+            <div>
+                <label>الحد الأقصى للطلب:</label>
+                <input type="number" id="maxQuantity" value="10">
+            </div>
+        </div>
+
+        <label>وصف المنتج:</label>
+        <textarea id="productDescription" placeholder="وصف قصير للمنتج"></textarea>
+
+        <label>رابط صورة المنتج:</label>
+        <input type="url" id="productImage" placeholder="https://example.com/image.jpg">
+
+        <div style="display:flex;gap:10px;margin-top:15px">
+            <button class="btn-success" onclick="saveProduct()">حفظ المنتج</button>
+            <button class="btn-secondary" onclick="closeProductModal()">إلغاء</button>
+        </div>
+        <p id="modalMessage" class="message" style="display:none"></p>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",
+    authDomain: "pistach-d-alep.firebaseapp.com",
+    projectId: "pistach-d-alep",
+    storageBucket: "pistach-d-alep.firebasestorage.app",
+    messagingSenderId: "288943885593",
+    appId: "1:288943885593:web:4737041244be376c274988"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentCategories = ["حلويات", "مكسرات", "مشروبات"];
+let productsData = [];
+let ordersData = [];
+
+// المصادقة
+window.login = async function(){
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("loginMessage");
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.style.display = "none";
+    } catch (e) {
+        msg.textContent = "بيانات الدخول غير صحيحة";
+        msg.className = "message error";
+        msg.style.display = "block";
+    }
+};
+
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById("loginPanel").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        initDataListeners();
+    } else {
+        document.getElementById("loginPanel").style.display = "block";
+        document.getElementById("adminPanel").style.display = "none";
+    }
+});
+
+// التنقل بين التبويبات
+window.switchTab = function(tabId, btn){
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".nav-tabs button").forEach(b => b.classList.remove("active"));
+    document.getElementById(tabId).classList.add("active");
+    btn.classList.add("active");
+};
+
+// الاستماع المباشر للبيانات (Realtime)
+function initDataListeners() {
+    // المنتجات
+    onSnapshot(collection(db, "products"), (snapshot) => {
+        productsData = [];
+        snapshot.forEach(doc => productsData.push({ id: doc.id, ...doc.data() }));
+        renderProducts();
+        renderReports();
     });
 
-    async function handleLogin(e) {
-      e.preventDefault();
-      try {
-        await auth.signInWithEmailAndPassword(
-          document.getElementById('loginEmail').value,
-          document.getElementById('loginPassword').value
-        );
-      } catch (err) { alert("خطأ في تسجيل الدخول: " + err.message); }
+    // الطلبات
+    onSnapshot(collection(db, "orders"), (snapshot) => {
+        ordersData = [];
+        snapshot.forEach(doc => ordersData.push({ id: doc.id, ...doc.data() }));
+        renderOrders();
+        renderReports();
+    });
+
+    // الإعدادات
+    onSnapshot(doc(db, "settings", "store"), (docSnap) => {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.whatsappNumber) document.getElementById("whatsappNumberInput").value = data.whatsappNumber;
+            if (data.categories) {
+                currentCategories = data.categories;
+                document.getElementById("categoriesInput").value = currentCategories.join(", ");
+                updateCategoryDropdown();
+            }
+            if (data.deliveryZones) renderDeliveryZones(data.deliveryZones);
+        } else {
+            // إنشاء المستند الافتراضي إذا لم يوجد
+            setDoc(doc(db, "settings", "store"), {
+                whatsappNumber: "201140653708",
+                categories: currentCategories,
+                deliveryZones: [{ name: "القاهرة والجيزة", fee: 30 }]
+            });
+        }
+    });
+}
+
+function updateCategoryDropdown() {
+    const select = document.getElementById("productCategory");
+    select.innerHTML = currentCategories.map(c => `<option value="${c}">${c}</option>`).join("");
+}
+
+// إظهار المنتجات
+function renderProducts() {
+    const list = document.getElementById("productsList");
+    if (!productsData.length) {
+        list.innerHTML = "<p>لا توجد منتجات حتى الآن.</p>";
+        return;
     }
-
-    function handleLogout() { auth.signOut(); }
-
-    async function loadSettings() {
-      const doc = await db.collection('settings').doc('store_config').get();
-      if (doc.exists) {
-        const data = doc.data();
-        document.getElementById('cfgWhatsapp').value = data.whatsappNumber || '';
-        document.getElementById('cfgDelivery').value = data.deliveryFee || 0;
-      }
-    }
-
-    async function saveSettings() {
-      await db.collection('settings').doc('store_config').set({
-        whatsappNumber: document.getElementById('cfgWhatsapp').value.trim(),
-        deliveryFee: parseFloat(document.getElementById('cfgDelivery').value) || 0
-      }, { merge: true });
-      alert("تم حفظ الإعدادات!");
-    }
-
-    function togglePricingInputs(type) {
-      document.getElementById('weightPricing').classList.toggle('hidden', type !== 'weight');
-      document.getElementById('unitPricing').classList.toggle('hidden', type !== 'unit');
-    }
-
-    async function saveProduct(e) {
-      e.preventDefault();
-      const id = document.getElementById('prodId').value;
-      const saleType = document.querySelector('input[name="saleType"]:checked').value;
-
-      const pData = {
-        name: document.getElementById('prodName').value.trim(),
-        category: document.getElementById('prodCategory').value.trim(),
-        description: document.getElementById('prodDesc').value.trim(),
-        imageUrl: document.getElementById('prodImage').value.trim(),
-        saleType,
-        isHidden: false,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      if (saleType === 'by_weight') {
-        pData.priceKg = parseFloat(document.getElementById('priceKg').value) || 0;
-        pData.customPrices = {
-          halfKg: parseFloat(document.getElementById('priceHalf').value) || null,
-          quarterKg: parseFloat(document.getElementById('priceQuarter').value) || null
-        };
-      } else {
-        pData.unitLabel = document.getElementById('unitLabel').value.trim() || 'قطعة';
-        pData.unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
-      }
-
-      if (id) {
-        await db.collection('products').doc(id).update(pData);
-      } else {
-        await db.collection('products').add(pData);
-      }
-
-      alert("تم حفظ المنتج بنجاح!");
-      location.reload();
-    }
-
-    async function loadAdminProducts() {
-      const snap = await db.collection('products').get();
-      const list = document.getElementById('adminProductsList');
-      list.innerHTML = '';
-      snap.forEach(doc => {
-        const p = doc.data();
-        list.innerHTML += `
-          <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-xl border border-gray-200 text-xs">
-            <div class="flex items-center gap-2">
-              <img src="${p.imageUrl}" class="w-10 h-10 object-cover rounded-lg">
-              <div>
-                <h4 class="font-bold">${p.name} (${p.category})</h4>
-                <p class="text-gray-500">${p.saleType === 'by_weight' ? `الكيلو: ${p.priceKg} ج.م` : `السعر: ${p.unitPrice} ج.م`}</p>
-              </div>
+    list.innerHTML = productsData.map(p => `
+        <div class="product-item">
+            <img src="${p.image || 'https://via.placeholder.com/90'}" alt="">
+            <div class="product-info">
+                <h3>${escapeHtml(p.name)}</h3>
+                <small>التصنيف: ${p.category || 'غير محدد'} | المخزون: ${p.stock || 0}</small><br>
+                <span>${getPricingText(p)}</span><br>
+                <span class="badge ${p.hidden ? 'badge-hidden' : 'badge-visible'}">
+                    ${p.hidden ? '🔴 مخفي' : '🟢 ظاهر'}
+                </span>
             </div>
-            <div class="flex gap-2">
-              <button onclick="toggleHide('${doc.id}', ${!p.isHidden})" class="px-2 py-1 rounded border font-bold">${p.isHidden ? 'إظهار' : 'إخفاء'}</button>
-              <button onclick="deleteProd('${doc.id}')" class="text-red-600 font-bold px-2 py-1">حذف</button>
+            <div class="product-actions">
+                <button class="btn-warning" onclick="openProductModal('${p.id}')">✏️ تعديل</button>
+                <button class="btn-secondary" onclick="toggleHide('${p.id}', ${!p.hidden})">
+                    ${p.hidden ? '👁️ إظهار' : '🚫 إخفاء'}
+                </button>
+                <button class="btn-danger" onclick="deleteProduct('${p.id}')">🗑️ حذف</button>
             </div>
-          </div>
-        `;
-      });
+        </div>
+    `).join("");
+}
+
+function getPricingText(p) {
+    if (p.saleType === "weight") {
+        return `كيلو: ${p.pricing?.kilo || p.price || 0} ج | نصف: ${p.pricing?.half || 0} ج | ربع: ${p.pricing?.quarter || 0} ج`;
+    }
+    return `السعر: ${p.unitPrice || p.price || 0} جنيه (${p.saleType === 'box' ? 'بالعلبة' : 'بالقطعة'})`;
+}
+
+// التحكم بنماذج إضافة وتعديل المنتج
+window.togglePricingInputs = function() {
+    const type = document.getElementById("saleType").value;
+    document.getElementById("weightPricingSection").style.display = type === "weight" ? "block" : "none";
+    document.getElementById("unitPricingSection").style.display = type !== "weight" ? "block" : "none";
+};
+
+window.openProductModal = function(id = null) {
+    updateCategoryDropdown();
+    const modal = document.getElementById("productModal");
+    modal.style.display = "flex";
+    document.getElementById("modalMessage").style.display = "none";
+
+    if (id) {
+        const p = productsData.find(item => item.id === id);
+        document.getElementById("modalTitle").textContent = "تعديل منتج";
+        document.getElementById("editProductId").value = id;
+        document.getElementById("productName").value = p.name || "";
+        document.getElementById("productCategory").value = p.category || currentCategories[0];
+        document.getElementById("saleType").value = p.saleType || "weight";
+        document.getElementById("priceQuarter").value = p.pricing?.quarter || "";
+        document.getElementById("priceHalf").value = p.pricing?.half || "";
+        document.getElementById("priceKilo").value = p.pricing?.kilo || p.price || "";
+        document.getElementById("unitPrice").value = p.unitPrice || p.price || "";
+        document.getElementById("stock").value = p.stock ?? 100;
+        document.getElementById("maxQuantity").value = p.maxQuantity ?? 10;
+        document.getElementById("productDescription").value = p.description || "";
+        document.getElementById("productImage").value = p.image || "";
+    } else {
+        document.getElementById("modalTitle").textContent = "إضافة منتج جديد";
+        document.getElementById("editProductId").value = "";
+        document.getElementById("productName").value = "";
+        document.getElementById("priceQuarter").value = "";
+        document.getElementById("priceHalf").value = "";
+        document.getElementById("priceKilo").value = "";
+        document.getElementById("unitPrice").value = "";
+        document.getElementById("productDescription").value = "";
+        document.getElementById("productImage").value = "";
+    }
+    togglePricingInputs();
+};
+
+window.closeProductModal = () => document.getElementById("productModal").style.display = "none";
+
+window.saveProduct = async function() {
+    const id = document.getElementById("editProductId").value;
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value;
+    const saleType = document.getElementById("saleType").value;
+    const stock = Number(document.getElementById("stock").value);
+    const maxQuantity = Number(document.getElementById("maxQuantity").value);
+    const description = document.getElementById("productDescription").value.trim();
+    const image = document.getElementById("productImage").value.trim();
+    const msg = document.getElementById("modalMessage");
+
+    if (!name) {
+        showMsg(msg, "يرجى كتابة اسم المنتج", "error");
+        return;
     }
 
-    async function toggleHide(id, isHidden) {
-      await db.collection('products').doc(id).update({ isHidden });
-      loadAdminProducts();
+    let payload = {
+        name, category, saleType, stock, maxQuantity, description, image,
+        updatedAt: Date.now()
+    };
+
+    if (saleType === "weight") {
+        const kilo = Number(document.getElementById("priceKilo").value);
+        const half = Number(document.getElementById("priceHalf").value);
+        const quarter = Number(document.getElementById("priceQuarter").value);
+        if (!kilo || kilo <= 0) { showMsg(msg, "يرجى تحديد سعر الكيلو", "error"); return; }
+        payload.pricing = { kilo, half: half || kilo / 2, quarter: quarter || kilo / 4 };
+        payload.price = kilo; // الحفاظ على الحقل القديم للتوافق
+    } else {
+        const uPrice = Number(document.getElementById("unitPrice").value);
+        if (!uPrice || uPrice <= 0) { showMsg(msg, "يرجى تحديد سعر المنتج", "error"); return; }
+        payload.unitPrice = uPrice;
+        payload.price = uPrice;
     }
 
-    async function deleteProd(id) {
-      if (confirm('هل أنت تأكد من حذف المنتج؟')) {
-        await db.collection('products').doc(id).delete();
-        loadAdminProducts();
-      }
+    try {
+        if (id) {
+            await updateDoc(doc(db, "products", id), payload);
+        } else {
+            payload.hidden = false;
+            payload.createdAt = Date.now();
+            await addDoc(collection(db, "products"), payload);
+        }
+        closeProductModal();
+    } catch (e) {
+        showMsg(msg, "حدث خطأ أثناء حفظ المنتج", "error");
     }
-  </script>
-</body>
-</html>
+};
+
+window.toggleHide = async (id, hidden) => updateDoc(doc(db, "products", id), { hidden });
+window.deleteProduct = async (id) => { if(confirm("هل أنت متأكد من الحذف؟")) await deleteDoc(doc(db, "products", id)); };
+
+// إدارة الطلبات
+function renderOrders() {
+    const list = document.getElementById("ordersList");
+    if (!ordersData.length) {
+        list.innerHTML = "<p>لا توجد طلبات مسجلة.</p>";
+        return;
+    }
+    list.innerHTML = ordersData.sort((a,b) => b.createdAt - a.createdAt).map(o => `
+        <div class="order-card">
+            <div style="display:flex;justify-content:space-between">
+                <strong>رقم الطلب: ${o.orderId || o.id}</strong>
+                <small>${new Date(o.createdAt).toLocaleString('ar-EG')}</small>
+            </div>
+            <p style="margin:5px 0">👤 العميل: ${escapeHtml(o.customer?.name || 'غير معروف')} | 📞 ${o.customer?.phone || ''}</p>
+            <p style="margin:5px 0">📍 العنوان: ${escapeHtml(o.customer?.address || '')} (${o.customer?.deliveryZone || ''})</p>
+            <hr>
+            <div>
+                ${(o.items || []).map(i => `<div>• ${escapeHtml(i.name)} (${i.selectedOption}) × ${i.quantity} =${i.totalPrice} ج</div>`).join("")}
+            </div>
+            <hr>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <strong>الإجمالي الكلي: ${o.grandTotal} جنيه</strong>
+                <select style="width:auto" onchange="updateOrderStatus('${o.id}', this.value)">
+                    <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>قيد ال
