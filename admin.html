@@ -289,13 +289,33 @@ let products = [], regions = [], categories = [], settings = {};
 const $ = id => document.getElementById(id), esc = v => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"), num = v => Number(v) || 0;
 
 window.login = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  const msg = $("loginMessage");
+
+  if (!email || !password) {
+    msg.textContent = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+    msg.className = "message errorText";
+    return;
+  }
+
+  msg.textContent = "جاري التحقق...";
+  msg.className = "message";
+
   try {
-    await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
-    $("loginMessage").textContent = "تم تسجيل الدخول بنجاح";
-    $("loginMessage").className = "message successText";
+    await signInWithEmailAndPassword(auth, email, password);
+    msg.textContent = "تم تسجيل الدخول بنجاح";
+    msg.className = "message successText";
   } catch (e) {
-    $("loginMessage").textContent = "بيانات الدخول غير صحيحة";
-    $("loginMessage").className = "message errorText";
+    console.error("Login Error:", e);
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+      msg.textContent = "بيانات الدخول غير صحيحة";
+    } else if (e.code === 'auth/invalid-email') {
+      msg.textContent = "البريد الإلكتروني غير صحيح";
+    } else {
+      msg.textContent = "تعذر الدخول: " + (e.message || "خطأ غير معروف");
+    }
+    msg.className = "message errorText";
   }
 };
 
@@ -313,17 +333,21 @@ onAuthStateChanged(auth, async u => {
 });
 
 async function loadAll() {
-  const [p, r, c, s] = await Promise.all([
-    getDocs(collection(db, "products")),
-    getDocs(collection(db, "deliveryRegions")),
-    getDocs(collection(db, "categories")),
-    getDoc(doc(db, "settings", "main"))
-  ]);
-  products = p.docs.map(d => ({ id: d.id, ...d.data() }));
-  regions = r.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-  categories = c.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-  settings = s.exists() ? s.data() : {};
-  fillSettings(); renderCategories(); renderRegions(); populateCategorySelects(); renderProducts();
+  try {
+    const [p, r, c, s] = await Promise.all([
+      getDocs(collection(db, "products")),
+      getDocs(collection(db, "deliveryRegions")),
+      getDocs(collection(db, "categories")),
+      getDoc(doc(db, "settings", "main"))
+    ]);
+    products = p.docs.map(d => ({ id: d.id, ...d.data() }));
+    regions = r.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    categories = c.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    settings = s.exists() ? s.data() : {};
+    fillSettings(); renderCategories(); renderRegions(); populateCategorySelects(); renderProducts();
+  } catch(err) {
+    console.error("Error loading data:", err);
+  }
 }
 
 function fillSettings() {
@@ -460,19 +484,4 @@ window.addProduct = async () => {
     maxQuantity: num($("maxQuantity").value) || 10,
     units, hidden: false, order: products.length + 1, createdAt: Date.now()
   };
-  await addDoc(collection(db, "products"), data);
-  ["productName", "productDescription", "productImage", "u1p", "u2p", "u3p", "u4n", "u4p"].forEach(id => $(id).value = "");
-  $("addMessage").textContent = "✅ تمت إضافة الصنف بنجاح";
-  $("addMessage").className = "message successText";
-  await loadAll();
-};
-
-function getUnits(p) {
-  if (Array.isArray(p.units) && p.units.length) return p.units;
-  if (p.prices) return Object.entries(p.prices).map(([name, price]) => ({ name, price: num(price) }));
-  return [{ name: "كيلو", price: num(p.price) }];
-}
-
-function renderProducts() {
-  let q = ($("search").value || "").trim().toLowerCase();
-  let list = products.filter(p => (p.name || "").toLowerCase().includes(q) || (p.category || "").toLowerCase().i
+  await addDoc(collection(db, "products"), 
