@@ -3,179 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منيو</title>
+<title>لوحة تحكم - فستق حلب</title>
 <!-- Google Font: Cairo -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#789262;--bg:#d9e8b8;--text:#222;--card:#ffffff;--soft:#f7f9ef;--accent:#25D366}
 *{box-sizing:border-box; transition: all 0.2s ease-in-out;}
-body{margin:0;font-family:'Cairo', sans-serif;background:var(--bg);color:var(--text); line-height: 1.6;}
-header{background:linear-gradient(135deg, var(--primary), #5a7346);color:#fff;text-align:center;padding:25px 15px;position:relative; border-bottom-left-radius:24px; border-bottom-right-radius:24px; box-shadow:0 8px 20px rgba(0,0,0,0.12);}
-header img{max-width:110px;max-height:80px;object-fit:contain;display:none;margin:0 auto 10px;border-radius:12px; background:#fff; padding:4px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-header h1{margin:0;font-size:30px; font-weight:800; letter-spacing: -0.5px;}
-header p{margin:6px 0 0; opacity:0.9; font-size:15px;}
-.container{max-width:780px;margin:auto;padding:20px 15px;}
-.categories{display:flex;gap:10px;overflow-x:auto;margin-bottom:20px; padding-bottom:8px; scrollbar-width: none;}
-.categories::-webkit-scrollbar { display: none; }
-.categories button{border:0;background:var(--card);color:var(--text);padding:10px 20px;border-radius:30px;white-space:nowrap;cursor:pointer; font-family:inherit; font-weight:600; font-size:14px; box-shadow:0 3px 8px rgba(0,0,0,0.05);}
-.categories button.active{background:var(--primary);color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.item{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.06); display:flex; flex-direction:column; border:1px solid rgba(255,255,255,0.6);}
-.item:hover{transform:translateY(-4px); box-shadow:0 8px 25px rgba(0,0,0,0.12);}
-.item img{width:100%;height:165px;object-fit:cover;}
-.item-content{padding:14px; display:flex; flex-direction:column; flex:1; justify-content:space-between;}
-.item h3{margin:0 0 6px; font-size:17px; font-weight:700;}
-.description{color:#666;font-size:13px;min-height:36px; line-height:1.4;}
-.price{font-size:15px;font-weight:700;margin:10px 0; color:var(--primary); background:var(--soft); padding:6px 10px; border-radius:8px; text-align:center;}
-.weight-select,input,textarea,select{width:100%;padding:11px 14px;margin:6px 0;border:1px solid #e0e0e0;border-radius:10px;font-family:inherit;background:#fff; font-size:14px; outline:none;}
-.weight-select:focus,input:focus,textarea:focus,select:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(120,146,98,0.2);}
-.add{width:100%;padding:12px;border:0;border-radius:10px;background:var(--primary);color:#fff;cursor:pointer; font-weight:700; font-size:15px; font-family:inherit;}
-.add:active{transform:scale(0.98);}
-.cart{background:#fff;margin-top:30px;padding:22px;border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.08);}
-.cart h2{margin-top:0; font-size:22px; border-bottom:2px solid var(--soft); padding-bottom:10px;}
-.cart-item{border-bottom:1px solid #f0f0f0;padding:12px 0;}
-.cart-top{display:flex;justify-content:space-between;gap:10px;}
-.cart-details{color:#777;font-size:13px;margin-top:4px;}
-.qty{display:flex;align-items:center;gap:8px;margin-top:10px;}
-.qty button{width:34px;height:34px;border:0;border-radius:8px;background:var(--soft); font-weight:bold; cursor:pointer;}
-.qty span{min-width:25px;text-align:center;font-weight:bold;}
-.total{font-size:19px;font-weight:700;margin:15px 0;}
-.whatsapp{background:var(--accent);font-size:17px;font-weight:700; color:#fff; border:0; border-radius:12px; padding:14px; width:100%; cursor:pointer; font-family:inherit; box-shadow:0 4px 15px rgba(37,211,102,0.3);}
-.whatsapp:hover{background:#20bd5a;}
-.empty,.loading{text-align:center;color:#777;padding:30px; font-weight:600;}
-.floating-cart{position:fixed;bottom:22px;right:22px;width:62px;height:62px;border:0;border-radius:50%;background:var(--primary);color:#fff;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,0.25);z-index:20;cursor:pointer; display:flex; align-items:center; justify-content:center;}
-.cart-count{position:absolute;top:-2px;left:-2px;background:#e53935;color:#fff;border-radius:50%;min-width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold; border:2px solid #fff;}
-#cartSection{scroll-margin-top:20px;}
-.delivery{background:var(--soft);padding:14px;border-radius:12px;margin:12px 0;}
-.delivery label{display:block;font-size:14px;margin-bottom:6px; font-weight:700;}
-@media(max-width:550px){.menu{grid-template-columns:1fr}}
+body{margin:0;font-family:'Cairo', sans-serif;background:#f0f2f5;color:#222; line-height:1.6;}
+.container{max-width:980px;margin:auto;padding:20px 15px;}
+.card{background:#fff;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,0.05); border:1px solid #eef0f2;}
+h1,h2{font-weight:800; color:#1a1a1a; margin-top:0;}
+input,textarea,select,button{width:100%;padding:12px 14px;margin:8px 0;border:1px solid #dcdfe6;border-radius:10px;font-size:15px;font-family:inherit; outline:none;}
+input:focus,textarea:focus,select:focus{border-color:#222; box-shadow:0 0 0 3px rgba(0,0,0,0.08);}
+button{background:#222;color:#fff;border:0;cursor:pointer; font-weight:700; border-radius:10px; padding:13px;}
+button:hover{opacity:0.9; transform:translateY(-1px);}
+.danger{background:#dc3545; color:#fff;}.success{background:#198754; color:#fff;}.blue{background:#0d6efd; color:#fff;}.gray{background:#6c757d; color:#fff;}.green{background:#20c997; color:#fff;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.actions{display:flex;gap:8px;flex-wrap:wrap; margin-top:8px;}
+.actions button{flex:1;min-width:110px; padding:8px 12px; font-size:14px;}
+.product,.region,.category{border:1px solid #e9ecef;border-radius:14px;padding:16px;margin:12px 0;background:#fafafa; box-shadow:0 2px 6px rgba(0,0,0,0.02);}
+.hidden{opacity:.55; background:#f1f3f5;}
+.thumb{width:90px;height:90px;object-fit:cover;border-radius:12px; border:1px solid #eee;}
+.message{text-align:center;min-height:22px;font-weight:bold; margin-top:10px;}
+.successText{color:#198754;}.errorText{color:#dc3545;}
+.info{background:#e7f1ff;color:#0c5460;padding:14px;border-radius:12px;font-size:14px; border:1px solid #b6d4fe; margin-bottom:12px;}
+.check{display:flex;gap:8px;align-items:center;margin:5px 0; font-weight:600; cursor:pointer;}
+.check input{width:auto;}
+.unitrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.preview{max-width:120px;max-height:90px;object-fit:contain;display:block;margin:10px 0; border-radius:8px; border:1px solid #ddd; padding:4px;}
+.status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:13px; font-weight:bold;}
+.on{background:#d1e7dd;color:#0f5132;}.off{background:#f8d7da;color:#842029;}
+@media(max-width:600px){.row,.unitrow{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-<img id="logo" alt="الشعار">
-<h1 id="storeName">🍰 Pistach D'Alep</h1>
-<p id="storeSubtitle">بيستاش دي ألب</p>
-</header>
-
 <div class="container">
-<div class="categories" id="categories"></div>
-<div class="menu" id="menu"><div class="loading">جاري تحميل المنيو...</div></div>
-
-<section class="cart" id="cartSection">
-<h2>🛒 سلة الطلب</h2>
-<div id="cartItems"><div class="empty">السلة فارغة</div></div>
-<div class="total">الإجمالي: <span id="subtotal">0</span> جنيه</div>
-
-<div class="delivery">
-<label>🚚 منطقة التوصيل</label>
-<select id="region" onchange="updateCart()"><option value="">اختر المنطقة</option></select>
-<div style="margin-top:6px;">رسوم التوصيل: <strong><span id="deliveryFee">0</span> جنيه</strong></div>
+<div id="loginPanel" class="card" style="max-width:450px; margin:60px auto;">
+<h1 style="text-align:center;">🔐 لوحة تحكم فستق حلب</h1>
+<input id="email" type="email" placeholder="البريد الإلكتروني">
+<input id="password" type="password" placeholder="كلمة المرور">
+<button onclick="login()">تسجيل الدخول</button>
+<p id="loginMessage" class="message"></p>
 </div>
 
-<div class="total" style="color:var(--primary); font-size:21px;">الإجمالي النهائي: <span id="grandTotal">0</span> جنيه</div>
-<input id="name" placeholder="اسم العميل *">
-<input id="phone" type="tel" placeholder="رقم الهاتف *">
-<textarea id="address" rows="3" placeholder="العنوان بالتفصيل *"></textarea>
-<button class="whatsapp" onclick="sendWhatsApp()">📲 إرسال الطلب عبر واتساب</button>
-</section>
+<div id="adminPanel" style="display:none">
+<div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+<div>
+<h1 style="margin:0;">🍰 فستق حلب</h1>
+<p style="margin:0; color:#666;">لوحة الإدارة والمتابعة</p>
+</div>
+<button class="danger" style="width:auto; padding:10px 20px;" onclick="logout()">تسجيل الخروج</button>
 </div>
 
-<button class="floating-cart" onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})" aria-label="السلة">
-🛒<span class="cart-count" id="cartCount">0</span>
-</button>
+<div class="card"><h2>🎨 إعدادات المنيو</h2>
+<div class="row"><input id="storeName" placeholder="اسم المتجر"><input id="subtitle" placeholder="الوصف أسفل الاسم"></div>
+<div class="row"><label>لون المنيو<input id="primaryColor" type="color" value="#789262"></label><label>لون الخلفية<input id="backgroundColor" type="color" value="#d9e8b8"></label></div>
+<label>لون النص<input id="textColor" type="color" value="#222222"></label>
+<input id="logoUrl" placeholder="رابط الشعار (اختياري)">
+<input id="logoFile" type="file" accept="image/*"><button class="blue" onclick="uploadLogo()">🖼️ رفع الشعار</button><img id="logoPreview" class="preview">
+<button class="success" onclick="saveSettings()">💾 حفظ إعدادات المنيو</button><p id="settingsMessage" class="message"></p></div>
+
+<div class="card"><h2>📂 الأقسام</h2><div class="info">أضف أسماء الأقسام ورتبها. ترتيب الأرقام الأصغر يظهر أولًا.</div>
+<div class="row"><input id="categoryName" placeholder="اسم القسم"><input id="categoryOrder" type="number" value="1" placeholder="الترتيب"></div><button onclick="addCategory()">➕ إضافة قسم</button><div id="categoriesList"></div></div>
+
+<div class="card"><h2>🚚 مناطق التوصيل</h2><div class="info">أنت تكتب أسماء المناطق ورسوم التوصيل. ستظهر للزبون كقائمة منسدلة.</div>
+<div class="row"><input id="regionName" placeholder="اسم المنطقة"><input id="regionFee" type="number" min="0" value="0" placeholder="رسوم التوصيل"></div><button onclick="addRegion()">➕ إضافة منطقة</button><div id="regionsList"></div></div>
+
+<div class="card"><h2>➕ إضافة صنف</h2><div class="info">يمكنك استخدام كيلو/نصف/ربع، أو قطعة/علبة. لكل وحدة سعر مستقل.</div>
+<input id="productName" placeholder="اسم الصنف"><textarea id="productDescription" placeholder="وصف الصنف"></textarea>
+<div class="row"><input id="productCategory" placeholder="القسم"><input id="maxQuantity" type="number" min="1" value="10" placeholder="الحد الأقصى"></div>
+<input id="productImage" placeholder="رابط صورة الصنف">
+<div class="unitrow"><input id="u1n" value="كيلو" placeholder="الوحدة 1"><input id="u1p" type="number" min="0" placeholder="سعر الوحدة 1"></div>
+<div class="unitrow"><input id="u2n" value="نصف كيلو" placeholder="الوحدة 2"><input id="u2p" type="number" min="0" placeholder="سعر الوحدة 2"></div>
+<div class="unitrow"><input id="u3n" value="ربع كيلو" placeholder="الوحدة 3"><input id="u3p" type="number" min="0" placeholder="سعر الوحدة 3"></div>
+<div class="unitrow"><input id="u4n" placeholder="وحدة إضافية مثل قطعة أو علبة"><input id="u4p" type="number" min="0" placeholder="السعر"></div>
+<button class="success" onclick="addProduct()">➕ إضافة الصنف</button><p id="addMessage" class="message"></p></div>
+
+<div class="card"><h2>📋 الأصناف</h2><input id="search" oninput="renderProducts()" placeholder="🔎 بحث عن صنف"><div id="productsList">جاري التحميل...</div></div>
+
+<div class="card"><h2>💾 النسخ الاحتياطي</h2><div class="info">النسخة تشمل الأصناف والأقسام ومناطق التوصيل وإعدادات المنيو. احفظ الملف على هاتفك أو جهازك.</div>
+<button class="blue" onclick="backup()">⬇️ تصدير نسخة احتياطية</button><input id="restoreFile" type="file" accept=".json"><button class="success" onclick="restoreBackup()">⬆️ استعادة النسخة الاحتياطية</button><p id="backupMessage" class="message"></p></div>
+</div></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import{getFirestore,collection,getDocs,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import{getFirestore,collection,getDocs,addDoc,doc,getDoc,setDoc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
 const firebaseConfig={apiKey:"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",authDomain:"pistach-d-alep.firebaseapp.com",projectId:"pistach-d-alep",storageBucket:"pistach-d-alep.firebasestorage.app",messagingSenderId:"288943885593",appId:"1:288943885593:web:4737041244be376c274988",measurementId:"G-569W2MXBTJ"};
-const db=getFirestore(initializeApp(firebaseConfig));
-const whatsappNumber="201010644644";
-let products=[],cart=[],regions=[],categories=[],currentCategory="الكل",settings={};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
+let products=[],regions=[],categories=[],settings={};
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"),num=v=>Number(v)||0;
 
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-const num=v=>Number(v)||0;
+window.login=async()=>{try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);$("loginMessage").textContent="تم تسجيل الدخول";}catch(e){$("loginMessage").textContent="بيانات الدخول غير صحيحة";$("loginMessage").className="message errorText"}};
+window.logout=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{if(u){$("loginPanel").style.display="none";$("adminPanel").style.display="block";await loadAll()}else{$("loginPanel").style.display="block";$("adminPanel").style.display="none"}});
 
 async function loadAll(){
- try{
-  const [ps,rs,cs,ss]=await Promise.all([
-   getDocs(collection(db,"products")),getDocs(collection(db,"deliveryRegions")),
-   getDocs(collection(db,"categories")),getDoc(doc(db,"settings","main"))
-  ]);
-  products=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.hidden!==true);
-  regions=rs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
-  categories=cs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
-  settings=ss.exists()?ss.data():{};
-  applySettings();showCategories();showProducts();showRegions();
- }catch(e){console.error(e);$("menu").innerHTML='<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+esc(e.message)+'</div>'}
+ const [p,r,c,s]=await Promise.all([getDocs(collection(db,"products")),getDocs(collection(db,"deliveryRegions")),getDocs(collection(db,"categories")),getDoc(doc(db,"settings","main"))]);
+ products=p.docs.map(d=>({id:d.id,...d.data()}));
+ regions=r.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
+ categories=c.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
+ settings=s.exists()?s.data():{};
+ fillSettings();renderCategories();renderRegions();renderProducts();
 }
-function applySettings(){
- document.documentElement.style.setProperty("--primary",settings.primaryColor||"#789262");
- document.documentElement.style.setProperty("--bg",settings.backgroundColor||"#d9e8b8");
- document.documentElement.style.setProperty("--text",settings.textColor||"#222");
- $("storeName").textContent=settings.storeName||"🍰 Pistach D'Alep";
- $("storeSubtitle").textContent=settings.subtitle||"بيستاش دي ألب";
- document.title=settings.storeName||"منيو";
- if(settings.logo){$("logo").src=settings.logo;$("logo").style.display="block"}else $("logo").style.display="none";
-}
-function showRegions(){
- $("region").innerHTML='<option value="">اختر المنطقة</option>'+regions.map(r=>`<option value="${esc(r.id)}">${esc(r.name)} - ${num(r.fee)} جنيه</option>`).join("");
-}
-function showCategories(){
- const names=categories.length?categories.map(c=>c.name):[...new Set(products.map(p=>p.category||"أخرى"))];
- const list=["الكل",...names.filter(x=>x&&x!=="الكل")];
- $("categories").innerHTML=list.map(c=>`<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
- document.querySelectorAll("#categories button").forEach(b=>b.onclick=()=>{currentCategory=b.dataset.cat;showCategories();showProducts()});
-}
-function getOptions(p){
- if(Array.isArray(p.units)&&p.units.length)return p.units.map(u=>({name:u.name,price:num(u.price)}));
- if(p.prices&&typeof p.prices==="object")return Object.entries(p.prices).map(([name,price])=>({name,price:num(price)}));
- const base=num(p.price);return (p.weights||["كيلو"]).map(w=>({name:w,price:w==="ربع كيلو"?base*.25:w==="نصف كيلو"?base*.5:base}));
-}
-function showProducts(){
- const list=currentCategory==="الكل"?products:products.filter(p=>(p.category||"أخرى")===currentCategory);
- $("menu").innerHTML=list.length?list.map(p=>{
-  const opts=getOptions(p);
-  return `<div class="item">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:""}<div class="item-content">
-  <h3>${esc(p.name)}</h3><div class="description">${esc(p.description)}</div>
-  <div class="price">${opts.map(o=>`${esc(o.name)}:${o.price} جنيه`).join(" | ")}</div>
-  <select class="weight-select" id="unit-${esc(p.id)}">${opts.map(o=>`<option value="${esc(o.name)}">${esc(o.name)} -${o.price} جنيه</option>`).join("")}</select>
-  <button class="add" onclick="addToCart('${esc(p.id)}')">➕ إضافة للسلة</button></div></div>`;
- }).join(""):'<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
-}
-window.addToCart=id=>{
- const p=products.find(x=>x.id===id);if(!p)return;
- const unit=$(("unit-"+id)).value;const u=getOptions(p).find(x=>x.name===unit);if(!u)return;
- const max=num(p.maxQuantity)||10;const old=cart.find(x=>x.id===id&&x.unit===unit);
- if(old){if(old.quantity>=max)return alert("وصلت للحد الأقصى لهذا الصنف.");old.quantity++}
- else cart.push({id,name:p.name,unit,price:u.price,quantity:1,maxQuantity:max});
- updateCart();
-};
-window.increase=i=>{let x=cart[i];if(!x)return;if(x.quantity>=x.maxQuantity)return alert("وصلت للحد الأقصى لهذا الصنف.");x.quantity++;updateCart()};
-window.decrease=i=>{let x=cart[i];if(!x)return;x.quantity--;if(x.quantity<=0)cart.splice(i,1);updateCart()};
-window.removeItem=i=>{cart.splice(i,1);updateCart()};
-function updateCart(){
- let sub=0,count=0;cart.forEach(x=>{sub+=x.price*x.quantity;count+=x.quantity});
- $("cartCount").textContent=count; $("subtotal").textContent=sub;
- const r=regions.find(x=>x.id===$("region").value);const fee=r?num(r.fee):0;
- $("deliveryFee").textContent=fee;$("grandTotal").textContent=sub+fee;
- $("cartItems").innerHTML=cart.length?cart.map((x,i)=>`<div class="cart-item"><div class="cart-top"><strong>${esc(x.name)}</strong><strong>${x.price*x.quantity} جنيه</strong></div><div class="cart-details">${esc(x.unit)} — ${x.price} جنيه للوحدة</div><div class="qty"><button onclick="decrease(${i})">−</button><span>${x.quantity}</span><button onclick="increase(${i})">+</button><button onclick="removeItem(${i})">🗑️</button></div></div>`).join(""):'<div class="empty">السلة فارغة</div>';
-}
-window.sendWhatsApp=()=>{
- if(!cart.length)return alert("أضف صنفًا إلى السلة أولاً.");
- const name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),r=regions.find(x=>x.id===$("region").value);
- if(!name)return alert("اكتب اسم العميل.");
- if(!phone)return alert("اكتب رقم الهاتف.");
- if(!r)return alert("اختر منطقة التوصيل.");
- if(!address)return alert("اكتب العنوان بالتفصيل.");
- let sub=0,msg=`🛒 طلب جديد\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n🚚 المنطقة: ${r.name}\n📍 العنوان: ${address}\n\n📦 تفاصيل الطلب:\n`;
- cart.forEach(x=>{let t=x.price*x.quantity;sub+=t;msg+=`• ${x.name}\n  ${x.unit} × ${x.quantity} = ${t} جنيه\n`});
- const total=sub+num(r.fee);msg+=`\n💵 قيمة الطلب: ${sub} جنيه\n🚚 التوصيل: ${num(r.fee)} جنيه\n💰 الإجمالي النهائي: ${total} جنيه`;
- window.open("https://wa.me/"+whatsappNumber+"?text="+encodeURIComponent(msg),"_blank");
-};
-loadAll();
+function fillSettings(){$("storeName").value=settings.storeName||"Pistach D'Alep";$("subtitle").value=settings.subtitle\vert{}\vert{}"بيستاش دي ألب";$("primaryColor").value=settings.primaryColor||"#789262";$("backgroundColor").value=settings.backgroundColor\vert{}\vert{}"#d9e8b8";$("textColor").value=settings.textColor||"#222222";$("logoUrl").value=settings.logo\vert{}\vert{}"";if(settings.logo)$("logoPreview").src=settings.logo}
+window.saveSettings=async()=>{try{let data={storeName:$("storeName").value.trim(),subtitle:$("subtitle").value.trim(),primaryColor:$("primaryColor").value,backgroundColor:$("backgroundColor").value,textColor:$("textColor").value,logo:$("logoUrl").value.trim(),updatedAt:Date.now()};await setDoc(doc(db,"settings","main"),data,{merge:true});settings=data;$("settingsMessage").textContent="✅ تم حفظ الإعدادات";}catch(e){alert(e.message)}};
+window.uploadLogo=async()=>{let f=$("logoFile").files[0];if(!f)return alert("اختر صورة أولًا");try{$("settingsMessage").textContent="جاري رفع الشعار...";let r=ref(storage,"store/logo_"+Date.now()+"_"+f.name.replace(/[^a-zA-Z0-9._-]/g,"_"));await uploadBytes(r,f);let url=await getDownloadURL(r);$("logoUrl").value=url;$("logoPreview").src=url;await saveSettings();}catch(e){alert("تعذر رفع الشعار: "+e.message)}};
+
+window.addCategory=async()=>{let name=$("categoryName").value.trim(),order=num($("categoryOrder").value);if(!name)return alert("اكتب اسم القسم");await addDoc(collection(db,"categories"),{name,order:order||999,createdAt:Date.now()});$("categoryName").value="";await loadAll()};
+function renderCategories(){$("categoriesList").innerHTML=categories.length?categories.map(c=>`<div class="category"><strong>${esc(c.name)}</strong> — ترتيب ${c.order}<div class="actions"><button class="blue" onclick="editCategory('${c.id}')">✏️ تعديل</button><button class="danger" onclick="deleteCategory('${c.id}')">🗑️ حذف</button></div></div>`).join(""):'<p>لا توجد أقسام.</p>'}
+window.editCategory=async id=>{let c=categories.find(x=>x.id===id);if(!c)return;let n=prompt("اسم القسم",c.name);if(n===null)return;let o=prompt("الترتيب",c.order??999);if(o===null)return;await updateDoc(doc(db,"categories",id),{name:n.trim(),order:num(o)||999});await loadAll()};
+window.deleteCategory=async id=>{if(!confirm("حذف القسم؟ لن يحذف الأصناف داخله."))return;await deleteDoc(doc(db,"categories",id));await loadAll()};
+
+window.addRegion=async()=>{let name=$("regionName").value.trim(),fee=num($("regionFee").value);if(!name)return alert("اكتب اسم المنطقة");await addDoc(collection(db,"deliveryRegions"),{name,fee,order:regions.length+1});$("regionName").value="";$("regionFee").value="0";await loadAll()};
+function renderRegions(){$("regionsList").innerHTML=regions.length?regions.map(r=>`<div class="region"><strong>${esc(r.name)}</strong> — ${num(r.fee)} جنيه<div class="actions"><button class="blue" onclick="editRegion('${r.id}')">✏️ تعديل</button><button class="danger" onclick="deleteRegion('${r.id}')">🗑️ حذف</button></div></div>`).join(""):'<p>لا توجد مناطق.</p>'}
+window.editRegion=async id=>{let r=regions.find(x=>x.id===id);if(!r)return;let n=prompt("اسم المنطقة",r.name);if(n===null)return;let f=prompt("رسوم التوصيل",r.fee);if(f===null)return;await updateDoc(doc(doc(db,"deliveryRegions",id),{name:n.trim(),fee:num(f)}));await loadAll()};
+window.deleteRegion=async id=>{if(!confirm("حذف المنطقة؟"))return;await deleteDoc(doc(db,"deliveryRegions",id));await loadAll()};
+
+function unitsFromForm(){return[1,2,3,4].map(i=>({name:$("u"+i+"n").value.trim(),price:num($("u"+i+"p").value)})).filter(x=>x.name)}
+window.addProduct=async()=>{let name=$("productName").value.trim(),units=unitsFromForm();if(!name)return alert("اكتب اسم الصنف");if(!units.length)return alert("أضف وحدة وسعرًا واحدًا على الأقل");let data={name,description:$("productDescription").value.trim(),category:$("productCategory").value.trim()||"أخرى",image:$("productImage").value.trim(),maxQuantity:num($("maxQuantity").value)||10,units,hidden:false,order:products.length+1,createdAt:Date.now()};await addDoc(collection(db,"products"),data);["productName","productDescription","productCategory","productImage","u1p","u2p","u3p","u4n","u4p"].forEach(id=>$(id).value="");$("addMessage").textContent="✅ تمت إضافة الصنف";await loadAll()};
+function getUnits(p){if(Array.isArray(p.units)&&p.units.length)return p.units;if(p.prices)return Object.entries(p.prices).map(([name,price])=>({name,price:num(price)}));return[{name:"كيلو",price:num(p.price)}]}
+function renderProducts(){let q=($("search").value||"").trim().toLowerCase();let list=products.filter(p=>(p.name||"").toLowerCase().includes(q)||(p.category||"").toLowerCase().includes(q));$("productsList").innerHTML=list.length?list.map(p=>{let hidden=p.hidden===true;return `<div class="product ${hidden?"hidden":""}">${p.image?`<img class="thumb" src="${esc(p.image)}" onerror="this.style.display='none'">`:""}<h3>${esc(p.name||"بدون اسم")}</h3><p>🏷️ ${esc(p.category||"أخرى")} | 📦 حد أقصى: ${num(p.maxQuantity)||10}</p><p>💰 ${getUnits(p).map(u=>esc(u.name)+": "+num(u.price)+" جنيه").join(" — ")}</p><span class="status ${hidden?"":"on"}">${hidden?"🔴 مخفي":"🟢 ظاهر"}</span><div class="actions"><button class="blue" onclick="editProduct('${p.id}')">✏️ تعديل</button><button class="${hidden?"green":"gray"}" onclick="toggleProduct('${p.id}',${hidden})">${hidden?"👁️ إظهار":"🚫 إخفاء"}</button><button class="danger" onclick="deleteProduct('${p.id}')">🗑️ حذف</button></div></div>`}).join(""):'<div class="info">لا توجد نتائج.</div>'}
+window.toggleProduct=async(id,h)=>{await updateDoc(doc(db,"products",id),{hidden:!h});await loadAll()};
+window.editProduct=async id=>{let p=products.find(x=>x.id===id);if(!p)return;let name=prompt("اسم الصنف",p.name||"");if(name===null)return;let cat=prompt("القسم",p.category||"أخرى");if(cat===null)return;let desc=prompt("الوصف",p.description||"");if(desc===null)return;let img=prompt("رابط الصورة",p.image||"");if(img===null)return;let max=prompt("الحد الأقصى",p.maxQuantity||10);if(max===null)return;let units=getUnits(p);let text=prompt("الوحدات والأسعار بصيغة: كيلو=400, نصف كيلو=200, قطعة=25",units.map(u=>u.name+"="+u.price).join(", "));if(text===null)return;let parsed=text.split(",").map(x=>x.trim()).filter(Boolean).map(x=>{let a=x.split("=");return{name:(a[0]||"").trim(),price:num(a[1])}}).filter(x=>x.name);if(!parsed.length)return alert("أدخل وحدة واحدة على الأقل");await updateDoc(doc(db,"products",id),{name:name.trim(),category:cat.trim()||"أخرى",description:desc.trim(),image:img.trim(),maxQuantity:num(max)||10,units:parsed});await loadAll()};
+window.deleteProduct=async id=>{if(!confirm("هل أنت متأكد من حذف الصنف نهائيًا؟"))return;await deleteDoc(doc(db,"products",id));await loadAll()};
+
+window.backup=async()=>{try{let data={version:2,createdAt:new Date().toISOString(),settings,products,regions,categories};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="pistach-d-alep-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);$("backupMessage").textContent="✅ تم تصدير النسخة الاحتياطية";}catch(e){alert(e.message)}};
+window.restoreBackup=async()=>{let f=$("restoreFile").files[0];if(!f)return alert("اختر ملف النسخة الاحتياطية أولًا");if(!confirm("سيتم استبدال بيانات الأصناف والأقسام والمناطق والإعدادات الموجودة. هل أنت متأكد؟"))return;try{let data=JSON.parse(await f.text());if(!data||!Array.isArray(data.products)||!Array.isArray(data.regions)||!Array.isArray(data.categories))throw new Error("ملف النسخة غير صالح");for(const p of data.products){let{id,...rest}=p;id?await setDoc(doc(db,"products",id),rest):await addDoc(collection(db,"products"),rest)}for(const r of data.regions){let{id,...rest}=r;id?await setDoc(doc(db,"deliveryRegions",id),rest):await addDoc(collection(db,"deliveryRegions"),rest)}for(const c of data.categories){let{id,...rest}=c;id?await setDoc(doc(db,"categories",id),rest):await addDoc(collection(db,"categories"),rest)}if(data.settings)await setDoc(doc(db,"settings","main"),data.settings,{merge:true});await loadAll();$("backupMessage").textContent="✅ تمت الاستعادة بنجاح";}catch(e){console.error(e);alert("تعذر استعادة النسخة: "+e.message)}};
 </script>
 </body>
 </html>
