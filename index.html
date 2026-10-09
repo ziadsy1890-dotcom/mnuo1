@@ -3,151 +3,630 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منيو</title>
+<title>لوحة تحكم - فستق حلب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#789262;--bg:#d9e8b8;--text:#222;--card:#fff;--soft:#f7f9ef}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-header{background:var(--primary);color:#fff;text-align:center;padding:18px 10px;position:relative}
-header img{max-width:110px;max-height:80px;object-fit:contain;display:none;margin:0 auto 8px;border-radius:10px}
-header h1{margin:0;font-size:28px}header p{margin:7px 0 0}
-.container{max-width:760px;margin:auto;padding:15px}.categories{display:flex;gap:8px;overflow-x:auto;margin-bottom:15px}
-.categories button{border:0;background:var(--soft);padding:10px 16px;border-radius:20px;white-space:nowrap;cursor:pointer}.categories button.active{background:var(--primary);color:#fff}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:14px}.item{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002}.item img{width:100%;height:155px;object-fit:cover}.item-content{padding:12px}
-.item h3{margin:0 0 6px}.description{color:#777;font-size:13px;min-height:32px}.price{font-size:16px;font-weight:bold;margin:8px 0}
-.weight-select,input,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:8px;font-family:inherit;background:#fff}.add,.whatsapp{width:100%;padding:11px;border:0;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer}
-.cart{background:#fff;margin-top:20px;padding:15px;border-radius:12px}.cart-item{border-bottom:1px solid #eee;padding:12px 0}.cart-top{display:flex;justify-content:space-between;gap:10px}.cart-details{color:#666;font-size:14px;margin-top:5px}
-.qty{display:flex;align-items:center;gap:7px;margin-top:10px}.qty button{width:32px;height:32px;border:0;border-radius:6px;cursor:pointer}.qty span{min-width:25px;text-align:center;font-weight:bold}.total{font-size:20px;font-weight:bold;margin:15px 0}
-.whatsapp{background:#25D366;font-size:17px;font-weight:bold}.empty,.loading{text-align:center;color:#777;padding:20px}
-.floating-cart{position:fixed;bottom:18px;right:18px;width:58px;height:58px;border:0;border-radius:50%;background:var(--primary);color:#fff;font-size:25px;box-shadow:0 4px 14px #0004;z-index:20;cursor:pointer}.cart-count{position:absolute;top:-5px;left:-5px;background:#c62828;color:#fff;border-radius:50%;min-width:24px;height:24px;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold}
-#cartSection{scroll-margin-top:15px}.delivery{background:#f7f7f7;padding:10px;border-radius:9px;margin:8px 0}.delivery label{display:block;font-size:14px;margin-bottom:4px}
-@media(max-width:500px){.menu{grid-template-columns:1fr}}
+:root {
+  --primary-color: #2e7d32;
+  --primary-hover: #1b5e20;
+  --bg-color: #f0f4f1;
+  --card-bg: #ffffff;
+  --text-color: #2c3e50;
+  --text-light: #6c757d;
+  --border-radius: 16px;
+  --danger-color: #e53935;
+  --info-bg: #e8f5e9;
+  --info-border: #a5d6a7;
+}
+
+* { box-sizing: border-box; transition: all 0.2s ease-in-out; }
+body { 
+  margin: 0; 
+  font-family: 'Tajawal', sans-serif; 
+  background: var(--bg-color); 
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+.card { 
+  background: var(--card-bg); 
+  border-radius: var(--border-radius); 
+  padding: 25px; 
+  margin-bottom: 25px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+h1, h2, h3 { color: #1b5e20; margin-top: 0; font-weight: 700; }
+h1 { font-size: 1.8rem; margin-bottom: 15px; }
+h2 { font-size: 1.4rem; border-bottom: 2px solid #e8f5e9; padding-bottom: 10px; margin-bottom: 20px; }
+
+input, textarea, select, button { 
+  width: 100%; 
+  padding: 12px 16px; 
+  margin: 8px 0; 
+  border: 1.5px solid #e0e0e0; 
+  border-radius: 10px; 
+  font-size: 15px; 
+  font-family: inherit;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+}
+
+button { 
+  background: var(--primary-color); 
+  color: #fff; 
+  border: 0; 
+  font-weight: 700;
+  cursor: pointer; 
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+}
+button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+
+.danger { background: var(--danger-color); box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2); }
+.danger:hover { background: #c62828; }
+.blue { background: #1976d2; box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2); }
+.blue:hover { background: #1565c0; }
+.gray { background: #78909c; box-shadow: 0 4px 12px rgba(120, 144, 156, 0.2); }
+.gray:hover { background: #546e7a; }
+.green { background: #2e7d32; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.unitrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.actions button { flex: 1; min-width: 100px; padding: 8px 12px; font-size: 14px; }
+
+.product, .region, .category { 
+  border: 1px solid #eef2f5; 
+  border-radius: 12px; 
+  padding: 18px; 
+  margin: 12px 0; 
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+.product-card-body { display: flex; gap: 15px; align-items: center; }
+.product-info { flex: 1; }
+
+.hidden { opacity: 0.6; filter: grayscale(80%); }
+.thumb { width: 85px; height: 85px; object-fit: cover; border-radius: 12px; border: 2px solid #e8f5e9; }
+.message { text-align: center; min-height: 20px; font-weight: bold; margin-top: 10px; word-break: break-word; }
+.successText { color: var(--primary-color); }
+.errorText { color: var(--danger-color); }
+
+.info { 
+  background: var(--info-bg); 
+  border-right: 4px solid var(--info-border);
+  padding: 12px 16px; 
+  border-radius: 8px; 
+  font-size: 14px;
+  color: #2e7d32;
+  margin-bottom: 15px;
+}
+
+.preview { max-width: 100px; max-height: 80px; object-fit: contain; display: block; margin: 10px 0; border-radius: 8px; }
+.status { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.on { background: #e8f5e9; color: #2e7d32; }
+.off { background: #ffebee; color: #c62828; }
+
+.login-card { max-width: 420px; margin: 80px auto; text-align: center; }
+
+/* Modal Design */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+.modal-content { background: #fff; margin: 5% auto; padding: 25px; border-radius: var(--border-radius); max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+.close-btn { cursor: pointer; font-size: 24px; color: #888; background: none; border: none; width: auto; padding: 0; }
+
+@media(max-width: 600px) {
+  .row, .unitrow { grid-template-columns: 1fr; }
+  .product-card-body { flex-direction: column; align-items: flex-start; }
+  .thumb { width: 100%; height: 160px; }
+  .container { padding: 0 10px; }
+}
 </style>
 </head>
 <body>
-<header>
-<img id="logo" alt="الشعار">
-<h1 id="storeName">🍰 Pistach D'Alep</h1>
-<p id="storeSubtitle">بيستاش دي ألب</p>
-</header>
 
 <div class="container">
-<div class="categories" id="categories"></div>
-<div class="menu" id="menu"><div class="loading">جاري تحميل المنيو...</div></div>
+  <!-- تسجيل الدخول -->
+  <div id="loginPanel" class="card login-card">
+    <h1>🔐 تسجيل الدخول</h1>
+    <p style="color:var(--text-light); margin-bottom: 20px;">لوحة تحكم فستق حلب</p>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <input id="email" type="email" placeholder="البريد الإلكتروني" required>
+      <input id="password" type="password" placeholder="كلمة المرور" required>
+      <button type="submit" id="btnLogin">دخول</button>
+    </form>
+    <p id="loginMessage" class="message"></p>
+  </div>
 
-<section class="cart" id="cartSection">
-<h2>🛒 سلة الطلب</h2>
-<div id="cartItems"><div class="empty">السلة فارغة</div></div>
-<div class="total">الإجمالي: <span id="subtotal">0</span> جنيه</div>
+  <!-- لوحة الإدارة -->
+  <div id="adminPanel" style="display:none">
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div>
+        <h1 style="margin:0;">🍰 فستق حلب</h1>
+        <span style="color: var(--text-light); font-size: 14px;">إدارة المنيو والطلبات</span>
+      </div>
+      <button class="danger" onclick="logout()" style="width: auto; padding: 8px 20px;">تسجيل الخروج</button>
+    </div>
 
-<div class="delivery">
-<label>🚚 منطقة التوصيل</label>
-<select id="region" onchange="updateCart()"><option value="">اختر المنطقة</option></select>
-<div>رسوم التوصيل: <strong><span id="deliveryFee">0</span> جنيه</strong></div>
+    <!-- إعدادات المنيو -->
+    <div class="card">
+      <h2>🎨 إعدادات المنيو والهوية</h2>
+      <div class="row">
+        <input id="storeName" placeholder="اسم المتجر">
+        <input id="subtitle" placeholder="الوصف أسفل الاسم">
+      </div>
+      <div class="row">
+        <label style="font-size: 13px; font-weight: bold;">لون المنيو<input id="primaryColor" type="color" value="#789262"></label>
+        <label style="font-size: 13px; font-weight: bold;">لون الخلفية<input id="backgroundColor" type="color" value="#d9e8b8"></label>
+      </div>
+      <label style="font-size: 13px; font-weight: bold;">لون النص<input id="textColor" type="color" value="#222222"></label>
+      <input id="logoUrl" placeholder="رابط الشعار (اختياري)">
+      <div class="row" style="align-items: center;">
+        <input id="logoFile" type="file" accept="image/*">
+        <button class="blue" onclick="uploadLogo()">🖼️ رفع الشعار</button>
+      </div>
+      <img id="logoPreview" class="preview">
+      <button class="green" onclick="saveSettings()" style="margin-top: 15px;">💾 حفظ الإعدادات</button>
+      <p id="settingsMessage" class="message"></p>
+    </div>
+
+    <!-- الأقسام -->
+    <div class="card">
+      <h2>📂 إدارة الأقسام</h2>
+      <div class="info">💡 أضف أسماء الأقسام ورتبها. الرقم الأصغر يظهر أولاً في المنيو.</div>
+      <div class="row">
+        <input id="categoryName" placeholder="اسم القسم">
+        <input id="categoryOrder" type="number" value="1" placeholder="الترتيب">
+      </div>
+      <button onclick="addCategory()">➕ إضافة قسم جديد</button>
+      <div id="categoriesList" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- مناطق التوصيل -->
+    <div class="card">
+      <h2>🚚 مناطق التوصيل</h2>
+      <div class="info">💡 تظهر هذه القائمة للزبون للاختيار منها عند إتمام الطلب.</div>
+      <div class="row">
+        <input id="regionName" placeholder="اسم المنطقة">
+        <input id="regionFee" type="number" min="0" value="0" placeholder="رسوم التوصيل">
+      </div>
+      <button onclick="addRegion()">➕ إضافة منطقة</button>
+      <div id="regionsList" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- إضافة صنف -->
+    <div class="card">
+      <h2>➕ إضافة صنف جديد</h2>
+      <div class="info">💡 يمكنك إضافة خيارات تسعير متعددة لنفس الصنف (كيلو، قطعة، علبة...).</div>
+      <input id="productName" placeholder="اسم الصنف">
+      <textarea id="productDescription" placeholder="وصف الصنف" rows="2"></textarea>
+      <div class="row">
+        <select id="productCategorySelect"></select>
+        <input id="maxQuantity" type="number" min="1" value="10" placeholder="الحد الأقصى للطلب">
+      </div>
+      <input id="productImage" placeholder="رابط صورة الصنف">
+      
+      <p style="font-weight: bold; margin-bottom: 5px;">وحدات التسعير:</p>
+      <div class="unitrow"><input id="u1n" value="كيلو" placeholder="الوحدة 1"><input id="u1p" type="number" min="0" placeholder="السعر"></div>
+      <div class="unitrow"><input id="u2n" value="نصف كيلو" placeholder="الوحدة 2"><input id="u2p" type="number" min="0" placeholder="السعر"></div>
+      <div class="unitrow"><input id="u3n" value="ربع كيلو" placeholder="الوحدة 3"><input id="u3p" type="number" min="0" placeholder="السعر"></div>
+      <div class="unitrow"><input id="u4n" placeholder="وحدة إضافية (قطعة/علبة)"><input id="u4p" type="number" min="0" placeholder="السعر"></div>
+      
+      <button class="green" onclick="addProduct()" style="margin-top: 10px;">➕ حفظ الصنف</button>
+      <p id="addMessage" class="message"></p>
+    </div>
+
+    <!-- قائمة الأصناف -->
+    <div class="card">
+      <h2>📋 قائمة الأصناف</h2>
+      <input id="search" oninput="renderProducts()" placeholder="🔎 بحث عن صنف أو قسم...">
+      <div id="productsList">جاري التحميل...</div>
+    </div>
+
+    <!-- النسخ الاحتياطي -->
+    <div class="card">
+      <h2>💾 النسخ الاحتياطي والبيانات</h2>
+      <div class="info">💡 يمكنك تصدير بياناتك للاحتفاظ بها أو استعادتها في أي وقت.</div>
+      <div class="row">
+        <button class="blue" onclick="backup()">⬇️ تصدير نسخة احتياطية</button>
+        <div>
+          <input id="restoreFile" type="file" accept=".json">
+          <button class="green" onclick="restoreBackup()">⬆️ استعادة النسخة</button>
+        </div>
+      </div>
+      <p id="backupMessage" class="message"></p>
+    </div>
+  </div>
 </div>
 
-<div class="total">الإجمالي النهائي: <span id="grandTotal">0</span> جنيه</div>
-<input id="name" placeholder="اسم العميل *">
-<input id="phone" type="tel" placeholder="رقم الهاتف *">
-<textarea id="address" rows="3" placeholder="العنوان بالتفصيل *"></textarea>
-<button class="whatsapp" onclick="sendWhatsApp()">📲 إرسال الطلب عبر واتساب</button>
-</section>
+<!-- Modal التعديل -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 style="margin:0;">✏️ تعديل الصنف</h3>
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+    </div>
+    <input id="editProductId" type="hidden">
+    <label>اسم الصنف:</label>
+    <input id="editProductName">
+    <label>القسم:</label>
+    <select id="editProductCategorySelect"></select>
+    <label>الوصف:</label>
+    <textarea id="editProductDesc" rows="2"></textarea>
+    <label>رابط الصورة:</label>
+    <input id="editProductImg">
+    <label>الحد الأقصى للطلب:</label>
+    <input id="editProductMax" type="number">
+    
+    <p style="font-weight:bold; margin-top:10px;">الوحدات والأسعار:</p>
+    <div id="editUnitsContainer"></div>
+    
+    <div class="actions" style="margin-top:20px;">
+      <button class="green" onclick="saveProductEdit()">💾 حفظ التعديلات</button>
+      <button class="gray" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
 </div>
-
-<button class="floating-cart" onclick="document.getElementById('cartSection').scrollIntoView({behavior:'smooth'})" aria-label="السلة">
-🛒<span class="cart-count" id="cartCount">0</span>
-</button>
 
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import{getFirestore,collection,getDocs,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, doc, getDoc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
-const firebaseConfig={apiKey:"AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0",authDomain:"pistach-d-alep.firebaseapp.com",projectId:"pistach-d-alep",storageBucket:"pistach-d-alep.firebasestorage.app",messagingSenderId:"288943885593",appId:"1:288943885593:web:4737041244be376c274988",measurementId:"G-569W2MXBTJ"};
-const db=getFirestore(initializeApp(firebaseConfig));
-const whatsappNumber="201010644644";
-let products=[],cart=[],regions=[],categories=[],currentCategory="الكل",settings={};
+const firebaseConfig = { apiKey: "AIzaSyBoQHatPvFXnmCuI1M1UJcUWWQsB7vk3g0", authDomain: "pistach-d-alep.firebaseapp.com", projectId: "pistach-d-alep", storageBucket: "pistach-d-alep.firebasestorage.app", messagingSenderId: "288943885593", appId: "1:288943885593:web:4737041244be376c274988", measurementId: "G-569W2MXBTJ" };
+const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app), storage = getStorage(app);
+let products = [], regions = [], categories = [], settings = {};
+const $ = id => document.getElementById(id), esc = v => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"), num = v => Number(v) || 0;
 
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-const num=v=>Number(v)||0;
+window.handleLogin = async (e) => {
+  if (e) e.preventDefault();
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  const msg = $("loginMessage");
+  const btn = $("btnLogin");
 
-async function loadAll(){
- try{
-  const [ps,rs,cs,ss]=await Promise.all([
-   getDocs(collection(db,"products")),getDocs(collection(db,"deliveryRegions")),
-   getDocs(collection(db,"categories")),getDoc(doc(db,"settings","main"))
-  ]);
-  products=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.hidden!==true);
-  regions=rs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
-  categories=cs.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
-  settings=ss.exists()?ss.data():{};
-  applySettings();showCategories();showProducts();showRegions();
- }catch(e){console.error(e);$("menu").innerHTML='<div class="empty">حدث خطأ أثناء تحميل المنيو<br>'+esc(e.message)+'</div>'}
-}
-function applySettings(){
- document.documentElement.style.setProperty("--primary",settings.primaryColor||"#789262");
- document.documentElement.style.setProperty("--bg",settings.backgroundColor||"#d9e8b8");
- document.documentElement.style.setProperty("--text",settings.textColor||"#222");
- $("storeName").textContent=settings.storeName||"🍰 Pistach D'Alep";
- $("storeSubtitle").textContent=settings.subtitle||"بيستاش دي ألب";
- document.title=settings.storeName||"منيو";
- if(settings.logo){$("logo").src=settings.logo;$("logo").style.display="block"}else $("logo").style.display="none";
-}
-function showRegions(){
- $("region").innerHTML='<option value="">اختر المنطقة</option>'+regions.map(r=>`<option value="${esc(r.id)}">${esc(r.name)} - ${num(r.fee)} جنيه</option>`).join("");
-}
-function showCategories(){
- const names=categories.length?categories.map(c=>c.name):[...new Set(products.map(p=>p.category||"أخرى"))];
- const list=["الكل",...names.filter(x=>x&&x!=="الكل")];
- $("categories").innerHTML=list.map(c=>`<button class="${c===currentCategory?"active":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
- document.querySelectorAll("#categories button").forEach(b=>b.onclick=()=>{currentCategory=b.dataset.cat;showCategories();showProducts()});
-}
-function getOptions(p){
- if(Array.isArray(p.units)&&p.units.length)return p.units.map(u=>({name:u.name,price:num(u.price)}));
- if(p.prices&&typeof p.prices==="object")return Object.entries(p.prices).map(([name,price])=>({name,price:num(price)}));
- const base=num(p.price);return (p.weights||["كيلو"]).map(w=>({name:w,price:w==="ربع كيلو"?base*.25:w==="نصف كيلو"?base*.5:base}));
-}
-function showProducts(){
- const list=currentCategory==="الكل"?products:products.filter(p=>(p.category||"أخرى")===currentCategory);
- $("menu").innerHTML=list.length?list.map(p=>{
-  const opts=getOptions(p);
-  return `<div class="item">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:""}<div class="item-content">
-  <h3>${esc(p.name)}</h3><div class="description">${esc(p.description)}</div>
-  <div class="price">${opts.map(o=>`${esc(o.name)}: ${o.price} جنيه`).join(" | ")}</div>
-  <select class="weight-select" id="unit-${esc(p.id)}">${opts.map(o=>`<option value="${esc(o.name)}">${esc(o.name)} - ${o.price} جنيه</option>`).join("")}</select>
-  <button class="add" onclick="addToCart('${esc(p.id)}')">➕ إضافة للسلة</button></div></div>`;
- }).join(""):'<div class="empty">لا توجد أصناف متاحة حاليًا</div>';
-}
-window.addToCart=id=>{
- const p=products.find(x=>x.id===id);if(!p)return;
- const unit=$(("unit-"+id)).value;const u=getOptions(p).find(x=>x.name===unit);if(!u)return;
- const max=num(p.maxQuantity)||10;const old=cart.find(x=>x.id===id&&x.unit===unit);
- if(old){if(old.quantity>=max)return alert("وصلت للحد الأقصى لهذا الصنف.");old.quantity++}
- else cart.push({id,name:p.name,unit,price:u.price,quantity:1,maxQuantity:max});
- updateCart();
+  if (!email || !password) {
+    msg.textContent = "يرجى إدخال البريد وكلمة المرور";
+    msg.className = "message errorText";
+    return;
+  }
+
+  msg.textContent = "جاري التحقق من البيانات...";
+  msg.className = "message";
+  btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    msg.textContent = "تم تسجيل الدخول بنجاح!";
+    msg.className = "message successText";
+  } catch (e) {
+    console.error("Login Error Details:", e);
+    btn.disabled = false;
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') {
+      msg.textContent = "❌ كلمة المرور أو البريد غير صحيح";
+    } else if (e.code === 'auth/unauthorized-domain') {
+      msg.textContent = "⚠️ هذا النطاق غير مصرح به في إعدادات Firebase Authentication";
+    } else {
+      msg.textContent = "❌ خطأ: " + (e.message || "عفواً تعذر الاتصال بالخادم");
+    }
+    msg.className = "message errorText";
+  }
 };
-window.increase=i=>{let x=cart[i];if(!x)return;if(x.quantity>=x.maxQuantity)return alert("وصلت للحد الأقصى لهذا الصنف.");x.quantity++;updateCart()};
-window.decrease=i=>{let x=cart[i];if(!x)return;x.quantity--;if(x.quantity<=0)cart.splice(i,1);updateCart()};
-window.removeItem=i=>{cart.splice(i,1);updateCart()};
-function updateCart(){
- let sub=0,count=0;cart.forEach(x=>{sub+=x.price*x.quantity;count+=x.quantity});
- $("cartCount").textContent=count; $("subtotal").textContent=sub;
- const r=regions.find(x=>x.id===$("region").value);const fee=r?num(r.fee):0;
- $("deliveryFee").textContent=fee;$("grandTotal").textContent=sub+fee;
- $("cartItems").innerHTML=cart.length?cart.map((x,i)=>`<div class="cart-item"><div class="cart-top"><strong>${esc(x.name)}</strong><strong>${x.price*x.quantity} جنيه</strong></div><div class="cart-details">${esc(x.unit)} — ${x.price} جنيه للوحدة</div><div class="qty"><button onclick="decrease(${i})">−</button><span>${x.quantity}</span><button onclick="increase(${i})">+</button><button onclick="removeItem(${i})">🗑️</button></div></div>`).join(""):'<div class="empty">السلة فارغة</div>';
+
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, async u => {
+  if (u) {
+    $("loginPanel").style.display = "none";
+    $("adminPanel").style.display = "block";
+    await loadAll();
+  } else {
+    $("loginPanel").style.display = "block";
+    $("adminPanel").style.display = "none";
+    $("btnLogin").disabled = false;
+  }
+});
+
+async function loadAll() {
+  try {
+    const [p, r, c, s] = await Promise.all([
+      getDocs(collection(db, "products")),
+      getDocs(collection(db, "deliveryRegions")),
+      getDocs(collection(db, "categories")),
+      getDoc(doc(db, "settings", "main"))
+    ]);
+    products = p.docs.map(d => ({ id: d.id, ...d.data() }));
+    regions = r.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    categories = c.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    settings = s.exists() ? s.data() : {};
+    fillSettings(); renderCategories(); renderRegions(); populateCategorySelects(); renderProducts();
+  } catch(err) {
+    console.error("Error loading data:", err);
+  }
 }
-window.sendWhatsApp=()=>{
- if(!cart.length)return alert("أضف صنفًا إلى السلة أولاً.");
- const name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),r=regions.find(x=>x.id===$("region").value);
- if(!name)return alert("اكتب اسم العميل.");
- if(!phone)return alert("اكتب رقم الهاتف.");
- if(!r)return alert("اختر منطقة التوصيل.");
- if(!address)return alert("اكتب العنوان بالتفصيل.");
- let sub=0,msg=`🛒 طلب جديد\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n🚚 المنطقة: ${r.name}\n📍 العنوان: ${address}\n\n📦 تفاصيل الطلب:\n`;
- cart.forEach(x=>{let t=x.price*x.quantity;sub+=t;msg+=`• ${x.name}\n  ${x.unit} × ${x.quantity} = ${t} جنيه\n`});
- const total=sub+num(r.fee);msg+=`\n💵 قيمة الطلب: ${sub} جنيه\n🚚 التوصيل: ${num(r.fee)} جنيه\n💰 الإجمالي النهائي: ${total} جنيه`;
- window.open("https://wa.me/"+whatsappNumber+"?text="+encodeURIComponent(msg),"_blank");
+
+function fillSettings() {
+  $("storeName").value = settings.storeName || "Pistach D'Alep";
+  $("subtitle").value = settings.subtitle || "بيستاش دي ألب";
+  $("primaryColor").value = settings.primaryColor || "#789262";
+  $("backgroundColor").value = settings.backgroundColor || "#d9e8b8";
+  $("textColor").value = settings.textColor || "#222222";
+  $("logoUrl").value = settings.logo || "";
+  if (settings.logo) $("logoPreview").src = settings.logo;
+}
+
+window.saveSettings = async () => {
+  try {
+    let data = { storeName: $("storeName").value.trim(), subtitle: $("subtitle").value.trim(), primaryColor: $("primaryColor").value, backgroundColor: $("backgroundColor").value, textColor: $("textColor").value, logo: $("logoUrl").value.trim(), updatedAt: Date.now() };
+    await setDoc(doc(db, "settings", "main"), data, { merge: true });
+    settings = data;
+    $("settingsMessage").textContent = "✅ تم حفظ الإعدادات بنجاح";
+    $("settingsMessage").className = "message successText";
+  } catch (e) { alert(e.message); }
 };
-loadAll();
+
+window.uploadLogo = async () => {
+  let f = $("logoFile").files[0];
+  if (!f) return alert("اختر صورة أولاً");
+  try {
+    $("settingsMessage").textContent = "جاري رفع الشعار...";
+    let r = ref(storage, "store/logo_" + Date.now() + "_" + f.name.replace(/[^a-zA-Z0-9._-]/g, "_"));
+    await uploadBytes(r, f);
+    let url = await getDownloadURL(r);
+    $("logoUrl").value = url;
+    $("logoPreview").src = url;
+    await saveSettings();
+  } catch (e) { alert("تعذر رفع الشعار: " + e.message); }
+};
+
+window.addCategory = async () => {
+  let name = $("categoryName").value.trim(), order = num($("categoryOrder").value);
+  if (!name) return alert("اكتب اسم القسم");
+  await addDoc(collection(db, "categories"), { name, order: order || 999, createdAt: Date.now() });
+  $("categoryName").value = "";
+  await loadAll();
+};
+
+function renderCategories() {
+  $("categoriesList").innerHTML = categories.length ? categories.map(c => `
+    <div class="category">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong>📂 ${esc(c.name)}</strong>
+        <span class="status on">ترتيب: ${c.order}</span>
+      </div>
+      <div class="actions">
+        <button class="blue" onclick="editCategory('${c.id}')">✏️ تعديل</button>
+        <button class="danger" onclick="deleteCategory('${c.id}')">🗑️ حذف</button>
+      </div>
+    </div>`).join("") : '<p style="color:var(--text-light);">لا توجد أقسام حالياً.</p>';
+}
+
+function populateCategorySelects() {
+  const options = categories.length ? categories.map(c => `<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("") : '<option value="أخرى">أخرى</option>';
+  $("productCategorySelect").innerHTML = options;
+  $("editProductCategorySelect").innerHTML = options;
+}
+
+window.editCategory = async id => {
+  let c = categories.find(x => x.id === id);
+  if (!c) return;
+  let n = prompt("اسم القسم", c.name);
+  if (n === null) return;
+  let o = prompt("الترتيب", c.order ?? 999);
+  if (o === null) return;
+  await updateDoc(doc(db, "categories", id), { name: n.trim(), order: num(o) || 999 });
+  await loadAll();
+};
+
+window.deleteCategory = async id => {
+  if (!confirm("حذف القسم؟ لن يمسح الأصناف المرتبطة به.")) return;
+  await deleteDoc(doc(db, "categories", id));
+  await loadAll();
+};
+
+window.addRegion = async () => {
+  let name = $("regionName").value.trim(), fee = num($("regionFee").value);
+  if (!name) return alert("اكتب اسم المنطقة");
+  await addDoc(collection(db, "deliveryRegions"), { name, fee, order: regions.length + 1 });
+  $("regionName").value = ""; $("regionFee").value = "0";
+  await loadAll();
+};
+
+function renderRegions() {
+  $("regionsList").innerHTML = regions.length ? regions.map(r => `
+    <div class="region">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong>🚚 ${esc(r.name)}</strong>
+        <span style="font-weight:bold; color:var(--primary-color);">${num(r.fee)} ج.م</span>
+      </div>
+      <div class="actions">
+        <button class="blue" onclick="editRegion('${r.id}')">✏️ تعديل</button>
+        <button class="danger" onclick="deleteRegion('${r.id}')">🗑️ حذف</button>
+      </div>
+    </div>`).join("") : '<p style="color:var(--text-light);">لا توجد مناطق مضافة.</p>';
+}
+
+window.editRegion = async id => {
+  let r = regions.find(x => x.id === id);
+  if (!r) return;
+  let n = prompt("اسم المنطقة", r.name);
+  if (n === null) return;
+  let f = prompt("رسوم التوصيل", r.fee);
+  if (f === null) return;
+  await updateDoc(doc(db, "deliveryRegions", id), { name: n.trim(), fee: num(f) });
+  await loadAll();
+};
+
+window.deleteRegion = async id => {
+  if (!confirm("حذف المنطقة؟")) return;
+  await deleteDoc(doc(db, "deliveryRegions", id));
+  await loadAll();
+};
+
+function unitsFromForm() {
+  return [1, 2, 3, 4].map(i => ({ name: $("u" + i + "n").value.trim(), price: num($("u" + i + "p").value) })).filter(x => x.name && x.price > 0);
+}
+
+window.addProduct = async () => {
+  let name = $("productName").value.trim(), units = unitsFromForm();
+  if (!name) return alert("اكتب اسم الصنف");
+  if (!units.length) return alert("أضف وحدة واحدة وسعرها على الأقل");
+  let data = {
+    name,
+    description: $("productDescription").value.trim(),
+    category: $("productCategorySelect").value || "أخرى",
+    image: $("productImage").value.trim(),
+    maxQuantity: num($("maxQuantity").value) || 10,
+    units, hidden: false, order: products.length + 1, createdAt: Date.now()
+  };
+  await addDoc(collection(db, "products"), data);
+  ["productName", "productDescription", "productImage", "u1p", "u2p", "u3p", "u4n", "u4p"].forEach(id => $(id).value = "");
+  $("addMessage").textContent = "✅ تمت إضافة الصنف بنجاح";
+  $("addMessage").className = "message successText";
+  await loadAll();
+};
+
+function getUnits(p) {
+  if (Array.isArray(p.units) && p.units.length) return p.units;
+  if (p.prices) return Object.entries(p.prices).map(([name, price]) => ({ name, price: num(price) }));
+  return [{ name: "كيلو", price: num(p.price) }];
+}
+
+function renderProducts() {
+  let q = ($("search").value || "").trim().toLowerCase();
+  let list = products.filter(p => (p.name || "").toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q));
+  $("productsList").innerHTML = list.length ? list.map(p => {
+    let hidden = p.hidden === true;
+    return `
+    <div class="product ${hidden ? "hidden" : ""}">
+      <div class="product-card-body">
+        ${p.image ? `<img class="thumb" src="${esc(p.image)}" onerror="this.style.display='none'">` : ""}
+        <div class="product-info">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0;">${esc(p.name || "بدون اسم")}</h3>
+            <span class="status ${hidden ? "off" : "on"}">${hidden ? "🔴 مخفي" : "🟢 ظاهر"}</span>
+          </div>
+          <p style="margin: 5px 0; font-size:13px; color:var(--text-light);">🏷️ ${esc(p.category || "أخرى")} | 📦 أقصى كمية: ${num(p.maxQuantity) || 10}</p>
+          <p style="margin: 5px 0; font-weight:bold; color:var(--primary-color);">
+            💰 ${getUnits(p).map(u => esc(u.name) + ": " + num(u.price) + " ج.م").join(" | ")}
+          </p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="blue" onclick="openEditModal('${p.id}')">✏️ تعديل</button>
+        <button class="${hidden ? "green" : "gray"}" onclick="toggleProduct('${p.id}',${hidden})">${hidden ? "👁️ إظهار" : "🚫 إخفاء"}</button>
+        <button class="danger" onclick="deleteProduct('${p.id}')">🗑️ حذف</button>
+      </div>
+    </div>`;
+  }).join("") : '<div class="info">لا توجد نتائج مطابقة.</div>';
+}
+
+window.toggleProduct = async (id, h) => {
+  await updateDoc(doc(db, "products", id), { hidden: !h });
+  await loadAll();
+};
+
+/* Modal Functions */
+window.openEditModal = (id) => {
+  let p = products.find(x => x.id === id);
+  if (!p) return;
+  $("editProductId").value = p.id;
+  $("editProductName").value = p.name || "";
+  $("editProductCategorySelect").value = p.category || "أخرى";
+  $("editProductDesc").value = p.description || "";
+  $("editProductImg").value = p.image || "";
+  $("editProductMax").value = p.maxQuantity || 10;
+
+  let units = getUnits(p);
+  let unitsHTML = "";
+  for (let i = 0; i < 4; i++) {
+    let u = units[i] || { name: "", price: "" };
+    unitsHTML += `
+      <div class="unitrow">
+        <input id="eu${i}n" value="${esc(u.name)}" placeholder="اسم الوحدة">
+        <input id="eu${i}p" type="number" value="${u.price || ''}" placeholder="السعر">
+      </div>`;
+  }
+  $("editUnitsContainer").innerHTML = unitsHTML;
+  $("editModal").style.display = "block";
+};
+
+window.closeModal = () => { $("editModal").style.display = "none"; };
+
+window.saveProductEdit = async () => {
+  let id = $("editProductId").value;
+  let name = $("editProductName").value.trim();
+  if (!name) return alert("اسم الصنف مطلوب");
+
+  let units = [];
+  for (let i = 0; i < 4; i++) {
+    let uname = $("eu" + i + "n").value.trim();
+    let uprice = num($("eu" + i + "p").value);
+    if (uname && uprice > 0) units.push({ name: uname, price: uprice });
+  }
+
+  if (!units.length) return alert("يجب كتابة وحدة وسعر واحد على الأقل");
+
+  await updateDoc(doc(db, "products", id), {
+    name,
+    category: $("editProductCategorySelect").value,
+    description: $("editProductDesc").value.trim(),
+    image: $("editProductImg").value.trim(),
+    maxQuantity: num($("editProductMax").value) || 10,
+    units
+  });
+
+  closeModal();
+  await loadAll();
+};
+
+window.deleteProduct = async id => {
+  if (!confirm("هل أنت متأكد من حذف هذا الصنف نهائياً؟")) return;
+  await deleteDoc(doc(db, "products", id));
+  await loadAll();
+};
+
+window.backup = async () => {
+  try {
+    let data = { version: 2, createdAt: new Date().toISOString(), settings, products, regions, categories };
+    let blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "pistach-d-alep-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    $("backupMessage").textContent = "✅ تم تصدير النسخة الاحتياطية";
+    $("backupMessage").className = "message successText";
+  } catch (e) { alert(e.message); }
+};
+
+window.restoreBackup = async () => {
+  let f = $("restoreFile").files[0];
+  if (!f) return alert("اختر ملف النسخة الاحتياطية أولاً");
+  if (!confirm("سيتم استبدال البيانات الحالية بالبيانات الموجودة في الملف. هل أنت متأكد؟")) return;
+  try {
+    let data = JSON.parse(await f.text());
+    if (!data || !Array.isArray(data.products) || !Array.isArray(data.regions) || !Array.isArray(data.categories)) throw new Error("الملف غير صالح");
+    for (const p of data.products) { let { id, ...rest } = p; id ? await setDoc(doc(db, "products", id), rest) : await addDoc(collection(db, "products"), rest); }
+    for (const r of data.regions) { let { id, ...rest } = r; id ? await setDoc(doc(db, "deliveryRegions", id), rest) : await addDoc(collection(db, "deliveryRegions"), rest); }
+    for (const c of data.categories) { let { id, ...rest } = c; id ? await setDoc(doc(db, "categories", id), rest) : await addDoc(collection(db, "categories"), rest); }
+    if (data.settings) await setDoc(doc(db, "settings", "main"), data.settings, { merge: true });
+    await loadAll();
+    $("backupMessage").textContent = "✅ تمت الاستعادة بنجاح";
+    $("backupMessage").className = "message successText";
+  } catch (e) { console.error(e); alert("تعذر استعادة النسخة: " + e.message); }
+};
 </script>
 </body>
 </html>
