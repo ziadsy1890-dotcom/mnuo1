@@ -6,18 +6,24 @@
 <title>فستق حلب - Pistach D'Alep</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);background-attachment:fixed;color:#212529}
+body{
+    margin:0;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+    background-attachment: fixed !important;
+    color:#212529;
+}
 header{background:#1c1e21;color:#fff;text-align:center;padding:25px 15px;border-bottom:4px solid #1877f2}
 header h1{margin:0;font-size:26px}
 header p{margin:5px 0 0;color:#b0b3b8;font-size:14px}
 .container{max-width:800px;margin:auto;padding:15px}
 
-/* الأقسام: شفافة بنسبة 20% */
+/* الأقسام: بدون لون أبيض (شفافة تماماً) */
 .categories{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:15px;scrollbar-width:none}
 .categories::-webkit-scrollbar{display:none}
 .categories button{
-    border:1px solid rgba(255, 255, 255, 0.8) !important;
-    background: rgba(255, 255, 255, 0.80) !important; /* شفافة بنسبة 20% */
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    background: transparent !important; /* إلغاء الأبيض */
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
     padding:8px 18px;
@@ -26,42 +32,83 @@ header p{margin:5px 0 0;color:#b0b3b8;font-size:14px}
     font-weight:600;
     color: #1c1e21;
     cursor:pointer;
-    transition:all .2s
+    transition:all .2s;
 }
 .categories button.active{background:#1c1e21 !important;color:#fff !important;border-color:#1c1e21 !important}
 
 .menu{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 @media(max-width:550px){.menu{grid-template-columns:1fr}}
 
-/* بطاقة الصنف: شفافة بنسبة 20% فقط */
-.item{
-    background: rgba(255, 255, 255, 0.80) !important; /* شفافة 20% (0.80 أبيض) */
+/* بطاقة الصنف: بدون لون أبيض إطلاقاً (شفافة 100%) */
+.item {
+    background: transparent !important; /* إلغاء اللون الأبيض بالكامل */
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.6) !important;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,0.05);
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important; /* إطار لتحديد البطاقة */
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
 }
 
-.item img{width:100%;height:160px;object-fit:cover;background:rgba(0,0,0,0.03)}
-.item-content{padding:12px;flex:1;display:flex;flex-direction:column}
+.item-content {
+    background: transparent !important;
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
 .item h3{margin:0 0 6px;font-size:18px}
 .description{color:#4a5568;font-size:13px;margin-bottom:10px;flex:1}
-.option-select{width:100%;padding:8px;border:1px solid rgba(206, 212, 218, 0.8);border-radius:6px;margin-bottom:10px;font-size:14px;background:rgba(255,255,255,0.9)}
+.option-select{
+    width:100%;
+    padding:8px;
+    border:1px solid rgba(0, 0, 0, 0.15);
+    border-radius:6px;
+    margin-bottom:10px;
+    font-size:14px;
+    background: transparent !important; /* إلغاء الأبيض من القوائم المنسدلة */
+}
 .price-tag{font-size:18px;font-weight:bold;color:#1877f2;margin-bottom:10px}
 .add-btn{width:100%;padding:10px;border:none;border-radius:8px;background:#1c1e21;color:#fff;font-weight:bold;cursor:pointer;transition:background .2s}
 .add-btn:hover{background:#333}
-.cart{background:rgba(255, 255, 255, 0.90);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);margin-top:25px;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
-.cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e9ecef;padding:12px 0}
+
+/* السلة: بدون خلفية بيضاء ثقيلة */
+.cart{
+    background: transparent !important; /* إلغاء اللون الأبيض بالكامل */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    margin-top:25px;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+.cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(0, 0, 0, 0.1);padding:12px 0}
 .qty-ctrl{display:flex;align-items:center;gap:8px}
-.qty-ctrl button{width:28px;height:28px;border:none;border-radius:6px;background:#e9ecef;font-weight:bold;cursor:pointer}
+.qty-ctrl button{width:28px;height:28px;border:none;border-radius:6px;background:rgba(0,0,0,0.08);font-weight:bold;cursor:pointer}
 .summary-line{display:flex;justify-content:space-between;margin:8px 0;font-size:15px}
 .total-line{display:flex;justify-content:space-between;margin:15px 0 5px;font-size:20px;font-weight:bold;color:#1c1e21}
-input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ced4da;border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.95)}
+input,select,textarea{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border:1px solid rgba(0, 0, 0, 0.15);
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    background: transparent !important; /* إلغاء الأبيض من خانات الإدخال */
+}
 input:focus,select:focus,textarea:focus{border-color:#1877f2}
 .whatsapp-btn{width:100%;padding:14px;border:none;border-radius:8px;background:#25D366;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;margin-top:10px;transition:opacity .2s}
 .whatsapp-btn:disabled{background:#6c757d;cursor:not-allowed;opacity:0.7}
@@ -86,7 +133,7 @@ input:focus,select:focus,textarea:focus{border-color:#1877f2}
         <h2>🛒 سلة الشراء</h2>
         <div id="cartItems"><div class="empty">السلة فارغة حالياً</div></div>
 
-        <div style="margin-top:15px;border-top:2px dashed #e9ecef;padding-top:10px">
+        <div style="margin-top:15px;border-top:2px dashed rgba(0,0,0,0.15);padding-top:10px">
             <div class="summary-line">
                 <span>المجموع الفرعي:</span>
                 <span><span id="subtotal">0</span> جنيه</span>
@@ -101,7 +148,7 @@ input:focus,select:focus,textarea:focus{border-color:#1877f2}
             </div>
         </div>
 
-        <hr style="margin:15px 0;border:0;border-top:1px solid #eee">
+        <hr style="margin:15px 0;border:0;border-top:1px solid rgba(0,0,0,0.1)">
 
         <h3>بيانات الطلب والتوصيل</h3>
         <input type="text" id="custName" placeholder="الاسم بالكامل">
