@@ -17,12 +17,26 @@ header p{margin:5px 0 0;color:#b0b3b8;font-size:14px}
 .categories button.active{background:#1c1e21;color:#fff;border-color:#1c1e21}
 .menu{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 @media(max-width:550px){.menu{grid-template-columns:1fr}}
-.item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;flex-direction:column;justify-content:space-between}
-.item img{width:100%;height:160px;object-fit:cover;background:#e9ecef}
+
+/* التعديل هنا: جعل البطاقات شفافة وبتأثير زجاجي أنيق */
+.item{
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,0.05);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.item img{width:100%;height:160px;object-fit:cover;background:rgba(0,0,0,0.03)}
 .item-content{padding:12px;flex:1;display:flex;flex-direction:column}
 .item h3{margin:0 0 6px;font-size:18px}
 .description{color:#6c757d;font-size:13px;margin-bottom:10px;flex:1}
-.option-select{width:100%;padding:8px;border:1px solid #ced4da;border-radius:6px;margin-bottom:10px;font-size:14px}
+.option-select{width:100%;padding:8px;border:1px solid #ced4da;border-radius:6px;margin-bottom:10px;font-size:14px;background:rgba(255,255,255,0.8)}
 .price-tag{font-size:18px;font-weight:bold;color:#1877f2;margin-bottom:10px}
 .add-btn{width:100%;padding:10px;border:none;border-radius:8px;background:#1c1e21;color:#fff;font-weight:bold;cursor:pointer;transition:background .2s}
 .add-btn:hover{background:#333}
@@ -336,7 +350,6 @@ window.submitOrder = async function() {
         return;
     }
 
-    // تعطيل الزر لمنع التكرار
     btn.disabled = true;
     btn.textContent = "جاري تسجيل الطلب...";
 
@@ -357,10 +370,8 @@ window.submitOrder = async function() {
     };
 
     try {
-        // 1. التخزين في Firestore أولاً
         await addDoc(collection(db, "orders"), orderPayload);
 
-        // 2. تجهيز رسالة الواتساب
         let msg = `📋 *طلب جديد رقم: ${orderId}*\n\n`;
         msg += `👤 *الاسم:* ${name}\n`;
         msg += `📞 *الهاتف:* ${phone}\n`;
@@ -380,7 +391,6 @@ window.submitOrder = async function() {
         const waNum = storeSettings.whatsappNumber || "201140653708";
         const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
 
-        // إعادة ضبط السلة والنموذج
         cart = [];
         updateCartUI();
         document.getElementById("custName").value = "";
@@ -389,7 +399,6 @@ window.submitOrder = async function() {
         document.getElementById("custZone").value = "";
         selectedDeliveryFee = 0;
 
-        // التحويل إلى واتساب
         window.open(waUrl, "_blank");
 
     } catch (e) {
